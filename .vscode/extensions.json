@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "editorconfig.editorconfig",
+        "ionide.ionide-fsharp",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.powershell",
+        "redhat.vscode-yaml"
+    ]
+}

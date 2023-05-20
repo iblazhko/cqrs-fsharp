@@ -1,0 +1,77 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "./build.ps1",
+            "type": "shell",
+            "args": [
+                "-Target",
+                "FullBuild"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "start",
+            "command": "./build.ps1",
+            "type": "shell",
+            "args": [
+                "-Target",
+                "DockerCompose.StartDetached"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "stop",
+            "command": "./build.ps1",
+            "type": "shell",
+            "args": [
+                "-Target",
+                "DockerCompose.Stop"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "prune (build)",
+            "command": "./build.ps1",
+            "type": "shell",
+            "args": [
+                "-Target",
+                "Prune"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "prune (docker)",
+            "command": "./build.ps1",
+            "type": "shell",
+            "args": [
+                "-Target",
+                "Prune.Docker"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
