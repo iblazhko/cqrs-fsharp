@@ -2,7 +2,7 @@ namespace CQRS.Ports.EventStore
 
 open System.Text.Json
 
-type SystemTextEventSerializer(?options: JsonSerializerOptions) =
+type SystemTextJsonEventSerializer(?options: JsonSerializerOptions) =
     let optionsOrNull =
         match options with
         | Some o -> o

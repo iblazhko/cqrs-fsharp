@@ -18,18 +18,18 @@ module internal DtoEventHandler =
     let handleEvent<'TEventDto, 'TEvent, 'TViewModel>
         (context: DomainEventHandlerContext<'TEventDto, 'TEvent, 'TViewModel>)
         (dto: 'TEventDto)
-        : Task =
+        : Task = // TODO: Use Result<Task,EventHandlerFault>
         task {
             let evt =
                 dto
                 |> context.DtoMapper
                 |> Result.defaultWith (fun e -> raise (EventHandlerException e))
+            // TODO: map error to EventHandlerFault
 
             let documentCollectionId = evt |> context.DocumentCollectionIdFromEvent
             let documentId = evt |> context.DocumentIdFromEvent
 
-            let! documentCollection = context.DocumentStore.OpenDocumentCollection<'TViewModel>(documentCollectionId)
+            use! documentCollection = context.DocumentStore.OpenDocumentCollection<'TViewModel>(documentCollectionId)
             do! documentCollection.Update(documentId, (context.ViewModelUpdateAction evt))
-
-            return ()
+        // TODO: map ProjectionStore errors to EventHandlerFault
         }

@@ -20,44 +20,48 @@ Solution uses .NET7 / F# and has following major parts:
     [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object)s that only use
     primitive CLR types.
   - `CQRS.Mapping`: Implements mapping between DTOs and domain model.
-- *Application* services
-  - `CQRS.Application`: implements application services; handles Commands part
-    of the API. Application services are aware of the outside world and intended
+- *Application* services that are aware of the outside world and intended
     to have effects - consume and publish messages, read and write DB data,
     make external HTTP/GRPC calls etc.
-  - `CQRS.Application.Projections`: maintains projections; handles Query part
-    of the API.
+  - `CQRS.Application`: implements application services; handles Commands sent
+    from the API.
+  - `CQRS.Application.Projections`: projects domain Events to view models
+    persisted in a document-based ProjectionStore.
 - *API* components
-  - `CQRS.API`: combines Commands and Query API to access application services.
+  - `CQRS.API`: sends Commands to Application (command API),
+    uses ProjectionStore to retrieve view models (query API).
 - *Ports*
   - `CQRS.Ports.EventStore`: EventStore abstraction for event sourcing /
     event store
-  - `CQRS.Ports.MessageBus`: message bus abstraction for sending commands,
-    publishing events, and consuming commands / events
-  - `CQRS.Ports.ProjectionStore`: abstraction for persisting event stream
-    projections in either denormalized form (document store) or normalized form
-    (relational db).
+  - `CQRS.Ports.MessageBus`: message bus abstraction for sending commands and
+    publishing events. Note that registration of messages consumers is not
+    a part of this abstraction - it is a part of Application host that rely
+    on a specific MessageBus adapter.
+  - `CQRS.Ports.ProjectionStore`: abstraction for persisting event
+    projections in denormalized form (document store). Normalized form
+    (relational database) projections are not a part of this abstraction
+    at the moment, but could be added if needed.
 - *Adapters*
-  - `CQRS.Adapters.InMemoryEventStore`: in-memory adapter for `EventStore` port
-  - `CQRS.Adapters.InMemoryMessageBus`: in-memory adapter for `MessageBus` port
+  - `CQRS.Adapters.InMemoryEventStore`: in-memory adapter for *EventStore* port
+  - `CQRS.Adapters.InMemoryMessageBus`: in-memory adapter for *MessageBus* port
   - `CQRS.Adapters.InMemoryProjectionStore`: in-memory adapter for
-    `ProjectionStore` port
+    *ProjectionStore* port
   - `CQRS.Adapters.MartenDbEventStore`: [MartenDB](https://martendb.io/) adapter
-    for `EventStore` port
+    for *EventStore* port
   - `CQRS.Adapters.MartenDbProjectionStore`: [MartenDB](https://martendb.io/)
-    adapter for `ProjectionStore` port
+    adapter for *ProjectionStore* port
   - `CQRS.Adapters.MassTransitMessageBus`:
     [MassTransit](https://masstransit.io/) /
-    [RabbitMQ](https://www.rabbitmq.com/) adapter for `MessageBus` port
+    [RabbitMQ](https://www.rabbitmq.com/) adapter for *MessageBus* port
 - Client (`CQRS.Client`): example of an external client that interacts with
   the system via API.
-- Benchmark tests (`benchmark`).
+- Benchmark tests (`benchmark`). (WIP)
 
 For educational purposes *API* and *Application* have separate hosts
 (`CQRS.API.Host` and `CQRS.Application.Host` respectively). In a real life
-project these two hosts can be combined, or *Application* host can be split into
-smaller parts for better scalability (e.g. to separate commands handling
-and maintaining projections).
+projects these two hosts can be combined into one, or *Application* host
+can be split into smaller parts for better scalability (e.g. to separate
+commands handling and maintaining projections).
 
 ## Building and Running
 

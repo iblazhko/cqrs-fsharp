@@ -5,13 +5,13 @@ open CQRS.Ports.ProjectionStore
 open CQRS.Projections
 open CQRS.Projections.MassTransitConsumers
 open MassTransit
-open Serilog
 
 (*
-Note: MassTransit convention is to create a queue _per consumer class_.
-For events it does not make much of a difference if we have
-separate consumer classes per event or single consumer class consuming
+MassTransit convention is to create a queue *per consumer class*.
+For view model projection it does not make much of a difference if we have
+separate consumer classes per event type or single consumer class consuming
 multiple event types.
+Here we use a single consumer for the view model projection.
 *)
 
 type InventoryItemProjectionConsumer(documentStore: IDocumentStore<InventoryItemViewModel>) =

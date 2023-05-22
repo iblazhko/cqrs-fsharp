@@ -10,8 +10,9 @@ let handleMassTransitMessage<'T when 'T :> CqrsCommandDto and 'T: not struct>
     (consumeAction: IEventStore -> 'T -> Task)
     (eventStore: IEventStore)
     (context: ConsumeContext<'T>)
-    =
-    let message = context.Message
-    Log.Logger.Information("[RECEIVED] {@MessageType} {@Message}", message.GetType(), message)
-    message |> consumeAction eventStore |> ignore
-    Task.CompletedTask
+    : Task =
+    task {
+        let message = context.Message
+        Log.Logger.Information("[MESSAGE-BUS] {@MessageType} {@Message}", message.GetType(), message)
+        do! message |> consumeAction eventStore
+    }

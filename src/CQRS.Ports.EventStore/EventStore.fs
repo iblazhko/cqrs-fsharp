@@ -6,9 +6,9 @@ open System.Threading.Tasks
 (*
 These interfaces are meant for interoperability with actual event store
 implementations, so we are using interfaces and Tasks here, and do not
-use advanced type system (e.g. discriminated unions etc.)
+use advanced type system (e.g. discriminated unions etc.);
+also we represent parameters as tuples instead of using currying.
 *)
-
 
 type EventId = Guid
 
@@ -28,13 +28,13 @@ module EventStreamId =
     let value (s: EventStreamId) = s
 
 
-type EventStreamVersion = int64
+type EventStreamVersion = int
 
 module EventStreamVersion =
     [<Literal>]
-    let New: EventStreamVersion = 0L
+    let NewStream: EventStreamVersion = 0
 
-    let increment v : EventStreamVersion = v + 1L
+    let increment v : EventStreamVersion = v + 1
 
 type EventMetadata =
     { EventId: EventId
@@ -88,7 +88,7 @@ type IEventStreamProjection<'TEvent, 'TState> =
 type IEventStreamSession<'TEvent, 'TState> =
     inherit IDisposable
     inherit IAsyncDisposable
-    abstract member GetStream: unit -> Task<EventStream>
+    abstract member GetAllEvents: unit -> Task<EventStream>
     abstract member GetNewEvents: unit -> Task<EventStream>
     abstract member GetState: IEventStreamProjection<'TEvent, 'TState> -> Task<'TState>
     abstract member AppendEvents: obj seq -> Task

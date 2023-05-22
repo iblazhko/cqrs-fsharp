@@ -4,6 +4,17 @@ open System
 open System.Collections.Concurrent
 open System.Threading.Tasks
 open CQRS.Ports.ProjectionStore
+open Serilog
+
+(*
+Note that that this solution has two separate hosts: Application.Host and API.Host;
+these hosts have their own instances of InMemoryProjectionStore adapter, therefore
+when using InMemoryProjectionStore adapter, documents stored in Application
+will not be visible in API.
+
+This adapter is only suitable for unit or behavioural tests where everything
+is hosted in the same process.
+*)
 
 [<Sealed>]
 type InMemoryDocumentCollection<'TViewModel>() =
@@ -17,30 +28,34 @@ type InMemoryDocumentCollection<'TViewModel>() =
     interface IDocumentCollection<'TViewModel> with
         member this.GetById(documentId) =
             task {
-                let doc =
-                    documents.GetOrAdd(documentId, (fun _ -> Activator.CreateInstance(docType) :?> 'TViewModel))
+                Log.Logger.Information("[PROJECTION] Retrieving {DocumentId}", documentId)
 
-                return doc
+                let result =
+                    match documents.TryGetValue(documentId) with
+                    | true, doc -> Some(doc)
+                    | false, _ -> None
+
+                return result
             }
 
         member this.Update(documentId: DocumentId, updateAction: 'TViewModel -> 'TViewModel) : Task =
             task {
+                Log.Logger.Information("[PROJECTION] Storing {DocumentId}", documentId)
+
                 documents.AddOrUpdate(
                     documentId,
                     (fun _ -> (newVm ()) |> updateAction),
                     (fun _ -> (fun vm -> vm |> updateAction))
                 )
                 |> ignore
-
-                return ()
             }
 
         member this.Update(documentId: DocumentId, viewModel: 'TViewModel) : Task =
             task {
+                Log.Logger.Information("[PROJECTION] Storing {DocumentId} {@Document}", documentId, viewModel)
+
                 documents.AddOrUpdate(documentId, (fun _ -> viewModel), (fun _ -> (fun _ -> viewModel)))
                 |> ignore
-
-                return ()
             }
 
         member this.Dispose() = ()

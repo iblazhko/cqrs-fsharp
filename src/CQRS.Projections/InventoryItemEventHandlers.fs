@@ -21,7 +21,11 @@ let private handleInventoryEvent<'TEventDto, 'TEvent, 'TViewModel>
 Specific event handlers
 *)
 
-let InventoryItemProjectionId _ = "InventoryItems"
+let getProjectionId _ =
+    InventoryItemsCollection.InventoryItemsProjectionId
+
+let getDocumentId inventoryItemId =
+    inventoryItemId |> InventoryItemProjectionDocumentId.fromInventoryItemId
 
 let handleInventoryItemCreatedEvent
     (documentStore: IDocumentStore<InventoryItemViewModel>)
@@ -30,8 +34,8 @@ let handleInventoryItemCreatedEvent
     dto
     |> handleInventoryEvent
         { DtoMapper = InventoryItemCreatedMapper.toDomain
-          DocumentCollectionIdFromEvent = InventoryItemProjectionId
-          DocumentIdFromEvent = fun x -> x.InventoryItemId |> InventoryItemProjectionDocumentId.fromInventoryItemId
+          DocumentCollectionIdFromEvent = getProjectionId
+          DocumentIdFromEvent = fun x -> x.InventoryItemId |> getDocumentId
           DocumentStore = documentStore
           ViewModelUpdateAction = applyInventoryItemCreated }
 
@@ -42,7 +46,7 @@ let handleInventoryItemRenamedEvent
     dto
     |> handleInventoryEvent
         { DtoMapper = InventoryItemRenamedMapper.toDomain
-          DocumentCollectionIdFromEvent = InventoryItemProjectionId
-          DocumentIdFromEvent = fun x -> x.InventoryItemId |> InventoryItemProjectionDocumentId.fromInventoryItemId
+          DocumentCollectionIdFromEvent = getProjectionId
+          DocumentIdFromEvent = fun x -> x.InventoryItemId |> getDocumentId
           DocumentStore = documentStore
           ViewModelUpdateAction = applyInventoryItemRenamed }

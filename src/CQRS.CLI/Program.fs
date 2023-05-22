@@ -16,5 +16,8 @@ let main (args: string[]) =
     cli.Command(CreateInventoryItemCommand.name, (CreateInventoryItemCommand.configuration settings))
     |> ignore
 
+    cli.Command(GetInventoryItemCommand.name, (GetInventoryItemCommand.configuration settings))
+    |> ignore
+
     cli.HelpOption("-h|--help|-?") |> ignore
     cli.Execute(args)

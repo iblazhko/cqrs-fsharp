@@ -19,24 +19,25 @@ module internal DtoCommandHandler =
     let handleCommand<'TCommandDto, 'TCommand, 'TState, 'TEvent>
         (context: DomainCommandHandlerContext<'TCommandDto, 'TCommand, 'TState, 'TEvent>)
         (dto: 'TCommandDto)
-        : Task =
+        : Task = // TODO: Use Result<Task,CommandHandlerFault>
         task {
             let command =
                 dto
                 |> context.CommandDtoMapper
                 |> Result.defaultWith (fun e -> raise (CommandHandlerException e))
+            // TODO: map error to CommandHandlerFault
 
             let streamId = context.StreamIdFromCommand command
-            let streamSession = context.EventStore.Open(streamId, context.EventDtoMapper).Result
+            use! streamSession = context.EventStore.Open(streamId, context.EventDtoMapper)
 
-            let currentState = streamSession.GetState(context.StateProjection).Result
+            let! currentState = streamSession.GetState(context.StateProjection)
 
             let newEvents =
                 context.AggregateAction currentState command
                 |> Result.defaultWith (fun e -> raise (CommandHandlerException e))
+            // TODO: map error to CommandHandlerFault
 
             do! streamSession.AppendEvents(newEvents |> Seq.map box)
             do! context.EventStore.Save(streamSession)
-
-            return ()
+        // TODO: map EventStore errors to CommandHandlerFault
         }

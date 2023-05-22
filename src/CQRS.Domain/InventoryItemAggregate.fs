@@ -42,11 +42,8 @@ let private getRemovedFromInventoryEvent (x: InventoryItemState) removedCount =
           OldStockQuantity = x.StockQuantity
           NewStockQuantity = StockQuantity.subtract x.StockQuantity removedCount }
 
-let createWithId (state: InventoryItemState) (id: InventoryItemId) (name: InventoryItemName) =
+let create (state: InventoryItemState) (id: InventoryItemId) (name: InventoryItemName) =
     invokeIfNew state (fun () -> Seq.singleton (InventoryItemCreated { InventoryItemId = id; Name = name }))
-
-let create (state: InventoryItemState) (name: InventoryItemName) =
-    createWithId state (InventoryItemId.newId ()) name
 
 let changeName (state: InventoryItemState) (newName: InventoryItemName) =
     invokeIfExists state (fun x ->

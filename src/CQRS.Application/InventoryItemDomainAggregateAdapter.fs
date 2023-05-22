@@ -14,7 +14,7 @@ invokes domain aggregate methods and maps InventoryItemFailure to generic Errors
 let create (currentState: InventoryItemState) (command: CreateInventoryItem) =
     result {
         let! newEvents =
-            InventoryItemAggregate.create currentState command.Name
+            InventoryItemAggregate.create currentState command.InventoryItemId command.Name
             |> Result.mapError (DomainErrorMapper.mapDomainError (nameof CreateInventoryItem))
 
         return newEvents

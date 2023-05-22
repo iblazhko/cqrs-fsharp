@@ -53,7 +53,7 @@ module DocumentVersion =
 type IDocumentCollection<'TViewModel> =
     inherit IDisposable
     inherit IAsyncDisposable
-    abstract member GetById: DocumentId -> Task<'TViewModel>
+    abstract member GetById: DocumentId -> Task<'TViewModel option>
     abstract member Update: DocumentId * 'TViewModel -> Task
     abstract member Update: DocumentId * ('TViewModel -> 'TViewModel) -> Task
 

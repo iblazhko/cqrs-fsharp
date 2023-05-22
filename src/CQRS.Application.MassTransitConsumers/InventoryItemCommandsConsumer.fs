@@ -6,10 +6,11 @@ open CQRS.Ports.EventStore
 open MassTransit
 
 (*
-Note: MassTransit convention is to create a queue _per consumer class_.
-For commands, we need separate queue _per command type_ to match
-our internal sending conventions (see CQRS.Infrastructure.MassTransitConventions),
+MassTransit convention is to create a queue *per consumer class*.
+For commands, we need separate queue *per command type* to match
+our internal sending conventions (see `CQRS.Infrastructure.MassTransitConventions`),
 hence need separate consumer class per command with consumer class name matching command name
+(`Consumer` suffix is dropped from queue name by MassTransit queue name formatter)
 *)
 
 type CreateInventoryItemCommandConsumer(eventStore: IEventStore) =

@@ -13,7 +13,6 @@ let handleMassTransitMessage<'T, 'TViewModel when 'T :> CqrsEventDto and 'T: not
     : Task =
     task {
         let message = context.Message
-        Log.Logger.Information("[RECEIVED] {@MessageType} {@Message}", message.GetType(), message)
+        Log.Logger.Information("[MESSAGE-BUS] {@MessageType} {@Message}", message.GetType(), message)
         do! message |> consumeAction documentStore
-        return ()
     }

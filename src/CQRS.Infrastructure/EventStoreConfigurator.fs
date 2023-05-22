@@ -18,7 +18,8 @@ let configureServices (settings: MartenDbSettings) (services: IServiceCollection
         let bus = serviceProvider.GetRequiredService<IMessageBus>()
 
         let eventStore =
-            (new InMemoryEventStore(SystemTextEventSerializer(), Some(EventStoreEventsPublisher(bus)))) :> IEventStore
+            (new InMemoryEventStore(SystemTextJsonEventSerializer(), Some(EventStoreEventsPublisher(bus))))
+            :> IEventStore
 
         eventStore)
     |> ignore

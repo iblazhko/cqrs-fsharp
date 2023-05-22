@@ -17,7 +17,7 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
 
     let newVersion () =
         if sessionNewEvents.Length > 0 then
-            eventStream.StreamVersion + 1L
+            eventStream.StreamVersion |> EventStreamVersion.increment
         else
             eventStream.StreamVersion
 
@@ -25,7 +25,7 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
         eventStream.Events |> Seq.append sessionNewEvents
 
     interface IEventStreamSession<'TEvent, 'TState> with
-        member this.GetStream() =
+        member this.GetAllEvents() =
             task {
                 assertSessionIsNotLocked ()
 
@@ -61,8 +61,6 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
                               Metadata = None })
                         |> Seq.toList
                     )
-
-                return ()
             }
 
         member this.AppendEventsWithMetadata newEvents =
@@ -72,8 +70,6 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
                 sessionNewEvents <-
                     (sessionNewEvents
                      |> List.append (newEvents |> Seq.filter (fun x -> not (isNull x.Event)) |> Seq.toList))
-
-                return ()
             }
 
         member this.GetState projection =
@@ -128,7 +124,7 @@ type InMemoryEventStore(serializer: IEventSerializer, eventPublisher: IEventPubl
                     | true -> element
                     | false ->
                         { StreamId = streamId
-                          StreamVersion = 0L
+                          StreamVersion = EventStreamVersion.NewStream
                           Events = Seq.empty }
 
                 let deserializedEvents =
@@ -168,7 +164,7 @@ type InMemoryEventStore(serializer: IEventSerializer, eventPublisher: IEventPubl
                       StreamVersion = eventStream.StreamVersion
                       Events = serializedEvents }
 
-                // publishing _could be_ moved before serialization
+                // publishing *could be* moved before serialization
                 // however we want to be sure that we are ready to persist
                 // before we start publishing
                 do!
@@ -184,8 +180,6 @@ type InMemoryEventStore(serializer: IEventSerializer, eventPublisher: IEventPubl
                 |> ignore
 
                 session.Lock()
-
-                return ()
             }
 
         member this.Dispose() = ()

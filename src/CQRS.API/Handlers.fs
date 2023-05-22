@@ -7,28 +7,49 @@ open CQRS.DTO.V1
 open CQRS.EntityIds
 open CQRS.Ports.Messaging
 open CQRS.Ports.Messaging.MessageContextBuilder
+open CQRS.Ports.ProjectionStore
+open CQRS.Projections
 open FPrimitive
-open Microsoft.Extensions.Logging
+open Serilog
+
+type DocumentQueryResult =
+    | Document of InventoryItemViewModel
+    | NotFound
+    | BadRequest of ErrorsByTag
 
 let createInventoryItem
     (messageBus: IMessageBus)
     (clock: unit -> DateTimeOffset)
-    (logger: ILogger<CreateInventoryItemCommand>)
-    (inventoryItem: CreateInventoryItemCommand)
+    (cmd: CreateInventoryItemCommand)
     : Task<Result<AcceptedResponse, ErrorsByTag>> =
     task {
-        if (inventoryItem.InventoryItemId = EntityIdRawValue.Empty) then
-            inventoryItem.InventoryItemId <- (EntityId.newId () |> EntityId.value)
+        if (cmd.InventoryItemId = EntityIdRawValue.Empty) then
+            cmd.InventoryItemId <- (EntityId.newId () |> EntityId.value)
 
         let messageContext = getNewMessageContext clock
 
-        do! messageBus.SendCommand(Message<CreateInventoryItemCommand>(Data = inventoryItem, Context = messageContext))
+        do! messageBus.SendCommand(Message<CreateInventoryItemCommand>(Data = cmd, Context = messageContext))
 
-        logger.LogInformation $"Creating an inventory item: {inventoryItem.InventoryItemId}"
+        Log.Logger.Information $"Creating an inventory item: {cmd.InventoryItemId}"
 
-        return
-            Ok(
-                inventoryItem.InventoryItemId.ToString()
-                |> AcceptedResponse.fromEntityId messageContext
-            )
+        return Ok(cmd.InventoryItemId.ToString() |> AcceptedResponse.fromEntityId messageContext)
+    }
+
+let getInventoryItem
+    (projectionsStore: IDocumentStore<InventoryItemViewModel>)
+    (inventoryItemId: EntityId)
+    : Task<DocumentQueryResult> =
+    task {
+        Log.Logger.Information $"Retrieving an inventory item: {inventoryItemId}"
+        use! collection = projectionsStore.OpenDocumentCollection(InventoryItemsCollection.InventoryItemsProjectionId)
+
+        let documentId = inventoryItemId |> EntityId.toString |> DocumentId.create
+        let! document = collection.GetById(documentId)
+
+        let result =
+            match document with
+            | Some vm -> Document vm
+            | None -> NotFound
+
+        return result
     }

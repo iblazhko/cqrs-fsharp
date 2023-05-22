@@ -9,6 +9,4 @@ type EventStoreEventsPublisher(bus: IMessageBus) =
             task {
                 for e in events do
                     do! bus.PublishEvent(e.Event)
-
-                return ()
             }

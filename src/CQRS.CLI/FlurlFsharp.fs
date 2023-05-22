@@ -1,5 +1,6 @@
 module CQRS.CLI.FlurlFsharp
 
+open System.Net.Http
 open Flurl
 open Flurl.Http
 
@@ -14,3 +15,6 @@ let postJson x (endpoint: Url) =
 
 let putJson x (endpoint: Url) =
     FlurlRequest(endpoint).AllowAnyHttpStatus().PutJsonAsync(x).Result
+
+let getJson (endpoint: Url) =
+    FlurlRequest(endpoint).AllowAnyHttpStatus().SendAsync(HttpMethod.Get).Result

@@ -14,7 +14,7 @@ type CqrsCommandDto =
         inherit CqrsDto
     end
 
-// Marker interface for command DTOs
+// Marker interface for event DTOs
 [<AllowNullLiteral>]
 type CqrsEventDto =
     interface
