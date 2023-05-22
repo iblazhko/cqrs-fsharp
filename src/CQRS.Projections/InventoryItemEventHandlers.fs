@@ -11,7 +11,7 @@ open CQRS.Projections.InventoryItemProjectionApplier
 Generic template for event handlers
 *)
 
-let private handleInventoryEvent<'TEventDto, 'TEvent, 'TViewModel>
+let private handleInventoryEvent<'TEventDto, 'TEvent, 'TViewModel when 'TViewModel: null>
     (context: DomainEventHandlerContext<'TEventDto, 'TEvent, 'TViewModel>)
     (dto: 'TEventDto)
     =
@@ -28,7 +28,7 @@ let getDocumentId inventoryItemId =
     inventoryItemId |> InventoryItemProjectionDocumentId.fromInventoryItemId
 
 let handleInventoryItemCreatedEvent
-    (documentStore: IDocumentStore<InventoryItemViewModel>)
+    (projectionStore: IProjectionStore<InventoryItemViewModel>)
     (dto: InventoryItemCreatedEvent)
     =
     dto
@@ -36,11 +36,11 @@ let handleInventoryItemCreatedEvent
         { DtoMapper = InventoryItemCreatedMapper.toDomain
           DocumentCollectionIdFromEvent = getProjectionId
           DocumentIdFromEvent = fun x -> x.InventoryItemId |> getDocumentId
-          DocumentStore = documentStore
+          ProjectionStore = projectionStore
           ViewModelUpdateAction = applyInventoryItemCreated }
 
 let handleInventoryItemRenamedEvent
-    (documentStore: IDocumentStore<InventoryItemViewModel>)
+    (projectionStore: IProjectionStore<InventoryItemViewModel>)
     (dto: InventoryItemRenamedEvent)
     =
     dto
@@ -48,5 +48,5 @@ let handleInventoryItemRenamedEvent
         { DtoMapper = InventoryItemRenamedMapper.toDomain
           DocumentCollectionIdFromEvent = getProjectionId
           DocumentIdFromEvent = fun x -> x.InventoryItemId |> getDocumentId
-          DocumentStore = documentStore
+          ProjectionStore = projectionStore
           ViewModelUpdateAction = applyInventoryItemRenamed }

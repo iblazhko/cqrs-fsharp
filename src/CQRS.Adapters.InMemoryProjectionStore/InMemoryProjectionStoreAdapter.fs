@@ -17,7 +17,7 @@ is hosted in the same process.
 *)
 
 [<Sealed>]
-type InMemoryDocumentCollection<'TViewModel>() =
+type InMemoryDocumentCollection<'TViewModel when 'TViewModel: null>() =
     let docType = typedefof<'TViewModel>
 
     let newVm () =
@@ -25,7 +25,7 @@ type InMemoryDocumentCollection<'TViewModel>() =
 
     let documents = ConcurrentDictionary<DocumentId, 'TViewModel>()
 
-    interface IDocumentCollection<'TViewModel> with
+    interface IProjectionDocumentCollection<'TViewModel> with
         member this.GetById(documentId) =
             task {
                 Log.Logger.Information("[PROJECTION] Retrieving {DocumentId}", documentId)
@@ -62,11 +62,11 @@ type InMemoryDocumentCollection<'TViewModel>() =
         member this.DisposeAsync() = ValueTask.CompletedTask
 
 [<Sealed>]
-type InMemoryProjectionStore<'TViewModel>() =
+type InMemoryProjectionStore<'TViewModel when 'TViewModel: null>() =
     let documentCollections =
         ConcurrentDictionary<DocumentCollectionId, InMemoryDocumentCollection<'TViewModel>>()
 
-    interface IDocumentStore<'TViewModel> with
+    interface IProjectionStore<'TViewModel> with
         member this.OpenDocumentCollection<'TViewModel>(documentCollectionId) =
             task {
                 let collection =

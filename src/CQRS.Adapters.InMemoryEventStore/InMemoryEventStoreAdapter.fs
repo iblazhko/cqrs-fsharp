@@ -124,7 +124,7 @@ type InMemoryEventStore(serializer: IEventSerializer, eventPublisher: IEventPubl
                     | true -> element
                     | false ->
                         { StreamId = streamId
-                          StreamVersion = EventStreamVersion.NewStream
+                          StreamVersion = EventStreamVersion.New
                           Events = Seq.empty }
 
                 let deserializedEvents =

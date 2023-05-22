@@ -28,6 +28,15 @@ module DocumentCollectionId =
 type DocumentId = string
 exception InvalidDocumentIdException
 
+
+type DocumentVersion = int64
+
+module DocumentVersion =
+    [<Literal>]
+    let New: DocumentVersion = 0L
+
+    let increment v : DocumentVersion = v + 1L
+
 module DocumentId =
     let newId () =
         Guid.NewGuid().ToString("N").ToUpperInvariant()
@@ -41,16 +50,16 @@ module DocumentId =
     let value (s: DocumentId) = s
 
 
-type DocumentVersion = int64
+// This type is to be used by implementations of IProjectionStore/IProjectionDocumentCollection
+[<AllowNullLiteral>]
+type DocumentEnvelope<'TViewModel when 'TViewModel: null>() =
+    member val Id: DocumentId = DocumentId.Empty with get, set
+    member val Version: DocumentVersion = DocumentVersion.New with get, set
+    member val VM: 'TViewModel = null with get, set
 
-module DocumentVersion =
-    [<Literal>]
-    let New: DocumentVersion = 0L
-
-    let increment v : DocumentVersion = v + 1L
 
 [<Interface>]
-type IDocumentCollection<'TViewModel> =
+type IProjectionDocumentCollection<'TViewModel when 'TViewModel: null> =
     inherit IDisposable
     inherit IAsyncDisposable
     abstract member GetById: DocumentId -> Task<'TViewModel option>
@@ -58,9 +67,11 @@ type IDocumentCollection<'TViewModel> =
     abstract member Update: DocumentId * ('TViewModel -> 'TViewModel) -> Task
 
 [<Interface>]
-type IDocumentStore<'TViewModel> =
+type IProjectionStore<'TViewModel when 'TViewModel: null> =
     inherit IDisposable
     inherit IAsyncDisposable
-    abstract member OpenDocumentCollection<'TViewModel> : DocumentCollectionId -> Task<IDocumentCollection<'TViewModel>>
+
+    abstract member OpenDocumentCollection<'TViewModel> :
+        DocumentCollectionId -> Task<IProjectionDocumentCollection<'TViewModel>>
 
 exception ConcurrencyException of DocumentId * string

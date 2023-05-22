@@ -6,13 +6,13 @@ open CQRS.DTO
 open MassTransit
 open Serilog
 
-let handleMassTransitMessage<'T, 'TViewModel when 'T :> CqrsEventDto and 'T: not struct>
-    (consumeAction: IDocumentStore<'TViewModel> -> 'T -> Task)
-    (documentStore: IDocumentStore<'TViewModel>)
+let handleMassTransitMessage<'T, 'TViewModel when 'T :> CqrsEventDto and 'T: not struct and 'TViewModel: null>
+    (consumeAction: IProjectionStore<'TViewModel> -> 'T -> Task)
+    (projectionStore: IProjectionStore<'TViewModel>)
     (context: ConsumeContext<'T>)
     : Task =
     task {
         let message = context.Message
         Log.Logger.Information("[MESSAGE-BUS] {@MessageType} {@Message}", message.GetType(), message)
-        do! message |> consumeAction documentStore
+        do! message |> consumeAction projectionStore
     }

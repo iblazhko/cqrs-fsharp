@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CQRS.Adapters.InMemoryEventStore\CQRS.Adapters.InMemoryEventStore.fsproj" />
     <ProjectReference Include="..\CQRS.Adapters.InMemoryProjectionStore\CQRS.Adapters.InMemoryProjectionStore.fsproj" />
+    <ProjectReference Include="..\CQRS.Adapters.MartenDbProjectionStore\CQRS.Adapters.MartenDbProjectionStore.fsproj" />
     <ProjectReference Include="..\CQRS.Adapters.MassTransitMessageBus\CQRS.Adapters.MassTransitMessageBus.fsproj" />
     <ProjectReference Include="..\CQRS.Application\CQRS.Application.fsproj" />
     <ProjectReference Include="..\CQRS.Configuration\CQRS.Configuration.fsproj" />

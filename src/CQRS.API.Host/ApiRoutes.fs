@@ -32,7 +32,7 @@ let routes =
                         :> IResult)
             })
 
-        get "/v1/inventories/{id}" (fun (id: string) (documentStore: IDocumentStore<InventoryItemViewModel>) ->
+        get "/v1/inventories/{id}" (fun (id: string) (projectionStore: IProjectionStore<InventoryItemViewModel>) ->
             task {
                 // TODO: translate error to BadRequest
                 let inventoryItemId =
@@ -40,7 +40,7 @@ let routes =
                     |> EntityId.fromString "InventoryItemId"
                     |> Result.defaultWith (fun e -> failwith "Invalid entityId")
 
-                let! result = inventoryItemId |> getInventoryItem documentStore
+                let! result = inventoryItemId |> getInventoryItem projectionStore
 
                 match result with
                 | Document vm -> return (TypedResults.Ok(vm) :> IResult)

@@ -36,7 +36,7 @@ let createInventoryItem
     }
 
 let getInventoryItem
-    (projectionsStore: IDocumentStore<InventoryItemViewModel>)
+    (projectionsStore: IProjectionStore<InventoryItemViewModel>)
     (inventoryItemId: EntityId)
     : Task<DocumentQueryResult> =
     task {

@@ -14,17 +14,17 @@ multiple event types.
 Here we use a single consumer for the view model projection.
 *)
 
-type InventoryItemProjectionConsumer(documentStore: IDocumentStore<InventoryItemViewModel>) =
+type InventoryItemProjectionConsumer(projectionStore: IProjectionStore<InventoryItemViewModel>) =
     interface IConsumer<InventoryItemCreatedEvent> with
         member this.Consume(context: ConsumeContext<InventoryItemCreatedEvent>) =
             context
             |> EventConsumer.handleMassTransitMessage
                 InventoryItemEventHandlers.handleInventoryItemCreatedEvent
-                documentStore
+                projectionStore
 
     interface IConsumer<InventoryItemRenamedEvent> with
         member this.Consume(context: ConsumeContext<InventoryItemRenamedEvent>) =
             context
             |> EventConsumer.handleMassTransitMessage
                 InventoryItemEventHandlers.handleInventoryItemRenamedEvent
-                documentStore
+                projectionStore

@@ -5,6 +5,7 @@ open CQRS.DTO
 open CQRS.Ports.Messaging
 open MassTransit
 
+[<Sealed>]
 type MassTransitMessageBusAdapter(sendEndpoint: ISendEndpointProvider, publishEndpoint: IPublishEndpoint) =
     interface IMessageBus with
 

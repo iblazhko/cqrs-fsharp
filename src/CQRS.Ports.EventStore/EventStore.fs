@@ -32,7 +32,7 @@ type EventStreamVersion = int
 
 module EventStreamVersion =
     [<Literal>]
-    let NewStream: EventStreamVersion = 0
+    let New: EventStreamVersion = 0
 
     let increment v : EventStreamVersion = v + 1
 
