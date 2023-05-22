@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="InMemoryMemoryBusAdapter.fs" />
+  </ItemGroup>
+
+</Project>

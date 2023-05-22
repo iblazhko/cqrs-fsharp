@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FsToolkit.ErrorHandling" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CQRS.Domain\CQRS.Domain.fsproj" />
+    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj" />
+    <ProjectReference Include="..\CQRS.Mapping\CQRS.Mapping.fsproj" />
+    <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj" />
+    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="InventoryItemProjectionDocumentId.fs" />
+    <Compile Include="InventoryItemViewModel.fs" />
+    <Compile Include="DtoEventHandler.fs" />
+    <Compile Include="InventoryItemProjectionApplier.fs" />
+    <Compile Include="InventoryItemEventHandlers.fs" />
+  </ItemGroup>
+
+</Project>

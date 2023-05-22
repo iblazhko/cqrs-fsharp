@@ -1,0 +1,27 @@
+version: "3"
+
+# NOTE: this file is supposed to be joined with the `docker-compose.yaml`
+# Current directory is the root of this repository where the main `docker-compose.yaml` is located.
+
+services:
+  benchmark-test-runner:
+    build:
+      context: ./benchmark
+      dockerfile: cqrs-benchmark.Dockerfile
+    environment:
+      CQRS_SUT_BASE_URL: "http://server-api:17322"
+
+    volumes:
+      - benchmark-report:/benchmark-report
+      # NOTE: another option would be to map local directory directly without a volume:
+      # - ./reports:/benchmark-report
+      # However this directory will be created with root permissions, so not possible to move / delete easily.
+      # Using a volume instead and extracting report in `build.ps1` `Step_DockerComposeExtractBenchmarkReport`
+    depends_on:
+      - server-api
+      - server-application
+    networks:
+      - cqrs-net
+volumes:
+  benchmark-report:
+    driver: local

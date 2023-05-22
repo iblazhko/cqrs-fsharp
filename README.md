@@ -137,8 +137,7 @@ To stop a system running in the detached mode:
 
 ## References
 
-1. Fowler, Martin. “Bliki: CQRS” martinfowler.com, 2011-07-14, <https://martinfowler.com/bliki/CQRS.html>.  
+1. Fowler, Martin. “Bliki: CQRS” martinfowler.com, 2011-07-14, <https://martinfowler.com/bliki/CQRS.html>.
+1. Wlaschin, Scott. “Domain Modeling Made Functional”. P1.0, The Pragmatic Programmers, 2018-01, <https://pragprog.com/titles/swdddf/domain-modeling-made-functional/>. 
 1. Young, Gregory. “CQRS Documents” wordpress.com, 2010-11, <https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf>.
 1. Young, Gregory. “Simple CQRS” github.com, 2015-01-13, <https://github.com/gregoryyoung/m-r>.
-
-

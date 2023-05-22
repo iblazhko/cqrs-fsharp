@@ -1,0 +1,108 @@
+version: "3"
+
+services:
+  ## Infrastructure
+
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+    environment:
+      RABBITMQ_DEFAULT_USER: "cqrs_admin"
+      RABBITMQ_DEFAULT_PASS: "rS8pdo42MLFN"
+      RABBITMQ_DEFAULT_VHOST: "cqrs"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - cqrs-net
+
+  postgres:
+    image: postgres:15.3
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "cqrs_admin"
+      POSTGRES_PASSWORD: "p3YSB7zXN93a"
+      POSTGRES_DB: "cqrs"
+    networks:
+      - cqrs-net
+
+  ## Server
+
+  server-application:
+    build:
+      context: ./src/CQRS.Application.Host
+      dockerfile: cqrs-app.Dockerfile
+    environment:
+      CQRS_CqrsApp__ServiceUrl: "http://*:17321"
+      CQRS_CqrsApp__MartenDb__Endpoint__Host: "postgres"
+      CQRS_CqrsApp__MartenDb__Endpoint__Port: "5432"
+      CQRS_CqrsApp__MartenDb__Username: "cqrs_admin"
+      CQRS_CqrsApp__MartenDb__Password: "p3YSB7zXN93a"
+      CQRS_CqrsApp__MartenDb__Database: "cqrs"
+      CQRS_CqrsApp__MassTransit__RabbitMq__Endpoint__Host: "rabbitmq"
+      CQRS_CqrsApp__MassTransit__RabbitMq__Endpoint__Port: "5672"
+      CQRS_CqrsApp__MassTransit__RabbitMq__Username: "cqrs_admin"
+      CQRS_CqrsApp__MassTransit__RabbitMq__Password: "rS8pdo42MLFN"
+      CQRS_CqrsApp__MassTransit__RabbitMq__VHost: "cqrs"
+      CQRS_CqrsApp__Logging__Level: "Information"
+    ports:
+      - "17321:17321"
+    depends_on:
+      - rabbitmq
+      - postgres
+    networks:
+      - cqrs-net
+
+  server-api:
+    build:
+      context: ./src/CQRS.API.Host
+      dockerfile: cqrs-api.Dockerfile
+    environment:
+      CQRS_CqrsApi__ServiceUrl: "http://*:17322"
+      CQRS_CqrsApi__MartenDb__Endpoint__Host: "postgres"
+      CQRS_CqrsApi__MartenDb__Endpoint__Port: "5432"
+      CQRS_CqrsApi__MartenDb__Username: "cqrs_admin"
+      CQRS_CqrsApi__MartenDb__Password: "p3YSB7zXN93a"
+      CQRS_CqrsApi__MartenDb__Database: "cqrs"
+      CQRS_CqrsApi__MassTransit__RabbitMq__Endpoint__Host: "rabbitmq"
+      CQRS_CqrsApi__MassTransit__RabbitMq__Endpoint__Port: "5672"
+      CQRS_CqrsApi__MassTransit__RabbitMq__Username: "cqrs_admin"
+      CQRS_CqrsApi__MassTransit__RabbitMq__Password: "rS8pdo42MLFN"
+      CQRS_CqrsApi__MassTransit__RabbitMq__VHost: "cqrs"
+      CQRS_CqrsApi__Logging__Level: "Information"
+    ports:
+      - "17322:17322"
+    depends_on:
+      - rabbitmq
+      - postgres
+      - server-application
+    networks:
+      - cqrs-net
+
+#  ## Client
+#  # a.t.m cqrs-cli exits immediately after completing a command
+#  # so this would stop the whole Docker Compose project instance
+#  client:
+#    build:
+#      context: ./src/CQRS.CLI
+#      dockerfile: client.Dockerfile
+#    environment:
+#      CQRS_CqrsCli__ApiServiceUrl: "http://server-api:17322"
+#    depends_on:
+#      - server-api
+#    networks:
+#      - cqrs-net
+
+volumes:
+  rabbitmq-data:
+    driver: local
+  postgres-data:
+    driver: local
+
+networks:
+  cqrs-net:
+    driver: bridge

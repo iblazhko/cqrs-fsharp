@@ -1,0 +1,126 @@
+module CQRS.Application.Tests.EventStoreTests
+
+open CQRS.Application
+open CQRS.Domain.Inventory
+open CQRS.EntityIds
+open CQRS.Ports.EventStore
+open CQRS.Adapters
+open Xunit
+open FsUnit
+
+
+
+let private assertSuccess (x: Result<'Ts, 'Tf>) =
+    match x with
+    | Ok s -> s
+    | Error f -> failwith (f.ToString())
+
+let private getRandomStreamId () =
+    EntityId.newId () |> EntityId.toString |> EventStreamId.create
+
+let private eventMapper = InventoryItemDtoEventMapper()
+
+let private eventStore =
+    new InMemoryEventStore(SystemTextEventSerializer(), None) :> IEventStore
+
+[<Fact>]
+let ``EventStore Open can open a new stream`` () =
+    task {
+        let streamId = getRandomStreamId ()
+        let! eventStreamSession = eventStore.Open<InventoryItemEvent, InventoryItemState>(streamId, eventMapper)
+        let! stream = eventStreamSession.GetStream()
+
+        stream.StreamId |> should equal streamId
+        stream.StreamVersion |> should equal 0L
+    }
+
+[<Fact>]
+let ``EventStore Save can save a new stream`` () =
+    task {
+        let streamId = getRandomStreamId ()
+        let! eventStreamSession = eventStore.Open<InventoryItemEvent, InventoryItemState>(streamId, eventMapper)
+        do! eventStore.Save(eventStreamSession)
+
+        let! exists = eventStore.Contains streamId
+        exists |> should be True
+    }
+
+[<Fact>]
+let ``EventStore GetStream can open an existing stream`` () =
+    task {
+        let streamId = getRandomStreamId ()
+        let! eventStreamSession = eventStore.Open<InventoryItemEvent, InventoryItemState>(streamId, eventMapper)
+        do! eventStore.Save(eventStreamSession)
+        let! eventStreamSession2 = eventStore.Open<InventoryItemEvent, InventoryItemState>(streamId, eventMapper)
+
+        let! stream = eventStreamSession2.GetStream()
+        stream.StreamId |> should equal streamId
+    }
+
+[<Fact>]
+let ``EventStore Save can save an existing stream`` () =
+    task {
+        let streamId = getRandomStreamId ()
+        let! eventStreamSession = eventStore.Open<InventoryItemEvent, InventoryItemState>(streamId, eventMapper)
+        do! eventStore.Save(eventStreamSession)
+        let! eventStreamSession2 = eventStore.Open<InventoryItemEvent, InventoryItemState>(streamId, eventMapper)
+        do! eventStore.Save(eventStreamSession2)
+
+        let! exists = eventStore.Contains streamId
+        exists |> should be True
+    }
+
+[<Fact>]
+let ``EventStore Delete can delete existing stream`` () =
+    task {
+        let streamId = getRandomStreamId ()
+        let! eventStreamSession = eventStore.Open<InventoryItemEvent, InventoryItemState>(streamId, eventMapper)
+        do! eventStore.Save(eventStreamSession)
+
+        let! removed = eventStore.Delete streamId
+        removed |> should be True
+
+        let! exists = eventStore.Contains streamId
+        exists |> should be False
+    }
+
+[<Fact>]
+let ``EventStore Delete can handle non-existing stream`` () =
+    task {
+        let streamId = getRandomStreamId ()
+        let! removed = eventStore.Delete streamId
+        removed |> should be False
+
+        let! exists = eventStore.Contains streamId
+        exists |> should be False
+    }
+
+[<Fact>]
+let ``EventStore Contains can handle existing streams`` () =
+    task {
+        let streamId = getRandomStreamId ()
+        let! eventStreamSession = eventStore.Open<InventoryItemEvent, InventoryItemState>(streamId, eventMapper)
+        do! eventStore.Save(eventStreamSession)
+
+        let! exists = eventStore.Contains streamId
+        exists |> should be True
+    }
+
+[<Fact>]
+let ``EventStore Contains can handle non-existing streams`` () =
+    task {
+        let streamId = getRandomStreamId ()
+
+        let! exists = eventStore.Contains streamId
+        exists |> should be False
+    }
+
+[<Fact>]
+let ``EventStore Contains does not take into account new streams that have not been saved yet`` () =
+    task {
+        let streamId = getRandomStreamId ()
+        let! _ = eventStore.Open<InventoryItemEvent, InventoryItemState>(streamId, eventMapper)
+
+        let! exists = eventStore.Contains streamId
+        exists |> should be False
+    }

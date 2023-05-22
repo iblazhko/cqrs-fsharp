@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Polly" />
+    <PackageReference Include="Polly.Contrib.WaitAndRetry" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="SettingStringBuilder.fs" />
+    <Compile Include="UrlPart.fs" />
+    <Compile Include="InfrastructureSettings.fs" />
+    <Compile Include="CqrsSettings.fs" />
+  </ItemGroup>
+
+</Project>

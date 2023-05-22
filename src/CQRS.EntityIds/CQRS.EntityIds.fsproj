@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FPrimitive" />
+    <PackageReference Include="FSharp.Core" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <Compile Include="EntityId.fs" />
+  </ItemGroup>
+
+</Project>

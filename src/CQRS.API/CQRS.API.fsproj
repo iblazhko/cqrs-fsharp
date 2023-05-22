@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FPrimitive" />
+    <PackageReference Include="FSharp.Core" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj" />
+    <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj" />
+    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="AcceptedResponse.fs" />
+    <Compile Include="Handlers.fs" />
+  </ItemGroup>
+
+</Project>

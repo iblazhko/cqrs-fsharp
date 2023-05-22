@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="MessageBus.fs" />
+    <Compile Include="MessageContextBuilder.fs" />
+  </ItemGroup>
+
+</Project>

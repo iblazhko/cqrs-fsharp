@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="InMemoryProjectionStoreAdapter.fs" />
+  </ItemGroup>
+
+</Project>

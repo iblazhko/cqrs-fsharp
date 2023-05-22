@@ -1,0 +1,2 @@
+module CQRS.Application.Tests.InventoryItemCommandHandlersTest
+

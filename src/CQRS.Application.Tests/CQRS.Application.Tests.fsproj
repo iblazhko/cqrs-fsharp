@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Bogus" />
+    <PackageReference Include="FsToolkit.ErrorHandling" />
+    <PackageReference Include="FsUnit" />
+    <PackageReference Include="FsUnit.xUnit" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CQRS.Adapters.InMemoryEventStore\CQRS.Adapters.InMemoryEventStore.fsproj" />
+    <ProjectReference Include="..\CQRS.Application\CQRS.Application.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="EventStoreTests.fs" />
+    <Compile Include="InventoryItemCommandHandlersTest.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+</Project>

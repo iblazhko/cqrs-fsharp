@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FsToolkit.ErrorHandling" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CQRS.Domain\CQRS.Domain.fsproj" />
+    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="DtoMapper.fs" />
+    <Compile Include="InventoryTypesMapper.fs" />
+    <Compile Include="CreateInventoryItemMapper.fs" />
+    <Compile Include="RenameInventoryItemMapper.fs" />
+    <Compile Include="AddItemsToInventoryMapper.fs" />
+    <Compile Include="RemoveItemsFromInventoryMapper.fs" />
+    <Compile Include="DeactivateInventoryItemMapper.fs" />
+    <Compile Include="InventoryItemCreatedMapper.fs" />
+    <Compile Include="InventoryItemRenamedMapper.fs" />
+    <Compile Include="ItemsAddedToInventoryMapper.fs" />
+    <Compile Include="ItemsRemovedFromInventoryMapper.fs" />
+    <Compile Include="ItemNotInStockMapper.fs" />
+    <Compile Include="ItemWentOutOfStockMapper.fs" />
+    <Compile Include="InventoryItemDeactivatedMapper.fs" />
+  </ItemGroup>
+
+</Project>
