@@ -24,15 +24,23 @@ let private deactivateIfEmpty (state: InventoryState) (action: InventoryState ->
         | StockQuantity.InventoryCount _ -> Error(ValidationFailure(CannotDeactivateNonEmpty x.InventoryId))
         | StockQuantity.Empty -> Ok(action x)
 
-let private getNotInStockEvent (x: InventoryState) =
-    ItemNotInStock
+let private getInStockEvent (x: InventoryState) count =
+    ItemInStock
         { InventoryId = x.InventoryId
-          Name = x.Name }
+          Name = x.Name
+          StockQuantity = count |> StockQuantity.create }
 
 let private getWentOutOfStockEvent (x: InventoryState) =
     ItemWentOutOfStock
         { InventoryId = x.InventoryId
           Name = x.Name }
+
+let private getNotEnoughStockEvent (x: InventoryState) requestedCount =
+    RequestedMoreItemsThanHaveInStock
+        { InventoryId = x.InventoryId
+          Name = x.Name
+          StockQuantity = x.StockQuantity
+          RequestedCount = requestedCount }
 
 let private getRemovedFromInventoryEvent (x: InventoryState) removedCount =
     ItemsRemovedFromInventory
@@ -64,28 +72,31 @@ let rename (state: InventoryState) (newName: InventoryName) =
 
 let addItems (state: InventoryState) (count: PositiveInteger) =
     invokeIfExists state (fun x ->
-        Seq.singleton (
-            ItemsAddedToInventory
-                { InventoryId = x.InventoryId
-                  Name = x.Name
-                  AddedCount = count
-                  OldStockQuantity = x.StockQuantity
-                  NewStockQuantity = StockQuantity.add x.StockQuantity count }
-        ))
+        seq {
+            yield
+                ItemsAddedToInventory
+                    { InventoryId = x.InventoryId
+                      Name = x.Name
+                      AddedCount = count
+                      OldStockQuantity = x.StockQuantity
+                      NewStockQuantity = StockQuantity.add x.StockQuantity count }
 
+            if state.StockQuantity = Empty then
+                yield getInStockEvent x count
+        })
 
 let removeItems (state: InventoryState) (count: PositiveInteger) =
     invokeIfExists state (fun x ->
         seq {
             match x.StockQuantity with
-            | StockQuantity.Empty -> yield getNotInStockEvent x
+            | StockQuantity.Empty -> yield getNotEnoughStockEvent x count
             | StockQuantity.InventoryCount available ->
                 match available with
                 | amount when PositiveInteger.greaterThan amount count -> yield getRemovedFromInventoryEvent x count
                 | amount when PositiveInteger.equal amount count ->
                     yield getRemovedFromInventoryEvent x count
                     yield getWentOutOfStockEvent x
-                | _ -> yield getNotInStockEvent x
+                | _ -> yield getNotEnoughStockEvent x count
         })
 
 let deactivate (state: InventoryState) =

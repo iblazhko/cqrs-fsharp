@@ -1,12 +1,11 @@
 module CQRS.Mapping.RemoveItemsFromInventoryMapper
 
-open CQRS.Domain
 open CQRS.Domain.Inventory
 open CQRS.DTO.V1
 open CQRS.Mapping.DtoMapper
 open FsToolkit.ErrorHandling
 
-let fromDomain (domain: Inventory.RemoveItemsFromInventory) =
+let fromDomain (domain: RemoveItemsFromInventory) =
     let dto = RemoveItemsFromInventoryCommand()
     dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
     dto.Count <- domain.Count |> CountMapper.fromDomain

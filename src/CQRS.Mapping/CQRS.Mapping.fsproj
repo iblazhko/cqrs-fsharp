@@ -27,7 +27,8 @@
     <Compile Include="InventoryRenamedMapper.fs" />
     <Compile Include="ItemsAddedToInventoryMapper.fs" />
     <Compile Include="ItemsRemovedFromInventoryMapper.fs" />
-    <Compile Include="ItemNotInStockMapper.fs" />
+    <Compile Include="ItemInStockMapper.fs" />
+    <Compile Include="RequestedMoreItemsThanHaveInStockMapper.fs" />
     <Compile Include="ItemWentOutOfStockMapper.fs" />
     <Compile Include="InventoryDeactivatedMapper.fs" />
     <Compile Include="InventoryStateMapper.fs" />

@@ -1,12 +1,11 @@
 module CQRS.Mapping.CreateInventoryMapper
 
-open CQRS.Domain
 open CQRS.Domain.Inventory
 open CQRS.DTO.V1
 open CQRS.Mapping.DtoMapper
 open FsToolkit.ErrorHandling
 
-let fromDomain (domain: Inventory.CreateInventory) =
+let fromDomain (domain: CreateInventory) =
     let dto = CreateInventoryCommand()
     dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
     dto.Name <- domain.Name |> InventoryNameMapper.fromDomain

@@ -42,10 +42,19 @@ module StockQuantity =
         | Empty -> InventoryCount n
         | InventoryCount count -> InventoryCount(PositiveInteger.add count n)
 
+    let equals (stockQuantity: StockQuantity) (n: PositiveInteger) =
+        match stockQuantity with
+        | Empty -> false
+        | InventoryCount x -> x = n
+
     let subtract (stockQuantity: StockQuantity) (n: PositiveInteger) =
         match stockQuantity with
         | Empty -> failwith "Cannot subtract from Empty"
-        | InventoryCount count -> InventoryCount(PositiveInteger.subtract count n)
+        | InventoryCount count ->
+            if (equals stockQuantity n) then
+                Empty
+            else
+                InventoryCount(PositiveInteger.subtract count n)
 
 // State
 (*
@@ -111,13 +120,20 @@ type ItemsRemovedFromInventory =
       OldStockQuantity: StockQuantity
       NewStockQuantity: StockQuantity }
 
-type ItemNotInStock =
+type ItemInStock =
     { InventoryId: InventoryId
-      Name: InventoryName }
+      Name: InventoryName
+      StockQuantity: StockQuantity }
 
 type ItemWentOutOfStock =
     { InventoryId: InventoryId
       Name: InventoryName }
+
+type RequestedMoreItemsThanHaveInStock =
+    { InventoryId: InventoryId
+      Name: InventoryName
+      StockQuantity: StockQuantity
+      RequestedCount: PositiveInteger }
 
 type InventoryDeactivated =
     { InventoryId: InventoryId
@@ -137,8 +153,9 @@ type InventoryEvent =
     | InventoryRenamed of InventoryRenamed
     | ItemsAddedToInventory of ItemsAddedToInventory
     | ItemsRemovedFromInventory of ItemsRemovedFromInventory
-    | ItemNotInStock of ItemNotInStock
+    | ItemInStock of ItemInStock
     | ItemWentOutOfStock of ItemWentOutOfStock
+    | RequestedMoreItemsThanHaveInStock of RequestedMoreItemsThanHaveInStock
     | InventoryDeactivated of InventoryDeactivated
 
 // All domain validation failures
@@ -147,6 +164,7 @@ type ValidationFailure =
     | AlreadyExists of InventoryId
     | Deactivated of InventoryId
     | CannotDeactivateNonEmpty of InventoryId
+    | CannotRequestMoreThanHaveInStock of InventoryId
     | ValidationError of ErrorsByTag
 
 // All failures

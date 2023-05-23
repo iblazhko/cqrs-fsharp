@@ -15,7 +15,7 @@ let private getWithResponseBody (url: Url) =
     let responseStatusCode = response.ResponseMessage.StatusCode
     let responseBody = response.GetStringAsync().Result
 
-    Log.Logger.Information("[GET<] {Url} {ResponseStatusCode} {ResponseBody}", url, responseStatusCode, responseBody)
+    Log.Logger.Information("[GET<] {Url} {ResponseStatusCode} {@ResponseBody}", url, responseStatusCode, responseBody)
 
 let private postWithBody<'a> (body: 'a) (url: Url) =
     Log.Logger.Information("[POST>] {Url} {DTO}", url, body)
@@ -24,7 +24,7 @@ let private postWithBody<'a> (body: 'a) (url: Url) =
     let responseStatusCode = response.ResponseMessage.StatusCode
     let responseBody = response.GetStringAsync().Result
 
-    Log.Logger.Information("[POST<] {Url} {ResponseStatusCode} {ResponseBody}", url, responseStatusCode, responseBody)
+    Log.Logger.Information("[POST<] {Url} {ResponseStatusCode} {@ResponseBody}", url, responseStatusCode, responseBody)
 
 let private postWithEmptyBody (url: Url) =
     Log.Logger.Information("[POST>] {Url}", url)
@@ -33,7 +33,7 @@ let private postWithEmptyBody (url: Url) =
     let responseStatusCode = response.ResponseMessage.StatusCode
     let responseBody = response.GetStringAsync().Result
 
-    Log.Logger.Information("[POST<] {Url} {ResponseStatusCode} {ResponseBody}", url, responseStatusCode, responseBody)
+    Log.Logger.Information("[POST<] {Url} {ResponseStatusCode} {@ResponseBody}", url, responseStatusCode, responseBody)
 
 let createInventory (name: string) (apiServiceUrl: string) =
     let dto = CreateInventoryCommand()

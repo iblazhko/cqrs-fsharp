@@ -19,5 +19,6 @@ let apply (state: InventoryState) (e: InventoryEvent) : InventoryState =
     | ItemsRemovedFromInventory x ->
         { state with
             StockQuantity = x.NewStockQuantity }
-    | ItemNotInStock _ -> state
+    | ItemInStock _ -> state
     | ItemWentOutOfStock _ -> state
+    | RequestedMoreItemsThanHaveInStock _ -> state

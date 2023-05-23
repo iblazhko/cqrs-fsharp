@@ -84,10 +84,11 @@ type ItemsRemovedFromInventoryEvent() =
     override this.ToString() = Json.serialize this
 
 [<AllowNullLiteral>]
-type ItemNotInStockEvent() =
+type ItemInStockEvent() =
     interface CqrsEventDto
     member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Name: string = String.Empty with get, set
+    member val StockQuantity: int = 0 with get, set
     override this.ToString() = Json.serialize this
 
 [<AllowNullLiteral>]
@@ -95,6 +96,15 @@ type ItemWentOutOfStockEvent() =
     interface CqrsEventDto
     member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Name: string = String.Empty with get, set
+    override this.ToString() = Json.serialize this
+
+[<AllowNullLiteral>]
+type RequestedMoreItemsThanHaveInStockEvent() =
+    interface CqrsEventDto
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val Name: string = String.Empty with get, set
+    member val StockQuantity: int = 0 with get, set
+    member val RequestedCount: int = 0 with get, set
     override this.ToString() = Json.serialize this
 
 [<AllowNullLiteral>]

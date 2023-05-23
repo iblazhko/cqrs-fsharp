@@ -20,9 +20,10 @@ type InventoryEventDtoMapper() =
         | InventoryRenamed e -> (InventoryRenamedMapper.fromDomain e) :> obj
         | ItemsAddedToInventory e -> (ItemsAddedToInventoryMapper.fromDomain e) :> obj
         | ItemsRemovedFromInventory e -> (ItemsRemovedFromInventoryMapper.fromDomain e) :> obj
-        | ItemNotInStock e -> (ItemNotInStockMapper.fromDomain e) :> obj
+        | ItemInStock e -> (ItemInStockMapper.fromDomain e) :> obj
         | ItemWentOutOfStock e -> (ItemWentOutOfStockMapper.fromDomain e) :> obj
         | InventoryDeactivated e -> (InventoryDeactivatedMapper.fromDomain e) :> obj
+        | RequestedMoreItemsThanHaveInStock e -> (RequestedMoreItemsThanHaveInStockMapper.fromDomain e) :> obj
 
     interface IEventMapper<InventoryEvent> with
         member this.FromDomainEvent(domainEvent) =
@@ -64,13 +65,13 @@ type InventoryEventDtoMapper() =
 
                 (InventoryEvent.ItemsRemovedFromInventory domainEvent)
 
-            | :? CQRS.DTO.V1.ItemNotInStockEvent ->
+            | :? CQRS.DTO.V1.ItemInStockEvent ->
                 let domainEvent =
-                    (dtoWithMetadata.Event :?> CQRS.DTO.V1.ItemNotInStockEvent)
-                    |> ItemNotInStockMapper.toDomain
+                    (dtoWithMetadata.Event :?> CQRS.DTO.V1.ItemInStockEvent)
+                    |> ItemInStockMapper.toDomain
                     |> mapOfFail
 
-                (InventoryEvent.ItemNotInStock domainEvent)
+                (InventoryEvent.ItemInStock domainEvent)
 
             | :? CQRS.DTO.V1.ItemWentOutOfStockEvent ->
                 let domainEvent =
@@ -79,6 +80,14 @@ type InventoryEventDtoMapper() =
                     |> mapOfFail
 
                 (InventoryEvent.ItemWentOutOfStock domainEvent)
+
+            | :? CQRS.DTO.V1.RequestedMoreItemsThanHaveInStockEvent ->
+                let domainEvent =
+                    (dtoWithMetadata.Event :?> CQRS.DTO.V1.RequestedMoreItemsThanHaveInStockEvent)
+                    |> RequestedMoreItemsThanHaveInStockMapper.toDomain
+                    |> mapOfFail
+
+                (InventoryEvent.RequestedMoreItemsThanHaveInStock domainEvent)
 
             | :? CQRS.DTO.V1.InventoryDeactivatedEvent ->
                 let domainEvent =

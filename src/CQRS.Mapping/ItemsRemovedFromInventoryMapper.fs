@@ -1,12 +1,11 @@
 module CQRS.Mapping.ItemsRemovedFromInventoryMapper
 
 open CQRS.Domain.Inventory
-open CQRS.Domain
 open CQRS.DTO.V1
 open CQRS.Mapping.DtoMapper
 open FsToolkit.ErrorHandling
 
-let fromDomain (domain: Inventory.ItemsRemovedFromInventory) =
+let fromDomain (domain: ItemsRemovedFromInventory) =
     let dto = ItemsRemovedFromInventoryEvent()
     dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
     dto.Name <- domain.Name |> InventoryNameMapper.fromDomain
