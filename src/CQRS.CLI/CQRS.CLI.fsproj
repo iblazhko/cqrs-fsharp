@@ -40,6 +40,10 @@
     <Compile Include="FlurlFsharp.fs" />
     <Compile Include="ApiClient.fs" />
     <Compile Include="CreateInventoryCommand.fs" />
+    <Compile Include="RenameInventoryCommand.fs" />
+    <Compile Include="AddItemsToInventoryCommand.fs" />
+    <Compile Include="RemoveItemsFromInventoryCommand.fs" />
+    <Compile Include="DeactivateInventoryCommand.fs" />
     <Compile Include="GetInventoryCommand.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

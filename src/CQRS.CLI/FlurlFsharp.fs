@@ -4,11 +4,20 @@ open System.Net.Http
 open Flurl
 open Flurl.Http
 
-let appendPathSegment (segment: string) (url: string) =
+let appendPathSegmentToString (segment: string) (url: string) =
     GeneratedExtensions.AppendPathSegment(url, segment)
 
-let appendEncodedPathSegment (segment: string) (url: string) =
+let appendPathSegmentToUrl (segment: string) (url: Url) =
+    GeneratedExtensions.AppendPathSegment(url, segment)
+
+let appendEncodedPathSegmentToString (segment: string) (url: string) =
     GeneratedExtensions.AppendPathSegment(url, segment, true)
+
+let appendEncodedPathSegmentToUrl (segment: string) (url: Url) =
+    GeneratedExtensions.AppendPathSegment(url, segment, true)
+
+let post (endpoint: Url) =
+    FlurlRequest(endpoint).AllowAnyHttpStatus().PostAsync().Result
 
 let postJson x (endpoint: Url) =
     FlurlRequest(endpoint).AllowAnyHttpStatus().PostJsonAsync(x).Result

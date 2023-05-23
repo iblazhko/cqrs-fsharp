@@ -52,6 +52,7 @@ type InventoryCreatedEvent() =
     interface CqrsEventDto
     member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Name: string = String.Empty with get, set
+    member val IsActive: bool = false with get, set
     override this.ToString() = Json.serialize this
 
 [<AllowNullLiteral>]

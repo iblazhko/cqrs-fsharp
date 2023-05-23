@@ -44,3 +44,39 @@ let handleInventoryRenamedEvent (projectionStore: IProjectionStore<InventoryView
           DocumentIdFromEvent = fun x -> x.InventoryId |> getDocumentId
           ProjectionStore = projectionStore
           ViewModelUpdateAction = applyInventoryRenamed }
+
+let handleItemsAddedToInventoryEvent
+    (projectionStore: IProjectionStore<InventoryViewModel>)
+    (dto: ItemsAddedToInventoryEvent)
+    =
+    dto
+    |> handleInventoryEvent
+        { DtoMapper = ItemsAddedToInventoryMapper.toDomain
+          DocumentCollectionIdFromEvent = getProjectionId
+          DocumentIdFromEvent = fun x -> x.InventoryId |> getDocumentId
+          ProjectionStore = projectionStore
+          ViewModelUpdateAction = applyItemsAddedToInventory }
+
+let handleItemsRemovedFromInventoryEvent
+    (projectionStore: IProjectionStore<InventoryViewModel>)
+    (dto: ItemsRemovedFromInventoryEvent)
+    =
+    dto
+    |> handleInventoryEvent
+        { DtoMapper = ItemsRemovedFromInventoryMapper.toDomain
+          DocumentCollectionIdFromEvent = getProjectionId
+          DocumentIdFromEvent = fun x -> x.InventoryId |> getDocumentId
+          ProjectionStore = projectionStore
+          ViewModelUpdateAction = applyItemsRemovedFromInventory }
+
+let handleInventoryDeactivatedEvent
+    (projectionStore: IProjectionStore<InventoryViewModel>)
+    (dto: InventoryDeactivatedEvent)
+    =
+    dto
+    |> handleInventoryEvent
+        { DtoMapper = InventoryDeactivatedMapper.toDomain
+          DocumentCollectionIdFromEvent = getProjectionId
+          DocumentIdFromEvent = fun x -> x.InventoryId |> getDocumentId
+          ProjectionStore = projectionStore
+          ViewModelUpdateAction = applyInventoryDeactivated }

@@ -16,6 +16,18 @@ let main (args: string[]) =
     cli.Command(CreateInventoryCommand.name, (CreateInventoryCommand.configuration settings))
     |> ignore
 
+    cli.Command(RenameInventoryCommand.name, (RenameInventoryCommand.configuration settings))
+    |> ignore
+
+    cli.Command(AddItemsToInventoryCommand.name, (AddItemsToInventoryCommand.configuration settings))
+    |> ignore
+
+    cli.Command(RemoveItemsFromInventoryCommand.name, (RemoveItemsFromInventoryCommand.configuration settings))
+    |> ignore
+
+    cli.Command(DeactivateInventoryCommand.name, (DeactivateInventoryCommand.configuration settings))
+    |> ignore
+
     cli.Command(GetInventoryCommand.name, (GetInventoryCommand.configuration settings))
     |> ignore
 

@@ -7,7 +7,8 @@ open CQRS.Ports.ProjectionStore
 open CQRS.Projections
 open FSharp.MinimalApi
 open Microsoft.AspNetCore.Http
-open CQRS.API.Handlers
+open CQRS.API.HandlersMessageBusAdapter
+open CQRS.API.HandlersProjectionsAdapter
 open CQRS.DTO.V1
 open CQRS.Ports.Messaging
 
@@ -17,7 +18,7 @@ let routes =
     endpoints {
         get "/v1/hello" (fun () -> "Hi there")
 
-        put "/v1/inventories" (fun (cmd: CreateInventoryCommand) (messageBus: IMessageBus) ->
+        post "/v1/inventories" (fun (cmd: CreateInventoryCommand) (messageBus: IMessageBus) ->
             task {
                 let! result = cmd |> createInventory messageBus systemClock
 
@@ -31,6 +32,33 @@ let routes =
                         )
                         :> IResult)
             })
+
+        post "/v1/inventories/{id}/rename/{name}" (fun (id: string) (name: string) (messageBus: IMessageBus) ->
+            task {
+                // TODO: translate error to BadRequest
+                let inventoryId =
+                    id
+                    |> EntityId.fromString "InventoryId"
+                    |> Result.defaultWith (fun e -> failwith "Invalid entityId")
+
+
+                let cmd = RenameInventoryCommand()
+                cmd.InventoryId <- inventoryId |> EntityId.value
+                cmd.NewName <- name
+
+                let! result = cmd |> renameInventory messageBus systemClock
+
+                match result with
+                | Ok success -> return (TypedResults.Ok(success) :> IResult)
+                | Error error ->
+                    return
+                        (TypedResults.Problem(
+                            System.Text.Json.JsonSerializer.Serialize(error),
+                            statusCode = (int) HttpStatusCode.InternalServerError
+                        )
+                        :> IResult)
+            })
+
 
         post "/v1/inventories/{id}/add/{count}" (fun (id: string) (count: int) (messageBus: IMessageBus) ->
             task {

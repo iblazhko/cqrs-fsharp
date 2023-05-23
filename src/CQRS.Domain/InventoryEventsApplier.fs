@@ -9,8 +9,8 @@ let apply (state: InventoryState) (e: InventoryEvent) : InventoryState =
             InventoryId = x.InventoryId
             Name = x.Name
             StockQuantity = Empty
-            IsNew = false
-            IsActive = true }
+            IsActive = x.IsActive
+            IsNew = false }
     | InventoryDeactivated _ -> { state with IsActive = false }
     | InventoryRenamed x -> { state with Name = x.NewName }
     | ItemsAddedToInventory x ->

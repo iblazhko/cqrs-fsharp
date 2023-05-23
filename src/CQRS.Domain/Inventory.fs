@@ -89,7 +89,8 @@ type DeactivateInventory = { InventoryId: InventoryId }
 
 type InventoryCreated =
     { InventoryId: InventoryId
-      Name: InventoryName }
+      Name: InventoryName
+      IsActive: bool }
 
 type InventoryRenamed =
     { InventoryId: InventoryId

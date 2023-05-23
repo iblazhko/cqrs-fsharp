@@ -24,3 +24,24 @@ type InventoryProjectionConsumer(projectionStore: IProjectionStore<InventoryView
         member this.Consume(context: ConsumeContext<InventoryRenamedEvent>) =
             context
             |> EventConsumer.handleMassTransitMessage InventoryEventHandlers.handleInventoryRenamedEvent projectionStore
+
+    interface IConsumer<ItemsAddedToInventoryEvent> with
+        member this.Consume(context: ConsumeContext<ItemsAddedToInventoryEvent>) =
+            context
+            |> EventConsumer.handleMassTransitMessage
+                InventoryEventHandlers.handleItemsAddedToInventoryEvent
+                projectionStore
+
+    interface IConsumer<ItemsRemovedFromInventoryEvent> with
+        member this.Consume(context: ConsumeContext<ItemsRemovedFromInventoryEvent>) =
+            context
+            |> EventConsumer.handleMassTransitMessage
+                InventoryEventHandlers.handleItemsRemovedFromInventoryEvent
+                projectionStore
+
+    interface IConsumer<InventoryDeactivatedEvent> with
+        member this.Consume(context: ConsumeContext<InventoryDeactivatedEvent>) =
+            context
+            |> EventConsumer.handleMassTransitMessage
+                InventoryEventHandlers.handleInventoryDeactivatedEvent
+                projectionStore

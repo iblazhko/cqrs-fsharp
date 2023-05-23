@@ -10,6 +10,7 @@ let fromDomain (domain: Inventory.InventoryCreated) =
     let dto = InventoryCreatedEvent()
     dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
     dto.Name <- domain.Name |> InventoryNameMapper.fromDomain
+    dto.IsActive <- domain.IsActive
     dto
 
 let toDomain (dto: InventoryCreatedEvent) =
@@ -20,5 +21,6 @@ let toDomain (dto: InventoryCreatedEvent) =
 
         return
             { InventoryCreated.InventoryId = inventoryId
-              Name = name }
+              Name = name
+              IsActive = dto.IsActive }
     }
