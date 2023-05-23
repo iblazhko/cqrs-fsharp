@@ -2,24 +2,19 @@ module CQRS.Infrastructure.EventStoreConfigurator
 
 open CQRS.Adapters
 open CQRS.Application
-open CQRS.Configuration.Infrastructure
 open CQRS.Ports.EventStore
 open CQRS.Ports.Messaging
 open Marten
 open Microsoft.Extensions.DependencyInjection
 
-let configureServices (settings: MartenDbSettings) (services: IServiceCollection) =
-    services.AddMarten(fun (options: StoreOptions) -> options.Connection(settings.getConnectionString ()))
-    |> ignore
+let configureServices (services: IServiceCollection) =
 
     services.AddSingleton<IEventStore>(fun serviceProvider ->
-        // TODO: Replace InMemoryEventStore with MartenDbEventStore
-
+        let martenDocumentStore = serviceProvider.GetRequiredService<IDocumentStore>()
         let bus = serviceProvider.GetRequiredService<IMessageBus>()
 
         let eventStore =
-            (new InMemoryEventStore(SystemTextJsonEventSerializer(), Some(EventStoreEventsPublisher(bus))))
-            :> IEventStore
+            (new MartenDbEventStore(martenDocumentStore, Some(EventStoreEventsPublisher(bus)))) :> IEventStore
 
         eventStore)
     |> ignore

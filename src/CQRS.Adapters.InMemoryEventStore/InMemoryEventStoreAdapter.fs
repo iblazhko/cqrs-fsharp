@@ -15,7 +15,7 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
         if isLocked then
             raise (SessionIsLockedException eventStream.StreamId)
 
-    let newVersion () =
+    let updatedVersion () =
         if sessionNewEvents.Length > 0 then
             eventStream.StreamVersion |> EventStreamVersion.increment
         else
@@ -32,7 +32,7 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
                 return
                     { eventStream with
                         Events = allEvents ()
-                        StreamVersion = newVersion () }
+                        StreamVersion = updatedVersion () }
             }
 
         member this.GetNewEvents() =
@@ -42,7 +42,7 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
                 return
                     { eventStream with
                         Events = sessionNewEvents
-                        StreamVersion = newVersion () }
+                        StreamVersion = updatedVersion () }
             }
 
         member this.AppendEvents newEvents =

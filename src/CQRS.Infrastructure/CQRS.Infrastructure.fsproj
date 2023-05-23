@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CQRS.Adapters.InMemoryEventStore\CQRS.Adapters.InMemoryEventStore.fsproj" />
     <ProjectReference Include="..\CQRS.Adapters.InMemoryProjectionStore\CQRS.Adapters.InMemoryProjectionStore.fsproj" />
+    <ProjectReference Include="..\CQRS.Adapters.MartenDbEventStore\CQRS.Adapters.MartenDbEventStore.fsproj" />
     <ProjectReference Include="..\CQRS.Adapters.MartenDbProjectionStore\CQRS.Adapters.MartenDbProjectionStore.fsproj" />
     <ProjectReference Include="..\CQRS.Adapters.MassTransitMessageBus\CQRS.Adapters.MassTransitMessageBus.fsproj" />
     <ProjectReference Include="..\CQRS.Application\CQRS.Application.fsproj" />
@@ -38,6 +39,7 @@
     <Compile Include="InfrastructureWaitPolicy.fs" />
     <Compile Include="PostgresHealthCheck.fs" />
     <Compile Include="RabbitMqHealthCheck.fs" />
+    <Compile Include="MartenDbConfigurator.fs" />
     <Compile Include="EventStoreConfigurator.fs" />
     <Compile Include="ProjectionStoreConfigurator.fs" />
     <Compile Include="MassTransitConventions.fs" />

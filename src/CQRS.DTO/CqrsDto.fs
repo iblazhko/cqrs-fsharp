@@ -1,6 +1,5 @@
 namespace CQRS.DTO
 
-
 // Marker interface for DTOs
 [<AllowNullLiteral>]
 type CqrsDto =
@@ -17,6 +16,13 @@ type CqrsCommandDto =
 // Marker interface for event DTOs
 [<AllowNullLiteral>]
 type CqrsEventDto =
+    interface
+        inherit CqrsDto
+    end
+
+// Marker interface for aggregate state DTOs
+[<AllowNullLiteral>]
+type CqrsStateDto =
     interface
         inherit CqrsDto
     end

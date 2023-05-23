@@ -13,9 +13,10 @@ let configureServices
     (services: IServiceCollection)
     =
     services
-    |> EventStoreConfigurator.configureServices settings.MartenDb
-    |> ProjectionStoreConfigurator.configureServices settings.MartenDb
+    |> MartenDbConfigurator.configureServices settings.MartenDb
     |> MessageBusConfigurator.configureServices endpointsRegistration settings.MassTransit
+    |> EventStoreConfigurator.configureServices
+    |> ProjectionStoreConfigurator.configureServices
     |> HealthcheckConfigurator.configureServices settings
     |> ignore
 

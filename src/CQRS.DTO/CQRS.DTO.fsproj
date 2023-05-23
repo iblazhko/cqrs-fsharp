@@ -18,7 +18,8 @@
     <Compile Include="Json.fs" />
     <Compile Include="CqrsDto.fs" />
     <Compile Include="Message.fs" />
-    <Compile Include="V1\Inventory.fs" />
+    <Compile Include="V1\InventoryMessages.fs" />
+    <Compile Include="V1\InventoryItemState.fs" />
   </ItemGroup>
 
 </Project>

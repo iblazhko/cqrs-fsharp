@@ -30,6 +30,7 @@
     <Compile Include="ItemNotInStockMapper.fs" />
     <Compile Include="ItemWentOutOfStockMapper.fs" />
     <Compile Include="InventoryItemDeactivatedMapper.fs" />
+    <Compile Include="InventoryItemStateMapper.fs" />
   </ItemGroup>
 
 </Project>

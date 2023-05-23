@@ -28,13 +28,13 @@ module EventStreamId =
     let value (s: EventStreamId) = s
 
 
-type EventStreamVersion = int
+type EventStreamVersion = int64
 
 module EventStreamVersion =
     [<Literal>]
-    let New: EventStreamVersion = 0
+    let New: EventStreamVersion = 0L
 
-    let increment v : EventStreamVersion = v + 1
+    let increment v : EventStreamVersion = v + 1L
 
 type EventMetadata =
     { EventId: EventId
