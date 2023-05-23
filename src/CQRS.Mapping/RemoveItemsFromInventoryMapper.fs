@@ -8,17 +8,17 @@ open FsToolkit.ErrorHandling
 
 let fromDomain (domain: Inventory.RemoveItemsFromInventory) =
     let dto = RemoveItemsFromInventoryCommand()
-    dto.InventoryItemId <- domain.InventoryItemId |> InventoryItemIdMapper.fromDomain
+    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
     dto.Count <- domain.Count |> CountMapper.fromDomain
     dto
 
 let toDomain (dto: RemoveItemsFromInventoryCommand) =
     result {
         let! nonNullDto = dto |> ensureNotNull
-        let! inventoryItemId = nonNullDto.InventoryItemId |> InventoryItemIdMapper.toDomain "InventoryItemId"
+        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.toDomain "InventoryId"
         let! count = nonNullDto.Count |> CountMapper.toDomain "Count"
 
         return
-            { RemoveItemsFromInventory.InventoryItemId = inventoryItemId
+            { RemoveItemsFromInventory.InventoryId = inventoryId
               Count = count }
     }

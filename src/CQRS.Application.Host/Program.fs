@@ -22,8 +22,8 @@ let main (args: string[]) =
           Consumers =
             Some
                 { assemblies =
-                    [ typedefof<CreateInventoryItemCommandConsumer>.Assembly
-                      typedefof<InventoryItemProjectionConsumer>.Assembly ]
+                    [ typedefof<CreateInventoryCommandConsumer>.Assembly
+                      typedefof<InventoryProjectionConsumer>.Assembly ]
                   queuePrefix = "cqrs" } }
 
     builder.WebHost.ConfigureServices(configureServices endpointsRegistration settings)

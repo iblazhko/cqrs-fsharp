@@ -1,24 +1,24 @@
-module CQRS.Mapping.ItemWentOutOfStockMapper
+module CQRS.Mapping.InventoryCreatedMapper
 
-open CQRS.Domain.Inventory
 open CQRS.Domain
+open CQRS.Domain.Inventory
 open CQRS.DTO.V1
 open CQRS.Mapping.DtoMapper
 open FsToolkit.ErrorHandling
 
-let fromDomain (domain: Inventory.ItemWentOutOfStock) =
-    let dto = ItemWentOutOfStockEvent()
+let fromDomain (domain: Inventory.InventoryCreated) =
+    let dto = InventoryCreatedEvent()
     dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
     dto.Name <- domain.Name |> InventoryNameMapper.fromDomain
     dto
 
-let toDomain (dto: ItemWentOutOfStockEvent) =
+let toDomain (dto: InventoryCreatedEvent) =
     result {
         let! nonNullDto = dto |> ensureNotNull
         let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.toDomain "InventoryId"
         let! name = nonNullDto.Name |> InventoryNameMapper.toDomain "Name"
 
         return
-            { ItemWentOutOfStock.InventoryId = inventoryId
+            { InventoryCreated.InventoryId = inventoryId
               Name = name }
     }

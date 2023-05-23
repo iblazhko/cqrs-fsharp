@@ -13,6 +13,9 @@ let handleMassTransitMessage<'T when 'T :> CqrsCommandDto and 'T: not struct>
     : Task =
     task {
         let message = context.Message
+
+        // TODO: Use explicit dependency for logging
         Log.Logger.Information("[MESSAGE-BUS] {@MessageType} {@Message}", message.GetType(), message)
+
         do! message |> consumeAction eventStore
     }

@@ -10,9 +10,9 @@ open CQRS.EntityIds
 // serialized shape of a snapshot.
 
 [<AllowNullLiteral>]
-type InventoryItem() =
+type Inventory() =
     interface CqrsStateDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Name: string = String.Empty with get, set
     member val StockQuantity: int = 0 with get, set
     member val IsNew: bool = false with get, set

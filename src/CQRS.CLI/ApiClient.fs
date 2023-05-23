@@ -4,8 +4,8 @@ open CQRS.CLI.FlurlFsharp
 open CQRS.DTO.V1
 open Serilog
 
-let createInventoryItem name apiServiceUrl =
-    let dto = CreateInventoryItemCommand()
+let createInventory name apiServiceUrl =
+    let dto = CreateInventoryCommand()
     dto.Name <- name
     Log.Logger.Information("[PUT>] {Url}/api/v1/inventories {@Command}", apiServiceUrl, dto)
 
@@ -22,7 +22,7 @@ let createInventoryItem name apiServiceUrl =
         responseBody
     )
 
-let getInventoryItem id apiServiceUrl =
+let getInventory id apiServiceUrl =
     Log.Logger.Information("[GET>] {Url}/api/v1/inventories/{Id}", apiServiceUrl, id)
 
     let response =

@@ -4,31 +4,31 @@ open FPrimitive
 open CQRS.Domain.ValueTypes
 open CQRS.EntityIds
 
-type InventoryItemId = private InventoryItemId of EntityId
+type InventoryId = private InventoryId of EntityId
 
-module InventoryItemId =
+module InventoryId =
     [<Literal>]
-    let private stringPrefix = "InventoryItem-"
+    let private stringPrefix = "Inventory-"
 
-    let newId () = InventoryItemId(EntityId.newId ())
+    let newId () = InventoryId(EntityId.newId ())
 
-    let create (id: EntityId) = InventoryItemId id
+    let create (id: EntityId) = InventoryId id
 
-    let value (InventoryItemId id) = id
+    let value (InventoryId id) = id
 
-    let rec toString (InventoryItemId id) =
+    let rec toString (InventoryId id) =
         $"{stringPrefix}{(id |> EntityId.toString)}"
 
     let fromString propertyName (s: string) =
         s.Substring(stringPrefix.Length)
         |> EntityId.fromString propertyName
-        |> Result.map InventoryItemId
+        |> Result.map InventoryId
 
-type InventoryItemName = private InventoryItemName of MediumString
+type InventoryName = private InventoryName of MediumString
 
-module InventoryItemName =
-    let create (n: MediumString) = InventoryItemName n
-    let value (InventoryItemName n) = n
+module InventoryName =
+    let create (n: MediumString) = InventoryName n
+    let value (InventoryName n) = n
 
 type StockQuantity =
     | Empty
@@ -50,7 +50,7 @@ module StockQuantity =
 // State
 (*
 Instead of having IsNew and IsActive flags we could define distinct states like this
-type InventoryItemState =
+type InventoryState =
   | NewInventory of NewInventory
   | InactiveInventory of InactiveInventory
   | Inventory of Inventory
@@ -58,94 +58,94 @@ type InventoryItemState =
 This would make aggregate cleaner, but OTOH it would make appliers more complicated
 because we will not be able to use "{ with Property=NewValue }" syntax.
 *)
-type InventoryItemState =
-    { InventoryItemId: InventoryItemId
-      Name: InventoryItemName
+type InventoryState =
+    { InventoryId: InventoryId
+      Name: InventoryName
       StockQuantity: StockQuantity
       IsNew: bool
       IsActive: bool }
 
 // Domain commands
 
-type CreateInventoryItem =
-    { InventoryItemId: InventoryItemId
-      Name: InventoryItemName }
+type CreateInventory =
+    { InventoryId: InventoryId
+      Name: InventoryName }
 
-type RenameInventoryItem =
-    { InventoryItemId: InventoryItemId
-      NewName: InventoryItemName }
+type RenameInventory =
+    { InventoryId: InventoryId
+      NewName: InventoryName }
 
 type AddItemsToInventory =
-    { InventoryItemId: InventoryItemId
+    { InventoryId: InventoryId
       Count: PositiveInteger }
 
 type RemoveItemsFromInventory =
-    { InventoryItemId: InventoryItemId
+    { InventoryId: InventoryId
       Count: PositiveInteger }
 
-type DeactivateInventoryItem = { InventoryItemId: InventoryItemId }
+type DeactivateInventory = { InventoryId: InventoryId }
 
 // Domain events
 
-type InventoryItemCreated =
-    { InventoryItemId: InventoryItemId
-      Name: InventoryItemName }
+type InventoryCreated =
+    { InventoryId: InventoryId
+      Name: InventoryName }
 
-type InventoryItemRenamed =
-    { InventoryItemId: InventoryItemId
-      OldName: InventoryItemName
-      NewName: InventoryItemName }
+type InventoryRenamed =
+    { InventoryId: InventoryId
+      OldName: InventoryName
+      NewName: InventoryName }
 
 type ItemsAddedToInventory =
-    { InventoryItemId: InventoryItemId
-      Name: InventoryItemName
+    { InventoryId: InventoryId
+      Name: InventoryName
       AddedCount: PositiveInteger
       OldStockQuantity: StockQuantity
       NewStockQuantity: StockQuantity }
 
 type ItemsRemovedFromInventory =
-    { InventoryItemId: InventoryItemId
-      Name: InventoryItemName
+    { InventoryId: InventoryId
+      Name: InventoryName
       RemovedCount: PositiveInteger
       OldStockQuantity: StockQuantity
       NewStockQuantity: StockQuantity }
 
 type ItemNotInStock =
-    { InventoryItemId: InventoryItemId
-      Name: InventoryItemName }
+    { InventoryId: InventoryId
+      Name: InventoryName }
 
 type ItemWentOutOfStock =
-    { InventoryItemId: InventoryItemId
-      Name: InventoryItemName }
+    { InventoryId: InventoryId
+      Name: InventoryName }
 
-type InventoryItemDeactivated =
-    { InventoryItemId: InventoryItemId
-      Name: InventoryItemName }
+type InventoryDeactivated =
+    { InventoryId: InventoryId
+      Name: InventoryName }
 
 // All domain commands
-type InventoryItemCommand =
-    | CreateInventoryItem of CreateInventoryItem
-    | RenameInventoryItem of RenameInventoryItem
+type InventoryCommand =
+    | CreateInventory of CreateInventory
+    | RenameInventory of RenameInventory
     | AddItemsToInventory of AddItemsToInventory
     | RemoveItemsFromInventory of RemoveItemsFromInventory
-    | DeactivateInventoryItem of DeactivateInventoryItem
+    | DeactivateInventory of DeactivateInventory
 
 // All domain events
-type InventoryItemEvent =
-    | InventoryItemCreated of InventoryItemCreated
-    | InventoryItemRenamed of InventoryItemRenamed
+type InventoryEvent =
+    | InventoryCreated of InventoryCreated
+    | InventoryRenamed of InventoryRenamed
     | ItemsAddedToInventory of ItemsAddedToInventory
     | ItemsRemovedFromInventory of ItemsRemovedFromInventory
     | ItemNotInStock of ItemNotInStock
     | ItemWentOutOfStock of ItemWentOutOfStock
-    | InventoryItemDeactivated of InventoryItemDeactivated
+    | InventoryDeactivated of InventoryDeactivated
 
 // All domain validation failures
 type ValidationFailure =
-    | DoesNotExist of InventoryItemId
-    | AlreadyExists of InventoryItemId
-    | Deactivated of InventoryItemId
-    | CannotDeactivateNonEmpty of InventoryItemId
+    | DoesNotExist of InventoryId
+    | AlreadyExists of InventoryId
+    | Deactivated of InventoryId
+    | CannotDeactivateNonEmpty of InventoryId
     | ValidationError of ErrorsByTag
 
 // All failures
@@ -153,6 +153,6 @@ type InventoryFailure = ValidationFailure of ValidationFailure
 
 // Everything that can happen with Inventory
 type DomainMessage =
-    | InventoryCommand of InventoryItemCommand
-    | InventoryEvent of InventoryItemEvent
+    | InventoryCommand of InventoryCommand
+    | InventoryEvent of InventoryEvent
     | InventoryFailure of InventoryFailure

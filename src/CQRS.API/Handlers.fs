@@ -13,37 +13,104 @@ open FPrimitive
 open Serilog
 
 type DocumentQueryResult =
-    | Document of InventoryItemViewModel
+    | Document of InventoryViewModel
     | NotFound
     | BadRequest of ErrorsByTag
 
-let createInventoryItem
+let createInventory
     (messageBus: IMessageBus)
     (clock: unit -> DateTimeOffset)
-    (cmd: CreateInventoryItemCommand)
+    (cmd: CreateInventoryCommand)
     : Task<Result<AcceptedResponse, ErrorsByTag>> =
     task {
-        if (cmd.InventoryItemId = EntityIdRawValue.Empty) then
-            cmd.InventoryItemId <- (EntityId.newId () |> EntityId.value)
+        if (cmd.InventoryId = EntityIdRawValue.Empty) then
+            cmd.InventoryId <- (EntityId.newId () |> EntityId.value)
 
         let messageContext = getNewMessageContext clock
 
-        do! messageBus.SendCommand(Message<CreateInventoryItemCommand>(Data = cmd, Context = messageContext))
+        // TODO: Use explicit dependency for logging
+        Log.Logger.Information("Creating inventory {InventoryId}", cmd.InventoryId)
 
-        Log.Logger.Information $"Creating an inventory item: {cmd.InventoryItemId}"
+        do! messageBus.SendCommand(Message<CreateInventoryCommand>(Data = cmd, Context = messageContext))
 
-        return Ok(cmd.InventoryItemId.ToString() |> AcceptedResponse.fromEntityId messageContext)
+        return Ok(cmd.InventoryId.ToString() |> AcceptedResponse.fromEntityId messageContext)
     }
 
-let getInventoryItem
-    (projectionsStore: IProjectionStore<InventoryItemViewModel>)
-    (inventoryItemId: EntityId)
+let renameInventory
+    (messageBus: IMessageBus)
+    (clock: unit -> DateTimeOffset)
+    (cmd: RenameInventoryCommand)
+    : Task<Result<AcceptedResponse, ErrorsByTag>> =
+    task {
+        let messageContext = getNewMessageContext clock
+
+        // TODO: Use explicit dependency for logging
+        Log.Logger.Information("Renaming inventory {InventoryId} to {InventoryName}", cmd.InventoryId, cmd.NewName)
+
+        do! messageBus.SendCommand(Message<RenameInventoryCommand>(Data = cmd, Context = messageContext))
+
+        return Ok(cmd.InventoryId.ToString() |> AcceptedResponse.fromEntityId messageContext)
+    }
+
+let addItemsToInventory
+    (messageBus: IMessageBus)
+    (clock: unit -> DateTimeOffset)
+    (cmd: AddItemsToInventoryCommand)
+    : Task<Result<AcceptedResponse, ErrorsByTag>> =
+    task {
+        let messageContext = getNewMessageContext clock
+
+        // TODO: Use explicit dependency for logging
+        Log.Logger.Information("Adding {Count} items to inventory {InventoryId}", cmd.Count, cmd.InventoryId)
+
+        do! messageBus.SendCommand(Message<AddItemsToInventoryCommand>(Data = cmd, Context = messageContext))
+
+        return Ok(cmd.InventoryId.ToString() |> AcceptedResponse.fromEntityId messageContext)
+    }
+
+let removeItemsFromInventory
+    (messageBus: IMessageBus)
+    (clock: unit -> DateTimeOffset)
+    (cmd: RemoveItemsFromInventoryCommand)
+    : Task<Result<AcceptedResponse, ErrorsByTag>> =
+    task {
+        let messageContext = getNewMessageContext clock
+
+        // TODO: Use explicit dependency for logging
+        Log.Logger.Information("Removing {Count} items from inventory {InventoryId}", cmd.Count, cmd.InventoryId)
+
+        do! messageBus.SendCommand(Message<RemoveItemsFromInventoryCommand>(Data = cmd, Context = messageContext))
+
+        return Ok(cmd.InventoryId.ToString() |> AcceptedResponse.fromEntityId messageContext)
+    }
+
+let deactivateInventory
+    (messageBus: IMessageBus)
+    (clock: unit -> DateTimeOffset)
+    (cmd: DeactivateInventoryCommand)
+    : Task<Result<AcceptedResponse, ErrorsByTag>> =
+    task {
+        let messageContext = getNewMessageContext clock
+
+        // TODO: Use explicit dependency for logging
+        Log.Logger.Information("Deactivating inventory {InventoryId}", cmd.InventoryId)
+
+        do! messageBus.SendCommand(Message<DeactivateInventoryCommand>(Data = cmd, Context = messageContext))
+
+        return Ok(cmd.InventoryId.ToString() |> AcceptedResponse.fromEntityId messageContext)
+    }
+
+let getInventoryViewModel
+    (projectionsStore: IProjectionStore<InventoryViewModel>)
+    (inventoryId: EntityId)
     : Task<DocumentQueryResult> =
     task {
-        Log.Logger.Information $"Retrieving an inventory item: {inventoryItemId}"
-        use! collection = projectionsStore.OpenDocumentCollection(InventoryItemsCollection.InventoryItemsProjectionId)
+        // TODO: Use explicit dependency for logging
+        Log.Logger.Information("Retrieving inventory {InventoryId}", inventoryId)
 
-        let documentId = inventoryItemId |> EntityId.toString |> DocumentId.create
+        use! collection = projectionsStore.OpenDocumentCollection(InventoryCollection.InventoryProjectionId)
+
+        let documentId = inventoryId |> EntityId.toString |> DocumentId.create
         let! document = collection.GetById(documentId)
 
         let result =

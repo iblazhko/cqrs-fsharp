@@ -13,6 +13,9 @@ let handleMassTransitMessage<'T, 'TViewModel when 'T :> CqrsEventDto and 'T: not
     : Task =
     task {
         let message = context.Message
+
+        // TODO: Use explicit dependency for logging
         Log.Logger.Information("[MESSAGE-BUS] {@MessageType} {@Message}", message.GetType(), message)
+
         do! message |> consumeAction projectionStore
     }

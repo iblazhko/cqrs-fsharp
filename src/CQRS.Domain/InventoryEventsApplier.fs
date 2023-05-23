@@ -2,17 +2,17 @@ module CQRS.Domain.InventoryEventsApplier
 
 open CQRS.Domain.Inventory
 
-let apply (state: InventoryItemState) (e: InventoryItemEvent) : InventoryItemState =
+let apply (state: InventoryState) (e: InventoryEvent) : InventoryState =
     match e with
-    | InventoryItemCreated x ->
+    | InventoryCreated x ->
         { state with
-            InventoryItemId = x.InventoryItemId
+            InventoryId = x.InventoryId
             Name = x.Name
             StockQuantity = Empty
             IsNew = false
             IsActive = true }
-    | InventoryItemDeactivated x -> { state with IsActive = false }
-    | InventoryItemRenamed x -> { state with Name = x.NewName }
+    | InventoryDeactivated _ -> { state with IsActive = false }
+    | InventoryRenamed x -> { state with Name = x.NewName }
     | ItemsAddedToInventory x ->
         { state with
             StockQuantity = x.NewStockQuantity }

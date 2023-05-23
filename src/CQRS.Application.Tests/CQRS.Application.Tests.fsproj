@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <Compile Include="EventStoreTests.fs" />
-    <Compile Include="InventoryItemCommandHandlersTest.fs" />
+    <Compile Include="InventoryCommandHandlersTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

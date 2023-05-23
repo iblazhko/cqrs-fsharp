@@ -5,6 +5,7 @@ open System.Collections.Generic
 open System.Threading.Tasks
 open CQRS.Ports.EventStore
 open Marten
+open Serilog
 
 [<Sealed>]
 type MartenDbEventStreamSession<'TEvent, 'TState>
@@ -126,6 +127,8 @@ type MartenDbEventStreamSession<'TEvent, 'TState>
 type MartenDbEventStore(documentStore: IDocumentStore, eventPublisher: IEventPublisher option) =
     let save (session: MartenDbEventStreamSession<'TEvent, 'TState>) =
         task {
+            Log.Logger.Information("[EVENTSTORE] Save event stream {EventStreamId}", session.EventStreamId)
+
             let sessionAsInterface = session :> IEventStreamSession<'TEvent, 'TState>
             let! eventStream = sessionAsInterface.GetNewEvents()
 
@@ -162,6 +165,9 @@ type MartenDbEventStore(documentStore: IDocumentStore, eventPublisher: IEventPub
 
         member this.Open<'TEvent, 'TState>(streamId, eventMapper) =
             task {
+                // TODO: Use explicit dependency for logging
+                Log.Logger.Information("[EVENTSTORE] Open event stream {EventStreamId}", streamId)
+
                 let eventStreamSession =
                     new MartenDbEventStreamSession<'TEvent, 'TState>(streamId, documentStore, eventMapper)
 

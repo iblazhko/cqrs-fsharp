@@ -18,19 +18,19 @@
   <ItemGroup>
     <Compile Include="DtoMapper.fs" />
     <Compile Include="InventoryTypesMapper.fs" />
-    <Compile Include="CreateInventoryItemMapper.fs" />
-    <Compile Include="RenameInventoryItemMapper.fs" />
+    <Compile Include="CreateInventoryMapper.fs" />
+    <Compile Include="RenameInventoryMapper.fs" />
     <Compile Include="AddItemsToInventoryMapper.fs" />
     <Compile Include="RemoveItemsFromInventoryMapper.fs" />
-    <Compile Include="DeactivateInventoryItemMapper.fs" />
-    <Compile Include="InventoryItemCreatedMapper.fs" />
-    <Compile Include="InventoryItemRenamedMapper.fs" />
+    <Compile Include="DeactivateInventoryMapper.fs" />
+    <Compile Include="InventoryCreatedMapper.fs" />
+    <Compile Include="InventoryRenamedMapper.fs" />
     <Compile Include="ItemsAddedToInventoryMapper.fs" />
     <Compile Include="ItemsRemovedFromInventoryMapper.fs" />
     <Compile Include="ItemNotInStockMapper.fs" />
     <Compile Include="ItemWentOutOfStockMapper.fs" />
-    <Compile Include="InventoryItemDeactivatedMapper.fs" />
-    <Compile Include="InventoryItemStateMapper.fs" />
+    <Compile Include="InventoryDeactivatedMapper.fs" />
+    <Compile Include="InventoryStateMapper.fs" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-module CQRS.Mapping.CheckInItemsToInventoryMapper
+module CQRS.Mapping.AddItemsToInventoryMapper
 
 open CQRS.Domain
 open CQRS.Domain.Inventory
@@ -8,17 +8,17 @@ open FsToolkit.ErrorHandling
 
 let fromDomain (domain: Inventory.AddItemsToInventory) =
     let dto = AddItemsToInventoryCommand()
-    dto.InventoryItemId <- domain.InventoryItemId |> InventoryItemIdMapper.fromDomain
+    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
     dto.Count <- domain.Count |> CountMapper.fromDomain
     dto
 
 let toDomain (dto: AddItemsToInventoryCommand) =
     result {
         let! nonNullDto = dto |> ensureNotNull
-        let! inventoryItemId = nonNullDto.InventoryItemId |> InventoryItemIdMapper.toDomain "InventoryItemId"
+        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.toDomain "InventoryId"
         let! count = nonNullDto.Count |> CountMapper.toDomain "Count"
 
         return
-            { AddItemsToInventory.InventoryItemId = inventoryItemId
+            { AddItemsToInventory.InventoryId = inventoryId
               Count = count }
     }

@@ -7,11 +7,10 @@ open Marten
 open Microsoft.Extensions.DependencyInjection
 
 let configureServices (services: IServiceCollection) =
-    services.AddSingleton<IProjectionStore<InventoryItemViewModel>>(fun serviceProvider ->
+    services.AddSingleton<IProjectionStore<InventoryViewModel>>(fun serviceProvider ->
         let martenDocumentStore = serviceProvider.GetRequiredService<IDocumentStore>()
 
-        new MartenDbProjectionStore<InventoryItemViewModel>(martenDocumentStore)
-        :> IProjectionStore<InventoryItemViewModel>)
+        new MartenDbProjectionStore<InventoryViewModel>(martenDocumentStore) :> IProjectionStore<InventoryViewModel>)
     |> ignore
 
     services

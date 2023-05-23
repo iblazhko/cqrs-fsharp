@@ -19,7 +19,7 @@
     <Compile Include="ValueTypes.fs" />
     <Compile Include="Inventory.fs" />
     <Compile Include="DomainErrorMapper.fs" />
-    <Compile Include="InventoryItemAggregate.fs" />
+    <Compile Include="InventoryAggregate.fs" />
     <Compile Include="InventoryEventsApplier.fs" />
   </ItemGroup>
 

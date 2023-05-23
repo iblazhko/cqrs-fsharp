@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <Compile Include="EventConsumer.fs" />
-    <Compile Include="InventoryItemEventsConsumer.fs" />
+    <Compile Include="InventoryProjectionConsumer.fs" />
   </ItemGroup>
 
 </Project>

@@ -19,7 +19,7 @@
     <Compile Include="CqrsDto.fs" />
     <Compile Include="Message.fs" />
     <Compile Include="V1\InventoryMessages.fs" />
-    <Compile Include="V1\InventoryItemState.fs" />
+    <Compile Include="V1\InventoryState.fs" />
   </ItemGroup>
 
 </Project>

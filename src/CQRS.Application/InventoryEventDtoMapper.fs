@@ -4,11 +4,11 @@ open CQRS.Domain.Inventory
 open CQRS.Mapping
 open CQRS.Ports.EventStore
 
-// Maps any given DTO event from CQRS.DTO.V1 to union type InventoryItemEvent
+// Maps any given DTO event from CQRS.DTO.V1 to union type InventoryEvent
 // Fails immediately with EventMappingException id there are any mapping errors
 // Fails immediately with UnknownEventTypeException if DTO event is not supported / missing from mapping cases
 
-type InventoryItemDtoEventMapper() =
+type InventoryEventDtoMapper() =
     let mapOfFail r =
         match r with
         | Ok x -> x
@@ -16,37 +16,37 @@ type InventoryItemDtoEventMapper() =
 
     let domainEventToDtoEvent =
         function
-        | InventoryItemCreated e -> (InventoryItemCreatedMapper.fromDomain e) :> obj
-        | InventoryItemRenamed e -> (InventoryItemRenamedMapper.fromDomain e) :> obj
+        | InventoryCreated e -> (InventoryCreatedMapper.fromDomain e) :> obj
+        | InventoryRenamed e -> (InventoryRenamedMapper.fromDomain e) :> obj
         | ItemsAddedToInventory e -> (ItemsAddedToInventoryMapper.fromDomain e) :> obj
         | ItemsRemovedFromInventory e -> (ItemsRemovedFromInventoryMapper.fromDomain e) :> obj
         | ItemNotInStock e -> (ItemNotInStockMapper.fromDomain e) :> obj
         | ItemWentOutOfStock e -> (ItemWentOutOfStockMapper.fromDomain e) :> obj
-        | InventoryItemDeactivated e -> (InventoryItemDeactivatedMapper.fromDomain e) :> obj
+        | InventoryDeactivated e -> (InventoryDeactivatedMapper.fromDomain e) :> obj
 
-    interface IEventMapper<InventoryItemEvent> with
+    interface IEventMapper<InventoryEvent> with
         member this.FromDomainEvent(domainEvent) =
             match domainEvent with
-            | :? InventoryItemEvent -> (domainEvent :?> InventoryItemEvent) |> domainEventToDtoEvent
+            | :? InventoryEvent -> (domainEvent :?> InventoryEvent) |> domainEventToDtoEvent
             | _ -> raise (UnknownEventTypeException(domainEvent.GetType().FullName))
 
         member this.ToDomainEvent(dtoWithMetadata) =
             match dtoWithMetadata.Event with
-            | :? CQRS.DTO.V1.InventoryItemCreatedEvent ->
+            | :? CQRS.DTO.V1.InventoryCreatedEvent ->
                 let domainEvent =
-                    (dtoWithMetadata.Event :?> CQRS.DTO.V1.InventoryItemCreatedEvent)
-                    |> InventoryItemCreatedMapper.toDomain
+                    (dtoWithMetadata.Event :?> CQRS.DTO.V1.InventoryCreatedEvent)
+                    |> InventoryCreatedMapper.toDomain
                     |> mapOfFail
 
-                (InventoryItemEvent.InventoryItemCreated domainEvent)
+                (InventoryEvent.InventoryCreated domainEvent)
 
-            | :? CQRS.DTO.V1.InventoryItemRenamedEvent ->
+            | :? CQRS.DTO.V1.InventoryRenamedEvent ->
                 let domainEvent =
-                    (dtoWithMetadata.Event :?> CQRS.DTO.V1.InventoryItemRenamedEvent)
-                    |> InventoryItemRenamedMapper.toDomain
+                    (dtoWithMetadata.Event :?> CQRS.DTO.V1.InventoryRenamedEvent)
+                    |> InventoryRenamedMapper.toDomain
                     |> mapOfFail
 
-                (InventoryItemEvent.InventoryItemRenamed domainEvent)
+                (InventoryEvent.InventoryRenamed domainEvent)
 
             | :? CQRS.DTO.V1.ItemsAddedToInventoryEvent ->
                 let domainEvent =
@@ -54,7 +54,7 @@ type InventoryItemDtoEventMapper() =
                     |> ItemsAddedToInventoryMapper.toDomain
                     |> mapOfFail
 
-                (InventoryItemEvent.ItemsAddedToInventory domainEvent)
+                (InventoryEvent.ItemsAddedToInventory domainEvent)
 
             | :? CQRS.DTO.V1.ItemsRemovedFromInventoryEvent ->
                 let domainEvent =
@@ -62,7 +62,7 @@ type InventoryItemDtoEventMapper() =
                     |> ItemsRemovedFromInventoryMapper.toDomain
                     |> mapOfFail
 
-                (InventoryItemEvent.ItemsRemovedFromInventory domainEvent)
+                (InventoryEvent.ItemsRemovedFromInventory domainEvent)
 
             | :? CQRS.DTO.V1.ItemNotInStockEvent ->
                 let domainEvent =
@@ -70,7 +70,7 @@ type InventoryItemDtoEventMapper() =
                     |> ItemNotInStockMapper.toDomain
                     |> mapOfFail
 
-                (InventoryItemEvent.ItemNotInStock domainEvent)
+                (InventoryEvent.ItemNotInStock domainEvent)
 
             | :? CQRS.DTO.V1.ItemWentOutOfStockEvent ->
                 let domainEvent =
@@ -78,14 +78,14 @@ type InventoryItemDtoEventMapper() =
                     |> ItemWentOutOfStockMapper.toDomain
                     |> mapOfFail
 
-                (InventoryItemEvent.ItemWentOutOfStock domainEvent)
+                (InventoryEvent.ItemWentOutOfStock domainEvent)
 
-            | :? CQRS.DTO.V1.InventoryItemDeactivatedEvent ->
+            | :? CQRS.DTO.V1.InventoryDeactivatedEvent ->
                 let domainEvent =
-                    (dtoWithMetadata.Event :?> CQRS.DTO.V1.InventoryItemDeactivatedEvent)
-                    |> InventoryItemDeactivatedMapper.toDomain
+                    (dtoWithMetadata.Event :?> CQRS.DTO.V1.InventoryDeactivatedEvent)
+                    |> InventoryDeactivatedMapper.toDomain
                     |> mapOfFail
 
-                (InventoryItemEvent.InventoryItemDeactivated domainEvent)
+                (InventoryEvent.InventoryDeactivated domainEvent)
 
             | _ -> raise (UnknownEventTypeException dtoWithMetadata.EventType.FullName)

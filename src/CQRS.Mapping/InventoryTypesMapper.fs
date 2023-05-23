@@ -23,16 +23,16 @@ module StockQuantityMapper =
         | x when x = 0 -> Ok Empty
         | x -> x |> PositiveInteger.create propName |> Result.map InventoryCount
 
-module InventoryItemIdMapper =
-    let fromDomain (domain: InventoryItemId) =
-        domain |> InventoryItemId.value |> EntityId.value
+module InventoryIdMapper =
+    let fromDomain (domain: InventoryId) =
+        domain |> InventoryId.value |> EntityId.value
 
     let toDomain (propName: string) (dto: EntityIdRawValue) =
-        dto |> EntityId.create propName |> Result.map InventoryItemId.create
+        dto |> EntityId.create propName |> Result.map InventoryId.create
 
-module InventoryItemNameMapper =
-    let fromDomain (domain: InventoryItemName) =
-        domain |> InventoryItemName.value |> MediumString.value
+module InventoryNameMapper =
+    let fromDomain (domain: InventoryName) =
+        domain |> InventoryName.value |> MediumString.value
 
     let toDomain (propName: string) (dto: string) =
-        dto |> MediumString.create propName |> Result.map InventoryItemName.create
+        dto |> MediumString.create propName |> Result.map InventoryName.create

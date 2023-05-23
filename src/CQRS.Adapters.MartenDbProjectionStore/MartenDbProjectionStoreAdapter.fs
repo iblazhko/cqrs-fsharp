@@ -33,6 +33,7 @@ type MartenDbDocumentCollection<'TViewModel when 'TViewModel: null>(documentStor
     interface IProjectionDocumentCollection<'TViewModel> with
         member this.GetById(documentId) =
             task {
+                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Retrieving {DocumentId}", documentId)
 
                 let! envelopeOption = documentId |> tryGetEnvelopeByDocumentId session
@@ -43,6 +44,7 @@ type MartenDbDocumentCollection<'TViewModel when 'TViewModel: null>(documentStor
 
         member this.Update(documentId: DocumentId, updateAction: 'TViewModel -> 'TViewModel) : Task =
             task {
+                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Storing {DocumentId}", documentId)
 
                 let! envelopeOption = documentId |> tryGetEnvelopeByDocumentId session
@@ -69,6 +71,7 @@ type MartenDbDocumentCollection<'TViewModel when 'TViewModel: null>(documentStor
 
         member this.Update(documentId: DocumentId, viewModel: 'TViewModel) : Task =
             task {
+                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Storing {DocumentId}", documentId)
 
                 let! envelopeOption = documentId |> tryGetEnvelopeByDocumentId session

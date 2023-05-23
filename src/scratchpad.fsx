@@ -22,36 +22,26 @@ open CQRS.EntityIds
 open CQRS.DTO.V1
 open CQRS.Domain.Inventory
 open CQRS.Application
-open CQRS.Adapters.InMemoryEventStore
+open CQRS.Adapters
+open CQRS.Ports.EventStore
 
-let inMemoryEventStore =
-    InMemoryEventStore<InventoryItemEvent, InventoryItemState>()
+let eventStore = new InMemoryEventStore(SystemTextJsonEventSerializer(), None)
 
-let eventStore = inMemoryEventStore.Initialize()
+let inventoryId = InventoryId.newId ()
 
-let inventoryItemId = InventoryItemId.newId ()
+let inventoryIdAsGuid = inventoryId |> InventoryId.value |> EntityId.value
 
-let inventoryItemIdAsGuid =
-    inventoryItemId |> InventoryItemId.value |> EntityId.value
+let createInventoryCommand =
+    CreateInventoryCommand(InventoryId = inventoryIdAsGuid, Name = "Product001")
 
-let createInventoryItemCommand =
-    CreateInventoryItemCommand(InventoryItemId = inventoryItemIdAsGuid, Name = "Product001")
+InventoryCommandHandlers.handleCreateInventoryCommand eventStore createInventoryCommand
 
-let createResultOrError =
-    InventoryItemCommandHandlers.handleCreateInventoryItemCommand eventStore createInventoryItemCommand
-    |> Async.RunSynchronously
+let renameInventoryCommand =
+    RenameInventoryCommand(InventoryId = inventoryIdAsGuid, NewName = "Product001-New")
 
-let renameInventoryItemCommand =
-    RenameInventoryItemCommand(InventoryItemId = inventoryItemIdAsGuid, NewName = "Product001-New")
+InventoryCommandHandlers.handleRenameInventoryCommand eventStore renameInventoryCommand
 
-let renameResultOrError =
-    InventoryItemCommandHandlers.handleRenameInventoryItemCommand eventStore renameInventoryItemCommand
-    |> Async.RunSynchronously
+let deactivateInventoryCommand =
+    DeactivateInventoryCommand(InventoryId = inventoryIdAsGuid)
 
-
-let deactivateInventoryItemCommand =
-    DeactivateInventoryItemCommand(InventoryItemId = inventoryItemIdAsGuid)
-
-let deactivateResultOrError =
-    InventoryItemCommandHandlers.handleDeactivateInventoryItemCommand eventStore deactivateInventoryItemCommand
-    |> Async.RunSynchronously
+InventoryCommandHandlers.handleDeactivateInventoryCommand eventStore deactivateInventoryCommand

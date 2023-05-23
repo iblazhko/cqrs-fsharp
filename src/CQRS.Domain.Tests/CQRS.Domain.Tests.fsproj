@@ -24,7 +24,7 @@
   <ItemGroup>
     <Compile Include="ResultCheck.fs" />
     <Compile Include="InventoryEventsApplierTest.fs" />
-    <Compile Include="InventoryItemAggregateTest.fs" />
+    <Compile Include="InventoryAggregateTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

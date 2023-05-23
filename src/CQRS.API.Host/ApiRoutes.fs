@@ -17,9 +17,9 @@ let routes =
     endpoints {
         get "/v1/hello" (fun () -> "Hi there")
 
-        put "/v1/inventories" (fun (inventoryItem: CreateInventoryItemCommand) (messageBus: IMessageBus) ->
+        put "/v1/inventories" (fun (cmd: CreateInventoryCommand) (messageBus: IMessageBus) ->
             task {
-                let! result = inventoryItem |> createInventoryItem messageBus systemClock
+                let! result = cmd |> createInventory messageBus systemClock
 
                 match result with
                 | Ok success -> return (TypedResults.Ok(success) :> IResult)
@@ -32,15 +32,92 @@ let routes =
                         :> IResult)
             })
 
-        get "/v1/inventories/{id}" (fun (id: string) (projectionStore: IProjectionStore<InventoryItemViewModel>) ->
+        post "/v1/inventories/{id}/add/{count}" (fun (id: string) (count: int) (messageBus: IMessageBus) ->
             task {
                 // TODO: translate error to BadRequest
-                let inventoryItemId =
+                let inventoryId =
                     id
-                    |> EntityId.fromString "InventoryItemId"
+                    |> EntityId.fromString "InventoryId"
                     |> Result.defaultWith (fun e -> failwith "Invalid entityId")
 
-                let! result = inventoryItemId |> getInventoryItem projectionStore
+
+                let cmd = AddItemsToInventoryCommand()
+                cmd.InventoryId <- inventoryId |> EntityId.value
+                cmd.Count <- count
+
+                let! result = cmd |> addItemsToInventory messageBus systemClock
+
+                match result with
+                | Ok success -> return (TypedResults.Ok(success) :> IResult)
+                | Error error ->
+                    return
+                        (TypedResults.Problem(
+                            System.Text.Json.JsonSerializer.Serialize(error),
+                            statusCode = (int) HttpStatusCode.InternalServerError
+                        )
+                        :> IResult)
+            })
+
+        post "/v1/inventories/{id}/remove/{count}" (fun (id: string) (count: int) (messageBus: IMessageBus) ->
+            task {
+                // TODO: translate error to BadRequest
+                let inventoryId =
+                    id
+                    |> EntityId.fromString "InventoryId"
+                    |> Result.defaultWith (fun e -> failwith "Invalid entityId")
+
+
+                let cmd = RemoveItemsFromInventoryCommand()
+                cmd.InventoryId <- inventoryId |> EntityId.value
+                cmd.Count <- count
+
+                let! result = cmd |> removeItemsFromInventory messageBus systemClock
+
+                match result with
+                | Ok success -> return (TypedResults.Ok(success) :> IResult)
+                | Error error ->
+                    return
+                        (TypedResults.Problem(
+                            System.Text.Json.JsonSerializer.Serialize(error),
+                            statusCode = (int) HttpStatusCode.InternalServerError
+                        )
+                        :> IResult)
+            })
+
+        post "/v1/inventories/{id}/deactivate" (fun (id: string) (messageBus: IMessageBus) ->
+            task {
+                // TODO: translate error to BadRequest
+                let inventoryId =
+                    id
+                    |> EntityId.fromString "InventoryId"
+                    |> Result.defaultWith (fun e -> failwith "Invalid entityId")
+
+
+                let cmd = DeactivateInventoryCommand()
+                cmd.InventoryId <- inventoryId |> EntityId.value
+
+                let! result = cmd |> deactivateInventory messageBus systemClock
+
+                match result with
+                | Ok success -> return (TypedResults.Ok(success) :> IResult)
+                | Error error ->
+                    return
+                        (TypedResults.Problem(
+                            System.Text.Json.JsonSerializer.Serialize(error),
+                            statusCode = (int) HttpStatusCode.InternalServerError
+                        )
+                        :> IResult)
+            })
+
+        get "/v1/inventories/{id}" (fun (id: string) (projectionStore: IProjectionStore<InventoryViewModel>) ->
+            task {
+                // TODO: translate error to BadRequest
+                let inventoryId =
+                    id
+                    |> EntityId.fromString "InventoryId"
+                    |> Result.defaultWith (fun e -> failwith "Invalid entityId")
+
+                let! result = inventoryId |> getInventoryViewModel projectionStore
 
                 match result with
                 | Document vm -> return (TypedResults.Ok(vm) :> IResult)

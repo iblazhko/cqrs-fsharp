@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="InventoryItemsCollection.fs" />
-    <Compile Include="InventoryItemViewModel.fs" />
+    <Compile Include="InventoryCollection.fs" />
+    <Compile Include="InventoryViewModel.fs" />
   </ItemGroup>
 
 </Project>

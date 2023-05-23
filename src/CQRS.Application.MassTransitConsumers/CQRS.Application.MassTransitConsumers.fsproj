@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <Compile Include="CommandConsumer.fs" />
-    <Compile Include="InventoryItemCommandsConsumer.fs" />
+    <Compile Include="InventoryCommandsConsumer.fs" />
   </ItemGroup>
 
 </Project>

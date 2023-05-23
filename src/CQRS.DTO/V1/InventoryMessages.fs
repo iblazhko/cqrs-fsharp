@@ -11,53 +11,53 @@ open CQRS.EntityIds
 // Commands
 
 [<AllowNullLiteral>]
-type CreateInventoryItemCommand() =
+type CreateInventoryCommand() =
     interface CqrsCommandDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Name: string = String.Empty with get, set
     override this.ToString() = Json.serialize this
 
 [<AllowNullLiteral>]
-type RenameInventoryItemCommand() =
+type RenameInventoryCommand() =
     interface CqrsCommandDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val NewName: string = String.Empty with get, set
     override this.ToString() = Json.serialize this
 
 [<AllowNullLiteral>]
 type AddItemsToInventoryCommand() =
     interface CqrsCommandDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Count: int = 0 with get, set
     override this.ToString() = Json.serialize this
 
 [<AllowNullLiteral>]
 type RemoveItemsFromInventoryCommand() =
     interface CqrsCommandDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Count: int = 0 with get, set
     override this.ToString() = Json.serialize this
 
 
 [<AllowNullLiteral>]
-type DeactivateInventoryItemCommand() =
+type DeactivateInventoryCommand() =
     interface CqrsCommandDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     override this.ToString() = Json.serialize this
 
 // Events
 
 [<AllowNullLiteral>]
-type InventoryItemCreatedEvent() =
+type InventoryCreatedEvent() =
     interface CqrsEventDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Name: string = String.Empty with get, set
     override this.ToString() = Json.serialize this
 
 [<AllowNullLiteral>]
-type InventoryItemRenamedEvent() =
+type InventoryRenamedEvent() =
     interface CqrsEventDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val OldName: string = String.Empty with get, set
     member val NewName: string = String.Empty with get, set
     override this.ToString() = Json.serialize this
@@ -65,7 +65,7 @@ type InventoryItemRenamedEvent() =
 [<AllowNullLiteral>]
 type ItemsAddedToInventoryEvent() =
     interface CqrsEventDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Name: string = String.Empty with get, set
     member val AddedCount: int = 0 with get, set
     member val OldStockQuantity: int = 0 with get, set
@@ -75,7 +75,7 @@ type ItemsAddedToInventoryEvent() =
 [<AllowNullLiteral>]
 type ItemsRemovedFromInventoryEvent() =
     interface CqrsEventDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Name: string = String.Empty with get, set
     member val RemovedCount: int = 0 with get, set
     member val OldStockQuantity: int = 0 with get, set
@@ -85,20 +85,20 @@ type ItemsRemovedFromInventoryEvent() =
 [<AllowNullLiteral>]
 type ItemNotInStockEvent() =
     interface CqrsEventDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Name: string = String.Empty with get, set
     override this.ToString() = Json.serialize this
 
 [<AllowNullLiteral>]
 type ItemWentOutOfStockEvent() =
     interface CqrsEventDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Name: string = String.Empty with get, set
     override this.ToString() = Json.serialize this
 
 [<AllowNullLiteral>]
-type InventoryItemDeactivatedEvent() =
+type InventoryDeactivatedEvent() =
     interface CqrsEventDto
-    member val InventoryItemId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
+    member val InventoryId: EntityIdRawValue = EntityIdRawValue.Empty with get, set
     member val Name: string = String.Empty with get, set
     override this.ToString() = Json.serialize this

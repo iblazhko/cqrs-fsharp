@@ -28,6 +28,7 @@ type InMemoryDocumentCollection<'TViewModel when 'TViewModel: null>() =
     interface IProjectionDocumentCollection<'TViewModel> with
         member this.GetById(documentId) =
             task {
+                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Retrieving {DocumentId}", documentId)
 
                 let result =
@@ -40,6 +41,7 @@ type InMemoryDocumentCollection<'TViewModel when 'TViewModel: null>() =
 
         member this.Update(documentId: DocumentId, updateAction: 'TViewModel -> 'TViewModel) : Task =
             task {
+                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Storing {DocumentId}", documentId)
 
                 documents.AddOrUpdate(
@@ -52,6 +54,7 @@ type InMemoryDocumentCollection<'TViewModel when 'TViewModel: null>() =
 
         member this.Update(documentId: DocumentId, viewModel: 'TViewModel) : Task =
             task {
+                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Storing {DocumentId} {@Document}", documentId, viewModel)
 
                 documents.AddOrUpdate(documentId, (fun _ -> viewModel), (fun _ -> (fun _ -> viewModel)))

@@ -13,10 +13,10 @@ let main (args: string[]) =
     let cli = new CommandLineApplication()
     cli.Name <- "cqrs.cli"
 
-    cli.Command(CreateInventoryItemCommand.name, (CreateInventoryItemCommand.configuration settings))
+    cli.Command(CreateInventoryCommand.name, (CreateInventoryCommand.configuration settings))
     |> ignore
 
-    cli.Command(GetInventoryItemCommand.name, (GetInventoryItemCommand.configuration settings))
+    cli.Command(GetInventoryCommand.name, (GetInventoryCommand.configuration settings))
     |> ignore
 
     cli.HelpOption("-h|--help|-?") |> ignore

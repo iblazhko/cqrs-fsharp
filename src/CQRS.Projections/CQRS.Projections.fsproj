@@ -20,10 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="InventoryItemProjectionDocumentId.fs" />
+    <Compile Include="InventoryProjectionDocumentId.fs" />
     <Compile Include="DtoEventHandler.fs" />
-    <Compile Include="InventoryItemProjectionApplier.fs" />
-    <Compile Include="InventoryItemEventHandlers.fs" />
+    <Compile Include="InventoryProjectionApplier.fs" />
+    <Compile Include="InventoryEventHandlers.fs" />
   </ItemGroup>
 
 </Project>
