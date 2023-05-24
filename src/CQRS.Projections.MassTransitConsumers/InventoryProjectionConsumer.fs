@@ -18,30 +18,24 @@ type InventoryProjectionConsumer(projectionStore: IProjectionStore<InventoryView
     interface IConsumer<InventoryCreatedEvent> with
         member this.Consume(context: ConsumeContext<InventoryCreatedEvent>) =
             context
-            |> EventConsumer.handleMassTransitMessage InventoryEventHandlers.handleInventoryCreatedEvent projectionStore
+            |> MassTransitDtoConsumer.handleEvent InventoryViewModelProjection.handleInventoryEvent projectionStore
 
     interface IConsumer<InventoryRenamedEvent> with
         member this.Consume(context: ConsumeContext<InventoryRenamedEvent>) =
             context
-            |> EventConsumer.handleMassTransitMessage InventoryEventHandlers.handleInventoryRenamedEvent projectionStore
+            |> MassTransitDtoConsumer.handleEvent InventoryViewModelProjection.handleInventoryEvent projectionStore
 
     interface IConsumer<ItemsAddedToInventoryEvent> with
         member this.Consume(context: ConsumeContext<ItemsAddedToInventoryEvent>) =
             context
-            |> EventConsumer.handleMassTransitMessage
-                InventoryEventHandlers.handleItemsAddedToInventoryEvent
-                projectionStore
+            |> MassTransitDtoConsumer.handleEvent InventoryViewModelProjection.handleInventoryEvent projectionStore
 
     interface IConsumer<ItemsRemovedFromInventoryEvent> with
         member this.Consume(context: ConsumeContext<ItemsRemovedFromInventoryEvent>) =
             context
-            |> EventConsumer.handleMassTransitMessage
-                InventoryEventHandlers.handleItemsRemovedFromInventoryEvent
-                projectionStore
+            |> MassTransitDtoConsumer.handleEvent InventoryViewModelProjection.handleInventoryEvent projectionStore
 
     interface IConsumer<InventoryDeactivatedEvent> with
         member this.Consume(context: ConsumeContext<InventoryDeactivatedEvent>) =
             context
-            |> EventConsumer.handleMassTransitMessage
-                InventoryEventHandlers.handleInventoryDeactivatedEvent
-                projectionStore
+            |> MassTransitDtoConsumer.handleEvent InventoryViewModelProjection.handleInventoryEvent projectionStore

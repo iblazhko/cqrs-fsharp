@@ -18,9 +18,8 @@
   <ItemGroup>
     <Compile Include="ValueTypes.fs" />
     <Compile Include="Inventory.fs" />
-    <Compile Include="DomainErrorMapper.fs" />
     <Compile Include="InventoryAggregate.fs" />
-    <Compile Include="InventoryEventsApplier.fs" />
+    <Compile Include="InventoryStateProjection.fs" />
   </ItemGroup>
 
 </Project>

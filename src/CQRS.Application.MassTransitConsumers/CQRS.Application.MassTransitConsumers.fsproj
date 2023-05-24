@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="CommandConsumer.fs" />
+    <Compile Include="MassTransitDtoConsumer.fs" />
     <Compile Include="InventoryCommandsConsumer.fs" />
   </ItemGroup>
 

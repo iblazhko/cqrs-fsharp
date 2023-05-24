@@ -8,8 +8,6 @@ open CQRS.Adapters
 open Xunit
 open FsUnit
 
-
-
 let private assertSuccess (x: Result<'Ts, 'Tf>) =
     match x with
     | Ok s -> s
@@ -18,7 +16,7 @@ let private assertSuccess (x: Result<'Ts, 'Tf>) =
 let private getRandomStreamId () =
     EntityId.newId () |> EntityId.toString |> EventStreamId.create
 
-let private eventMapper = InventoryEventDtoMapper()
+let private eventMapper = InventoryEventStreamDtoMapper()
 
 let private eventStore =
     new InMemoryEventStore(SystemTextJsonEventSerializer(), None) :> IEventStore

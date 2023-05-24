@@ -1,4 +1,4 @@
-module CQRS.Domain.InventoryEventsApplier
+module CQRS.Domain.InventoryStateProjection
 
 open CQRS.Domain.Inventory
 
@@ -6,7 +6,6 @@ let apply (state: InventoryState) (e: InventoryEvent) : InventoryState =
     match e with
     | InventoryCreated x ->
         { state with
-            InventoryId = x.InventoryId
             Name = x.Name
             StockQuantity = Empty
             IsActive = x.IsActive

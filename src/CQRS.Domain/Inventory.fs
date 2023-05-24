@@ -96,6 +96,18 @@ type DeactivateInventory = { InventoryId: InventoryId }
 
 // Domain events
 
+// TODO: InventoryId and Name is mentioned in every domain event
+//
+// In theory, we could remove this from *domain* events,
+// this information can be inferred from the state.
+//
+// InventoryId will still be needed in DTOs though, so that
+// we are able to determine which inventory event stream
+// we need to work with; and Name is a useful information
+// to have *in DTOs*.
+//
+// All this can make DTO <-> domain event mapping more complicated.
+
 type InventoryCreated =
     { InventoryId: InventoryId
       Name: InventoryName
@@ -165,6 +177,7 @@ type ValidationFailure =
     | Deactivated of InventoryId
     | CannotDeactivateNonEmpty of InventoryId
     | CannotRequestMoreThanHaveInStock of InventoryId
+    | InventoryIdMismatch of InventoryId * InventoryId
     | ValidationError of ErrorsByTag
 
 // All failures

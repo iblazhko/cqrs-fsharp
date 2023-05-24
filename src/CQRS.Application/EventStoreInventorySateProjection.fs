@@ -6,7 +6,7 @@ open CQRS.Domain.ValueTypes
 open CQRS.Ports.EventStore
 open FsToolkit.ErrorHandling
 
-type InventorySateProjection() =
+type EventStoreInventorySateProjection() =
     let getIdFromStreamId (streamId: EventStreamId) : InventoryId =
         let idResult =
             streamId |> EventStreamId.value |> InventoryId.fromString "InventoryId"
@@ -35,4 +35,4 @@ type InventorySateProjection() =
               IsActive = true }
 
         member this.Apply(state, evt) =
-            evt |> InventoryEventsApplier.apply state
+            evt |> InventoryStateProjection.apply state
