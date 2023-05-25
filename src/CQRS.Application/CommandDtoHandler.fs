@@ -14,7 +14,7 @@ exception CommandProcessingException of InventoryFailure
 
 module CommandDtoHandler =
     let eventDtoMapper = InventoryEventStreamDtoMapper()
-    let stateProjection = EventStoreInventorySateProjection()
+    let stateProjection = InventoryEventStreamProjection()
 
     let streamIdFromCommand (cmd: InventoryCommand) =
         match cmd with

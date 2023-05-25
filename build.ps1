@@ -31,7 +31,7 @@ $normalizedTarget = $Target.Replace(".", "_")
 # This build system expects following solution layout:
 # solution_root/               -- $repositoryDir
 #   build.ps1                  -- this file - PowerShell build CLI
-#   docker-compose.yaml        -- Docker Compose definition of the coplete environment, including all required infrastructure
+#   docker-compose.yaml        -- Docker Compose definition of the complete environment, including all required infrastructure
 #   src/                       -- $srcDir
 #     Project1/
 #       Project1.csproj        -- project base filename matches directory name
@@ -108,7 +108,7 @@ Function Step_PruneBuild {
     LogWarning "Pruning $pruneDir build artifacts"
 
     # Prune nested directories
-    'bin', 'obj', 'publish' | ForEach-Object {
+    'bin', 'obj', 'publish', 'TestResults' | ForEach-Object {
         Get-ChildItem -Path $pruneDir -Filter $_ -Directory -Recurse | ForEach-Object { $_.Delete($true) }
     }
 
@@ -118,9 +118,10 @@ Function Step_PruneBuild {
     }
 
     # Prune top-level items
-    '.fable', '.ionide', 'build', 'project', 'target', 'node_modules', 'benchmark/reports' | ForEach-Object {
-        if (Test-Path $_) {
-            Remove-Item -Path $(Join-Path $pruneDir $_) -Recurse -Force
+    '.ionide', 'benchmark/reports' | ForEach-Object {
+        $dir = Join-Path $pruneDir $_
+        if (Test-Path $dir) {
+            Remove-Item -Path $dir -Recurse -Force
         }
     }
 }
@@ -134,19 +135,25 @@ Function Step_PruneDocker {
     LogCmd "docker container prune -f"
     & docker container prune -f | Out-Null
 
-    if ($(docker image ls cqrs_cqrs-client:latest -q | Out-String) -ne "") {
-        LogCmd "docker rmi cqrs_cqrs-client:latest -f"
-        & docker rmi cqrs_cqrs-client:latest -f | Out-Null
+    # TODO: scan docker-compose.yaml for 'service: <service-name>' with 'dockerfile:' present
+    'cqrs-server-application', 'cqrs-server-api', 'cqrs-client' | ForEach-Object {
+        $dockerImage = "$($_):latest"
+        $dockerImageInfo = & docker image ls $dockerImage -q
+        if ($dockerImageInfo) {
+            LogCmd "docker image rm $dockerImage -f"
+            & docker rmi $dockerImage -f | Out-Null
+        }
     }
 
-    if ($(docker image ls cqrs_cqrs-server-api:latest -q | Out-String) -ne "") {
-        LogCmd "docker rmi cqrs_cqrs-server-api:latest -f"
-        & docker rmi cqrs_cqrs-server-api:latest -f | Out-Null
-    }
-
-    if ($(docker image ls cqrs_cqrs-server-application:latest -q | Out-String) -ne "") {
-        LogCmd "docker rmi cqrs_cqrs-server-application:latest -f"
-        & docker rmi cqrs_cqrs-server-application:latest -f | Out-Null
+    $dockerVolumesList = & docker volume ls -q
+    # TODO: scan docker-compose.yaml 'volumes:' section
+    'cqrs_postgres-data', 'cqrs_rabbitmq-data' | ForEach-Object {
+        $dockerVolume = $_
+        $dockerVolumeInfo = & docker volume ls --filter name=$dockerImage -q
+        if ($dockerVolumeInfo) {
+            LogCmd "docker volume rm $dockerVolume -f"
+            & docker volume rm $dockerVolume -f | Out-Null
+        }
     }
 
     LogCmd "docker image prune -f"
@@ -378,9 +385,6 @@ Function Target_FullBuild {
     DependsOn "Dotnet.Build"
     DependsOn "Dotnet.Test"
     DependsOn "Dotnet.Publish"
-
-    LogTarget "FullBuild"
-    LogInfo "DONE"
 }
 
 #######################################################################
@@ -405,6 +409,7 @@ try {
     Set-Location $repositoryDir
     DependsOn "Prelude"
     Invoke-Expression "Target_$normalizedTarget"
+    LogInfo "DONE"
 }
 finally {
     $stopwatch.Stop()

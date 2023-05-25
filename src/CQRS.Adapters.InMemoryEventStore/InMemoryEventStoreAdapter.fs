@@ -155,7 +155,7 @@ type InMemoryEventStore(serializer: IEventSerializer, eventPublisher: IEventPubl
                         let se = serializer.Serialize(x.Event, x.EventType)
 
                         { Event = se
-                          EventTypeName = x.EventType.FullName
+                          EventTypeName = x.EventType.AssemblyQualifiedName
                           Metadata = x.Metadata })
                     |> Seq.toList
 

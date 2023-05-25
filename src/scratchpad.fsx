@@ -2,6 +2,7 @@
 
 #r "CQRS.Application.Host/bin/Debug/net7.0/FPrimitive.dll"
 #r "CQRS.Application.Host/bin/Debug/net7.0/FsToolkit.ErrorHandling.dll"
+#r "CQRS.Application.Tests/bin/Debug/net7.0/Microsoft.Extensions.Logging.Abstractions.dll"
 
 #r "CQRS.EntityIds/bin/Debug/net7.0/CQRS.EntityIds.dll"
 
@@ -25,23 +26,48 @@ open CQRS.Application
 open CQRS.Adapters
 open CQRS.Ports.EventStore
 
-let eventStore = new InMemoryEventStore(SystemTextJsonEventSerializer(), None)
+let eventStore =
+    new InMemoryEventStore(SystemTextJsonEventSerializer(), None) :> IEventStore
 
 let inventoryId = InventoryId.newId ()
-
 let inventoryIdAsGuid = inventoryId |> InventoryId.value |> EntityId.value
 
 let createInventoryCommand =
     CreateInventoryCommand(InventoryId = inventoryIdAsGuid, Name = "Product001")
 
-InventoryCommandHandlers.handleCreateInventoryCommand eventStore createInventoryCommand
+let createTask =
+    createInventoryCommand |> CommandDtoHandler.handleCommand eventStore
+
+createTask.Wait()
 
 let renameInventoryCommand =
     RenameInventoryCommand(InventoryId = inventoryIdAsGuid, NewName = "Product001-New")
 
-InventoryCommandHandlers.handleRenameInventoryCommand eventStore renameInventoryCommand
+let renameTask =
+    renameInventoryCommand |> CommandDtoHandler.handleCommand eventStore
 
-let deactivateInventoryCommand =
-    DeactivateInventoryCommand(InventoryId = inventoryIdAsGuid)
+renameTask.Wait()
 
-InventoryCommandHandlers.handleDeactivateInventoryCommand eventStore deactivateInventoryCommand
+// let deactivateInventoryCommand =
+//     DeactivateInventoryCommand(InventoryId = inventoryIdAsGuid)
+//
+// let deactivateTask =
+//     deactivateInventoryCommand |> CommandDtoHandler.handleCommand eventStore
+//
+// TODO: this fails in FSI with CommandProcessingException (ValidationFailure (DoesNotExist (InventoryId (EntityId <guid>)))))
+//
+// deactivateTask.Wait()
+
+let eventStreamDtoMapper =
+    InventoryEventStreamDtoMapper() :> IEventMapper<InventoryEvent>
+
+let stateProjection =
+    InventoryEventStreamProjection() :> IEventStreamProjection<InventoryEvent, InventoryState>
+
+let eventStreamId = inventoryId |> InventoryEventStreamId.fromInventoryId
+
+let (eventStreamSession: IEventStreamSession<InventoryEvent, InventoryState>) =
+    eventStore.Open(eventStreamId, eventStreamDtoMapper).Result
+
+let events = eventStreamSession.GetAllEvents().Result
+printfn $"%A{events}"

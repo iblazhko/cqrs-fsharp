@@ -5,13 +5,8 @@ open CQRS.Domain.Inventory
 open CQRS.EntityIds
 open CQRS.Ports.EventStore
 open CQRS.Adapters
-open Xunit
 open FsUnit
-
-let private assertSuccess (x: Result<'Ts, 'Tf>) =
-    match x with
-    | Ok s -> s
-    | Error f -> failwith (f.ToString())
+open Xunit
 
 let private getRandomStreamId () =
     EntityId.newId () |> EntityId.toString |> EventStreamId.create

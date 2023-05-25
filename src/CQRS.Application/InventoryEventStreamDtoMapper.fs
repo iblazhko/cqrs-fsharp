@@ -13,7 +13,7 @@ open FPrimitive
 type InventoryEventStreamDtoMapper() =
 
     let mapOrFail (result: Result<InventoryEvent, ErrorsByTag>) =
-        result |> Result.defaultWith (fun e -> failwith $"{e:A}")
+        result |> Result.defaultWith (fun e -> raise (EventMappingException $"{e:A}"))
 
     interface IEventMapper<InventoryEvent> with
         member this.FromDomainEvent(domainEvent) =

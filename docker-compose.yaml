@@ -89,7 +89,7 @@ services:
 #  client:
 #    build:
 #      context: ./src/CQRS.CLI
-#      dockerfile: client.Dockerfile
+#      dockerfile: cqrs-client.Dockerfile
 #    environment:
 #      CQRS_CqrsCli__ApiServiceUrl: "http://server-api:17322"
 #    depends_on:

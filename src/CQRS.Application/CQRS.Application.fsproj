@@ -21,9 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="InventoryEventStreamDtoMapper.fs" />
     <Compile Include="InventoryEventStreamId.fs" />
-    <Compile Include="EventStoreInventorySateProjection.fs" />
+    <Compile Include="InventoryEventStreamDtoMapper.fs" />
+    <Compile Include="InventoryEventStreamProjection.fs" />
     <Compile Include="CommandDtoHandler.fs" />
     <Compile Include="EventStoreEventsPublisher.fs" />
   </ItemGroup>

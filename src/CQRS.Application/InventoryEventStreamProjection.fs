@@ -6,7 +6,7 @@ open CQRS.Domain.ValueTypes
 open CQRS.Ports.EventStore
 open FsToolkit.ErrorHandling
 
-type EventStoreInventorySateProjection() =
+type InventoryEventStreamProjection() =
     let getIdFromStreamId (streamId: EventStreamId) : InventoryId =
         let idResult =
             streamId |> EventStreamId.value |> InventoryId.fromString "InventoryId"
