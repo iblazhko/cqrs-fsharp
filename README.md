@@ -1,5 +1,7 @@
 # CQRS Made Functional
 
+[![CI Workflow](https://github.com/iblazhko/cqrs-fsharp/actions/workflows/ci-workflow.yml/badge.svg?branch=main)](https://github.com/iblazhko/cqrs-fsharp/actions/workflows/ci-workflow.yml)
+
 Example of a simple inventory management system implemented in F# using DDD,
 CQRS, and Event Sourcing.
 
