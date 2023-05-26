@@ -18,12 +18,12 @@ type InventoryEventStreamDtoMapper() =
     interface IEventMapper<InventoryEvent> with
         member this.FromDomainEvent(domainEvent) =
             match domainEvent with
-            | :? InventoryEvent -> (domainEvent :?> InventoryEvent) |> InventoryEventMapper.fromDomain :> obj
+            | :? InventoryEvent as x -> x |> InventoryEventMapper.fromDomain :> obj
             | _ -> raise (UnknownEventTypeException(domainEvent.GetType().FullName))
 
         member this.ToDomainEvent(dtoWithMetadata) =
             let evt = dtoWithMetadata.Event
 
             match evt with
-            | :? CqrsEventDto -> (evt :?> CqrsEventDto) |> InventoryEventMapper.toDomain |> mapOrFail
+            | :? CqrsEventDto as x -> x |> InventoryEventMapper.toDomain |> mapOrFail
             | _ -> raise (UnknownEventTypeException(evt.GetType().FullName))

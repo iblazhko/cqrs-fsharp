@@ -19,36 +19,33 @@ let fromDomain (evt: InventoryEvent) =
 
 let toDomain (dto: CqrsEventDto) =
     match dto with
-    | :? InventoryCreatedEvent ->
-        (dto :?> InventoryCreatedEvent)
+    | :? InventoryCreatedEvent as x ->
+        x
         |> InventoryCreatedMapper.toDomain
         |> Result.map InventoryEvent.InventoryCreated
-    | :? InventoryRenamedEvent ->
-        (dto :?> InventoryRenamedEvent)
+    | :? InventoryRenamedEvent as x ->
+        x
         |> InventoryRenamedMapper.toDomain
         |> Result.map InventoryEvent.InventoryRenamed
-    | :? ItemsAddedToInventoryEvent ->
-        (dto :?> ItemsAddedToInventoryEvent)
+    | :? ItemsAddedToInventoryEvent as x ->
+        x
         |> ItemsAddedToInventoryMapper.toDomain
         |> Result.map InventoryEvent.ItemsAddedToInventory
-    | :? ItemsRemovedFromInventoryEvent ->
-        (dto :?> ItemsRemovedFromInventoryEvent)
+    | :? ItemsRemovedFromInventoryEvent as x ->
+        x
         |> ItemsRemovedFromInventoryMapper.toDomain
         |> Result.map InventoryEvent.ItemsRemovedFromInventory
-    | :? ItemInStockEvent ->
-        (dto :?> ItemInStockEvent)
-        |> ItemInStockMapper.toDomain
-        |> Result.map InventoryEvent.ItemInStock
-    | :? ItemWentOutOfStockEvent ->
-        (dto :?> ItemWentOutOfStockEvent)
+    | :? ItemInStockEvent as x -> x |> ItemInStockMapper.toDomain |> Result.map InventoryEvent.ItemInStock
+    | :? ItemWentOutOfStockEvent as x ->
+        x
         |> ItemWentOutOfStockMapper.toDomain
         |> Result.map InventoryEvent.ItemWentOutOfStock
-    | :? RequestedMoreItemsThanHaveInStockEvent ->
-        (dto :?> RequestedMoreItemsThanHaveInStockEvent)
+    | :? RequestedMoreItemsThanHaveInStockEvent as x ->
+        x
         |> RequestedMoreItemsThanHaveInStockMapper.toDomain
         |> Result.map InventoryEvent.RequestedMoreItemsThanHaveInStock
-    | :? InventoryDeactivatedEvent ->
-        (dto :?> InventoryDeactivatedEvent)
+    | :? InventoryDeactivatedEvent as x ->
+        x
         |> InventoryDeactivatedMapper.toDomain
         |> Result.map InventoryEvent.InventoryDeactivated
     | x -> raise (EventDtoMappingException $"Unknown event DTO type: {x.GetType().FullName}")

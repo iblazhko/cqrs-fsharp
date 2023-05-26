@@ -16,24 +16,24 @@ let fromDomain (cmd: InventoryCommand) =
 
 let toDomain (dto: CqrsCommandDto) =
     match dto with
-    | :? CreateInventoryCommand ->
-        (dto :?> CreateInventoryCommand)
+    | :? CreateInventoryCommand as x ->
+        x
         |> CreateInventoryMapper.toDomain
         |> Result.map InventoryCommand.CreateInventory
-    | :? RenameInventoryCommand ->
-        (dto :?> RenameInventoryCommand)
+    | :? RenameInventoryCommand as x ->
+        x
         |> RenameInventoryMapper.toDomain
         |> Result.map InventoryCommand.RenameInventory
-    | :? AddItemsToInventoryCommand ->
-        (dto :?> AddItemsToInventoryCommand)
+    | :? AddItemsToInventoryCommand as x ->
+        x
         |> AddItemsToInventoryMapper.toDomain
         |> Result.map InventoryCommand.AddItemsToInventory
-    | :? RemoveItemsFromInventoryCommand ->
-        (dto :?> RemoveItemsFromInventoryCommand)
+    | :? RemoveItemsFromInventoryCommand as x ->
+        x
         |> RemoveItemsFromInventoryMapper.toDomain
         |> Result.map InventoryCommand.RemoveItemsFromInventory
-    | :? DeactivateInventoryCommand ->
-        (dto :?> DeactivateInventoryCommand)
+    | :? DeactivateInventoryCommand as x ->
+        x
         |> DeactivateInventoryMapper.toDomain
         |> Result.map InventoryCommand.DeactivateInventory
     | x -> raise (CommandDtoMappingException $"Unknown command DTO type: {x.GetType().FullName}")
