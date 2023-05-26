@@ -5,7 +5,6 @@ open CQRS.DTO
 open CQRS.Domain
 open CQRS.Domain.Inventory
 open CQRS.Mapping
-open CQRS.Ports.EventStore
 open FPrimitive
 open FsToolkit.ErrorHandling
 
@@ -26,7 +25,7 @@ module CommandDtoHandler =
         |> InventoryEventStreamId.fromInventoryId
 
     let handleCommand<'TCommandDto when 'TCommandDto :> CqrsCommandDto>
-        (eventStore: IEventStore)
+        (env: ApplicationEnvironment)
         (dto: 'TCommandDto)
         : Task = // TODO: Use Result<Task,CommandHandlerFault>
         task {
@@ -36,17 +35,25 @@ module CommandDtoHandler =
                 |> Result.defaultWith (fun e -> raise (CommandDtoMappingException e))
             // TODO: map error to CommandHandlerFault
 
+            // TODO: Move this code into DeactivateInventory branch
+            let time = env.Clock.Now()
+            let! moonPhase = env.MoonPhase.GetMoonPhase(env.Location, time)
+
             let streamId = command |> streamIdFromCommand
-            use! streamSession = eventStore.Open(streamId, eventDtoMapper)
+            use! streamSession = env.EventStore.Open(streamId, eventDtoMapper)
 
             let! currentState = streamSession.GetState(stateProjection)
 
             let newEvents =
-                command
-                |> InventoryAggregate.handle currentState
+                match command with
+                | CreateInventory x -> x |> InventoryAggregate.create currentState
+                | RenameInventory x -> x |> InventoryAggregate.rename currentState
+                | AddItemsToInventory x -> x |> InventoryAggregate.addItems currentState
+                | RemoveItemsFromInventory x -> x |> InventoryAggregate.removeItems currentState
+                | DeactivateInventory x -> x |> InventoryAggregate.deactivate currentState moonPhase
                 |> Result.defaultWith (fun x -> raise (CommandProcessingException x))
 
             do! streamSession.AppendEvents(newEvents |> Seq.map box)
-            do! eventStore.Save(streamSession)
+            do! env.EventStore.Save(streamSession)
         // TODO: map EventStore errors to CommandHandlerFault
         }

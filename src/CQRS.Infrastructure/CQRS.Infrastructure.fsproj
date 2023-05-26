@@ -45,6 +45,7 @@
     <Compile Include="MassTransitConventions.fs" />
     <Compile Include="EndpointsRegistration.fs" />
     <Compile Include="MessageBusConfigurator.fs" />
+    <Compile Include="ApplicationEnvironmentConfigurator.fs" />
     <Compile Include="HealthcheckConfigurator.fs" />
     <Compile Include="LoggingConfigurator.fs" />
     <Compile Include="Startup.fs" />

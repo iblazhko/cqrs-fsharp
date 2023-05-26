@@ -1,5 +1,6 @@
 module CQRS.Domain.InventoryAggregate
 
+open CQRS.Domain.Moon
 open CQRS.Domain.ValueTypes
 open CQRS.Domain.Inventory
 
@@ -52,7 +53,7 @@ let private getRemovedFromInventoryEvent (x: InventoryState) removedCount =
           OldStockQuantity = x.StockQuantity
           NewStockQuantity = StockQuantity.subtract x.StockQuantity removedCount }
 
-let private create (state: InventoryState) (cmd: CreateInventory) =
+let create (state: InventoryState) (cmd: CreateInventory) =
     invokeIfNew state (fun () ->
         Seq.singleton (
             InventoryCreated
@@ -61,7 +62,7 @@ let private create (state: InventoryState) (cmd: CreateInventory) =
                   IsActive = true }
         ))
 
-let private rename (state: InventoryState) (cmd: RenameInventory) =
+let rename (state: InventoryState) (cmd: RenameInventory) =
     invokeIfExists state cmd.InventoryId (fun x ->
         seq {
             if not (state.Name = cmd.NewName) then
@@ -72,7 +73,7 @@ let private rename (state: InventoryState) (cmd: RenameInventory) =
                           NewName = cmd.NewName }
         })
 
-let private addItems (state: InventoryState) (cmd: AddItemsToInventory) =
+let addItems (state: InventoryState) (cmd: AddItemsToInventory) =
     invokeIfExists state cmd.InventoryId (fun x ->
         seq {
             let count = cmd.Count
@@ -89,7 +90,7 @@ let private addItems (state: InventoryState) (cmd: AddItemsToInventory) =
                 yield getInStockEvent x cmd.Count
         })
 
-let private removeItems (state: InventoryState) (cmd: RemoveItemsFromInventory) =
+let removeItems (state: InventoryState) (cmd: RemoveItemsFromInventory) =
     invokeIfExists state cmd.InventoryId (fun x ->
         seq {
             let count = cmd.Count
@@ -105,18 +106,14 @@ let private removeItems (state: InventoryState) (cmd: RemoveItemsFromInventory) 
                 | _ -> yield getNotEnoughStockEvent x count
         })
 
-let private deactivate (state: InventoryState) (cmd: DeactivateInventory) =
-    deactivateIfEmpty state cmd.InventoryId (fun x ->
-        Seq.singleton (
-            InventoryDeactivated
-                { InventoryId = x.InventoryId
-                  Name = x.Name }
-        ))
-
-let handle (state: InventoryState) (cmd: InventoryCommand) =
-    match cmd with
-    | CreateInventory x -> x |> create state
-    | RenameInventory x -> x |> rename state
-    | AddItemsToInventory x -> x |> addItems state
-    | RemoveItemsFromInventory x -> x |> removeItems state
-    | DeactivateInventory x -> x |> deactivate state
+// Random business rule: cannot deactivate an inventory when the moon is in full phase
+let deactivate (state: InventoryState) (moonPhase: MoonPhase) (cmd: DeactivateInventory) =
+    match moonPhase with
+    | FullMoon -> Error(ValidationFailure(CannotDeactivateWhenMoonIsFull cmd.InventoryId))
+    | _ ->
+        deactivateIfEmpty state cmd.InventoryId (fun x ->
+            seq {
+                InventoryDeactivated
+                    { InventoryId = x.InventoryId
+                      Name = x.Name }
+            })

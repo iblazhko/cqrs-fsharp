@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Compile Include="ValueTypes.fs" />
+    <Compile Include="Moon.fs" />
     <Compile Include="Inventory.fs" />
     <Compile Include="InventoryAggregate.fs" />
     <Compile Include="InventoryStateProjection.fs" />

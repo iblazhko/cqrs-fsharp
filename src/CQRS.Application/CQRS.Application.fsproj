@@ -18,9 +18,12 @@
     <ProjectReference Include="..\CQRS.Mapping\CQRS.Mapping.fsproj" />
     <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj" />
     <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj" />
+    <ProjectReference Include="..\CQRS.Ports.Time\CQRS.Ports.Time.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="IMoonPhaseService.fs" />
+    <Compile Include="ApplicationEnvironment.fs" />
     <Compile Include="InventoryEventStreamId.fs" />
     <Compile Include="InventoryEventStreamDtoMapper.fs" />
     <Compile Include="InventoryEventStreamProjection.fs" />

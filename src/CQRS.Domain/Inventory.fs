@@ -176,6 +176,7 @@ type ValidationFailure =
     | AlreadyExists of InventoryId
     | Deactivated of InventoryId
     | CannotDeactivateNonEmpty of InventoryId
+    | CannotDeactivateWhenMoonIsFull of InventoryId
     | CannotRequestMoreThanHaveInStock of InventoryId
     | InventoryIdMismatch of InventoryId * InventoryId
     | ValidationError of ErrorsByTag

@@ -6,7 +6,7 @@ open CQRS.EntityIds
 
 // DTOs are meant to be interoperable with outside world
 // hence using nullable classes with parameterless constructors
-// and get/set properties that can be nullable
+// and get/set properties
 
 // Commands
 
