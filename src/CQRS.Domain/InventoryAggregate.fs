@@ -55,55 +55,52 @@ let private getRemovedFromInventoryEvent (x: InventoryState) removedCount =
 
 let create (state: InventoryState) (cmd: CreateInventory) =
     invokeIfNew state (fun () ->
-        Seq.singleton (
+        seq {
             InventoryCreated
                 { InventoryId = cmd.InventoryId
                   Name = cmd.Name
                   IsActive = true }
-        ))
+        })
 
 let rename (state: InventoryState) (cmd: RenameInventory) =
     invokeIfExists state cmd.InventoryId (fun x ->
         seq {
             if not (state.Name = cmd.NewName) then
-                yield
-                    InventoryRenamed
-                        { InventoryId = x.InventoryId
-                          OldName = x.Name
-                          NewName = cmd.NewName }
+                InventoryRenamed
+                    { InventoryId = x.InventoryId
+                      OldName = x.Name
+                      NewName = cmd.NewName }
         })
 
 let addItems (state: InventoryState) (cmd: AddItemsToInventory) =
     invokeIfExists state cmd.InventoryId (fun x ->
-        seq {
-            let count = cmd.Count
+        let count = cmd.Count
 
-            yield
-                ItemsAddedToInventory
-                    { InventoryId = x.InventoryId
-                      Name = x.Name
-                      AddedCount = count
-                      OldStockQuantity = x.StockQuantity
-                      NewStockQuantity = StockQuantity.add x.StockQuantity count }
+        seq {
+            ItemsAddedToInventory
+                { InventoryId = x.InventoryId
+                  Name = x.Name
+                  AddedCount = count
+                  OldStockQuantity = x.StockQuantity
+                  NewStockQuantity = StockQuantity.add x.StockQuantity count }
 
             if state.StockQuantity = Empty then
-                yield getInStockEvent x cmd.Count
+                getInStockEvent x count
         })
 
 let removeItems (state: InventoryState) (cmd: RemoveItemsFromInventory) =
     invokeIfExists state cmd.InventoryId (fun x ->
-        seq {
-            let count = cmd.Count
+        let count = cmd.Count
 
+        seq {
             match x.StockQuantity with
-            | StockQuantity.Empty -> yield getNotEnoughStockEvent x count
+            | StockQuantity.Empty -> getNotEnoughStockEvent x count
             | StockQuantity.InventoryCount available ->
                 match available with
-                | amount when PositiveInteger.greaterThan amount count -> yield getRemovedFromInventoryEvent x count
+                | amount when PositiveInteger.greaterThan amount count -> getRemovedFromInventoryEvent x count
                 | amount when PositiveInteger.equal amount count ->
-                    yield getRemovedFromInventoryEvent x count
-                    yield getWentOutOfStockEvent x
-                | _ -> yield getNotEnoughStockEvent x count
+                    yield! [ getRemovedFromInventoryEvent x count; getWentOutOfStockEvent x ]
+                | _ -> getNotEnoughStockEvent x count
         })
 
 // Random business rule: cannot deactivate an inventory when the moon is in full phase
