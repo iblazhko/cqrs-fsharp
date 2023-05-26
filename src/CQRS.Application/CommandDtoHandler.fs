@@ -31,7 +31,7 @@ module CommandDtoHandler =
         task {
             let command =
                 dto
-                |> InventoryCommandMapper.toDomain
+                |> InventoryCommandMapper.ofDTO
                 |> Result.defaultWith (fun e -> raise (CommandDtoMappingException e))
             // TODO: map error to CommandHandlerFault
 

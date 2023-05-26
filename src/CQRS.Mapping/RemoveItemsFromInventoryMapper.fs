@@ -2,20 +2,20 @@ module CQRS.Mapping.RemoveItemsFromInventoryMapper
 
 open CQRS.Domain.Inventory
 open CQRS.DTO.V1
-open CQRS.Mapping.DtoMapper
+open CQRS.Mapping.NullableDtoMapper
 open FsToolkit.ErrorHandling
 
-let fromDomain (domain: RemoveItemsFromInventory) =
+let toDTO (domain: RemoveItemsFromInventory) =
     let dto = RemoveItemsFromInventoryCommand()
-    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
-    dto.Count <- domain.Count |> CountMapper.fromDomain
+    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.toDTO
+    dto.Count <- domain.Count |> CountMapper.toDTO
     dto
 
-let toDomain (dto: RemoveItemsFromInventoryCommand) =
+let ofDTO (dto: RemoveItemsFromInventoryCommand) =
     result {
-        let! nonNullDto = dto |> ensureNotNull
-        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.toDomain "InventoryId"
-        let! count = nonNullDto.Count |> CountMapper.toDomain "Count"
+        let! nonNullDto = dto |> ofNullable
+        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.ofDTO "InventoryId"
+        let! count = nonNullDto.Count |> CountMapper.ofDTO "Count"
 
         return
             { RemoveItemsFromInventory.InventoryId = inventoryId

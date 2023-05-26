@@ -2,26 +2,26 @@ module CQRS.Mapping.ItemsRemovedFromInventoryMapper
 
 open CQRS.Domain.Inventory
 open CQRS.DTO.V1
-open CQRS.Mapping.DtoMapper
+open CQRS.Mapping.NullableDtoMapper
 open FsToolkit.ErrorHandling
 
-let fromDomain (domain: ItemsRemovedFromInventory) =
+let toDTO (domain: ItemsRemovedFromInventory) =
     let dto = ItemsRemovedFromInventoryEvent()
-    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
-    dto.Name <- domain.Name |> InventoryNameMapper.fromDomain
-    dto.RemovedCount <- domain.RemovedCount |> CountMapper.fromDomain
-    dto.OldStockQuantity <- domain.OldStockQuantity |> StockQuantityMapper.fromDomain
-    dto.NewStockQuantity <- domain.NewStockQuantity |> StockQuantityMapper.fromDomain
+    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.toDTO
+    dto.Name <- domain.Name |> InventoryNameMapper.toDTO
+    dto.RemovedCount <- domain.RemovedCount |> CountMapper.toDTO
+    dto.OldStockQuantity <- domain.OldStockQuantity |> StockQuantityMapper.toDTO
+    dto.NewStockQuantity <- domain.NewStockQuantity |> StockQuantityMapper.toDTO
     dto
 
-let toDomain (dto: ItemsRemovedFromInventoryEvent) =
+let ofDTO (dto: ItemsRemovedFromInventoryEvent) =
     result {
-        let! nonNullDto = dto |> ensureNotNull
-        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.toDomain "InventoryId"
-        let! name = nonNullDto.Name |> InventoryNameMapper.toDomain "Name"
-        let! removedCount = nonNullDto.RemovedCount |> CountMapper.toDomain "RemovedCount"
-        let! oldStockQuantity = nonNullDto.OldStockQuantity |> StockQuantityMapper.toDomain "OldStockQuantity"
-        let! newStockQuantity = nonNullDto.NewStockQuantity |> StockQuantityMapper.toDomain "NewStockQuantity"
+        let! nonNullDto = dto |> ofNullable
+        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.ofDTO "InventoryId"
+        let! name = nonNullDto.Name |> InventoryNameMapper.ofDTO "Name"
+        let! removedCount = nonNullDto.RemovedCount |> CountMapper.ofDTO "RemovedCount"
+        let! oldStockQuantity = nonNullDto.OldStockQuantity |> StockQuantityMapper.ofDTO "OldStockQuantity"
+        let! newStockQuantity = nonNullDto.NewStockQuantity |> StockQuantityMapper.ofDTO "NewStockQuantity"
 
         return
             { ItemsRemovedFromInventory.InventoryId = inventoryId

@@ -16,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="DtoMapper.fs" />
+    <Compile Include="DtoError.fs" />
+    <Compile Include="NullableDtoMapper.fs" />
     <Compile Include="InventoryValueTypesMapper.fs" />
     <Compile Include="CreateInventoryMapper.fs" />
     <Compile Include="RenameInventoryMapper.fs" />

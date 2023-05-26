@@ -2,22 +2,22 @@ module CQRS.Mapping.InventoryRenamedMapper
 
 open CQRS.Domain.Inventory
 open CQRS.DTO.V1
-open CQRS.Mapping.DtoMapper
+open CQRS.Mapping.NullableDtoMapper
 open FsToolkit.ErrorHandling
 
-let fromDomain (domain: InventoryRenamed) =
+let toDTO (domain: InventoryRenamed) =
     let dto = InventoryRenamedEvent()
-    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
-    dto.OldName <- domain.OldName |> InventoryNameMapper.fromDomain
-    dto.NewName <- domain.NewName |> InventoryNameMapper.fromDomain
+    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.toDTO
+    dto.OldName <- domain.OldName |> InventoryNameMapper.toDTO
+    dto.NewName <- domain.NewName |> InventoryNameMapper.toDTO
     dto
 
-let toDomain (dto: InventoryRenamedEvent) =
+let ofDTO (dto: InventoryRenamedEvent) =
     result {
-        let! nonNullDto = dto |> ensureNotNull
-        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.toDomain "InventoryId"
-        let! oldName = nonNullDto.OldName |> InventoryNameMapper.toDomain "OldName"
-        let! newName = nonNullDto.NewName |> InventoryNameMapper.toDomain "NewName"
+        let! nonNullDto = dto |> ofNullable
+        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.ofDTO "InventoryId"
+        let! oldName = nonNullDto.OldName |> InventoryNameMapper.ofDTO "OldName"
+        let! newName = nonNullDto.NewName |> InventoryNameMapper.ofDTO "NewName"
 
         return
             { InventoryRenamed.InventoryId = inventoryId

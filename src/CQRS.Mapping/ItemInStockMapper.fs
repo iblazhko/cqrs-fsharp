@@ -2,22 +2,22 @@ module CQRS.Mapping.ItemInStockMapper
 
 open CQRS.Domain.Inventory
 open CQRS.DTO.V1
-open CQRS.Mapping.DtoMapper
+open CQRS.Mapping.NullableDtoMapper
 open FsToolkit.ErrorHandling
 
-let fromDomain (domain: ItemInStock) =
+let toDTO (domain: ItemInStock) =
     let dto = ItemInStockEvent()
-    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
-    dto.Name <- domain.Name |> InventoryNameMapper.fromDomain
-    dto.StockQuantity <- domain.StockQuantity |> StockQuantityMapper.fromDomain
+    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.toDTO
+    dto.Name <- domain.Name |> InventoryNameMapper.toDTO
+    dto.StockQuantity <- domain.StockQuantity |> StockQuantityMapper.toDTO
     dto
 
-let toDomain (dto: ItemInStockEvent) =
+let ofDTO (dto: ItemInStockEvent) =
     result {
-        let! nonNullDto = dto |> ensureNotNull
-        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.toDomain "InventoryId"
-        let! name = nonNullDto.Name |> InventoryNameMapper.toDomain "Name"
-        let! stockQuantity = nonNullDto.StockQuantity |> StockQuantityMapper.toDomain "StockQuantity"
+        let! nonNullDto = dto |> ofNullable
+        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.ofDTO "InventoryId"
+        let! name = nonNullDto.Name |> InventoryNameMapper.ofDTO "Name"
+        let! stockQuantity = nonNullDto.StockQuantity |> StockQuantityMapper.ofDTO "StockQuantity"
 
         return
             { ItemInStock.InventoryId = inventoryId

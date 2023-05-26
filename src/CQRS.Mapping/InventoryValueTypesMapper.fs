@@ -8,31 +8,31 @@ open CQRS.Domain.ValueTypes
 open CQRS.EntityIds
 
 module CountMapper =
-    let fromDomain (domain: PositiveInteger) = domain |> PositiveInteger.value
-    let toDomain (propName: string) (dto: int) = dto |> PositiveInteger.create propName
+    let toDTO (domain: PositiveInteger) = domain |> PositiveInteger.value
+    let ofDTO (propName: string) (dto: int) = dto |> PositiveInteger.create propName
 
 module StockQuantityMapper =
-    let fromDomain (domain: StockQuantity) =
+    let toDTO (domain: StockQuantity) =
         match domain with
         | Empty -> 0
         | InventoryCount count -> count |> PositiveInteger.value
 
-    let toDomain (propName: string) (n: int) : Result<StockQuantity, ErrorsByTag> =
+    let ofDTO (propName: string) (n: int) : Result<StockQuantity, ErrorsByTag> =
         match n with
         | x when x < 0 -> Error(ErrorsByTag(Seq.singleton (propName, [ "Expected non-negative number" ])))
         | x when x = 0 -> Ok Empty
         | x -> x |> PositiveInteger.create propName |> Result.map InventoryCount
 
 module InventoryIdMapper =
-    let fromDomain (domain: InventoryId) =
+    let toDTO (domain: InventoryId) =
         domain |> InventoryId.value |> EntityId.value
 
-    let toDomain (propName: string) (dto: EntityIdRawValue) =
+    let ofDTO (propName: string) (dto: EntityIdRawValue) =
         dto |> EntityId.create propName |> Result.map InventoryId.create
 
 module InventoryNameMapper =
-    let fromDomain (domain: InventoryName) =
+    let toDTO (domain: InventoryName) =
         domain |> InventoryName.value |> MediumString.value
 
-    let toDomain (propName: string) (dto: string) =
+    let ofDTO (propName: string) (dto: string) =
         dto |> MediumString.create propName |> Result.map InventoryName.create

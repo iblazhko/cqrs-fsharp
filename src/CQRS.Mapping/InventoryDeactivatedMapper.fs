@@ -2,20 +2,20 @@ module CQRS.Mapping.InventoryDeactivatedMapper
 
 open CQRS.Domain.Inventory
 open CQRS.DTO.V1
-open CQRS.Mapping.DtoMapper
+open CQRS.Mapping.NullableDtoMapper
 open FsToolkit.ErrorHandling
 
-let fromDomain (domain: InventoryDeactivated) =
+let toDTO (domain: InventoryDeactivated) =
     let dto = InventoryDeactivatedEvent()
-    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.fromDomain
-    dto.Name <- domain.Name |> InventoryNameMapper.fromDomain
+    dto.InventoryId <- domain.InventoryId |> InventoryIdMapper.toDTO
+    dto.Name <- domain.Name |> InventoryNameMapper.toDTO
     dto
 
-let toDomain (dto: InventoryDeactivatedEvent) =
+let ofDTO (dto: InventoryDeactivatedEvent) =
     result {
-        let! nonNullDto = dto |> ensureNotNull
-        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.toDomain "InventoryId"
-        let! name = nonNullDto.Name |> InventoryNameMapper.toDomain "Name"
+        let! nonNullDto = dto |> ofNullable
+        let! inventoryId = nonNullDto.InventoryId |> InventoryIdMapper.ofDTO "InventoryId"
+        let! name = nonNullDto.Name |> InventoryNameMapper.ofDTO "Name"
 
         return
             { InventoryDeactivated.InventoryId = inventoryId

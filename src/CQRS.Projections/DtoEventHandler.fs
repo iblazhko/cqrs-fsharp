@@ -30,7 +30,7 @@ let handleEvent<'TEventDto, 'TViewModel when 'TEventDto :> CqrsEventDto and 'TVi
     task {
         let evt =
             dto
-            |> InventoryEventMapper.toDomain
+            |> InventoryEventMapper.ofDTO
             |> Result.defaultWith (fun e -> raise (EventDtoMappingException e))
 
         let documentCollectionId = evt |> context.DocumentCollectionIdFromEvent
