@@ -8,7 +8,7 @@ Param(
     [ValidateSet("Debug", "Release")]
     [string]$Configuration = "Release",
 
-    [string]$DotnetVerbosity = "minimal",
+    [string]$DotnetVerbosity = "quiet",
 
     [string]$VersionSuffix = ""
 )
@@ -70,6 +70,7 @@ Function LogStep {
 
 Function LogTarget {
     Param([ValidateNotNullOrEmpty()] [string]$Message)
+    Write-Host ""
     Write-Host -ForegroundColor Green "--- TARGET: $Message"
 }
 
@@ -173,17 +174,17 @@ Function Step_DotnetClean {
 }
 
 Function Step_DotnetRestore {
-    LogStep "dotnet restore $dotnetSolutionFile --verbosity $DotnetVerbosity"
-    & dotnet restore "$dotnetSolutionFile" --verbosity $DotnetVerbosity
+    LogStep "dotnet restore $dotnetSolutionFile --verbosity $DotnetVerbosity -nologo"
+    & dotnet restore "$dotnetSolutionFile" --verbosity $DotnetVerbosity -nologo
     if (-Not ($?)) { exit $LastExitCode }
 }
 
 Function Step_DotnetBuild {
-    LogStep "dotnet build $dotnetSolutionFile --no-restore --configuration $Configuration --verbosity $DotnetVerbosity /p:Version=$buildVersion"
+    LogStep "dotnet build $dotnetSolutionFile --no-restore --configuration $Configuration --verbosity $DotnetVerbosity -nologo /p:Version=$buildVersion"
     $currentLocation = Get-Location
     try {
         Set-Location $srcDir
-        & dotnet build "$dotnetSolutionFile" --no-restore --configuration $Configuration --verbosity $DotnetVerbosity /p:Version=$buildVersion
+        & dotnet build "$dotnetSolutionFile" --no-restore --configuration $Configuration --verbosity $DotnetVerbosity -nologo /p:Version=$buildVersion
         if (-Not ($?)) { exit $LastExitCode }
     }
     finally {
@@ -193,15 +194,15 @@ Function Step_DotnetBuild {
 
 Function Step_DotnetPublish {
     Param([ValidateNotNullOrEmpty()] [string]$ProjectFile, [ValidateNotNullOrEmpty()] [string]$PublishOutput)
-    LogStep "dotnet publish $ProjectFile --output $PublishOutput --configuration $Configuration --verbosity $DotnetVerbosity /p:Version=$buildVersion"
-    & dotnet publish "$ProjectFile" --output "$PublishOutput" --configuration $Configuration --verbosity $DotnetVerbosity /p:Version=$buildVersion
+    LogStep "dotnet publish $ProjectFile --output $PublishOutput --configuration $Configuration --verbosity $DotnetVerbosity -nologo /p:Version=$buildVersion"
+    & dotnet publish "$ProjectFile" --output "$PublishOutput" --configuration $Configuration --verbosity $DotnetVerbosity -nologo /p:Version=$buildVersion
     if (-Not ($?)) { exit $LastExitCode }
 }
 
 Function Step_DotnetTest {
     Param([ValidateNotNullOrEmpty()] [string]$ProjectFile)
-    LogStep "dotnet test $ProjectFile --no-build --configuration $Configuration --logger:trx"
-    & dotnet test "$ProjectFile" --no-build --configuration $Configuration --logger:trx
+    LogStep "dotnet test $ProjectFile --no-build --configuration $Configuration --logger:trx -nologo"
+    & dotnet test "$ProjectFile" --no-build --configuration $Configuration --logger:trx --logger:"console;verbosity=normal" -nologo
     if (-Not ($?)) { exit $LastExitCode }
 }
 
@@ -403,16 +404,30 @@ if ($Target -eq "Prune.Docker") {
 #######################################################################
 # MAIN ENTRY POINT
 
+$exitResult = 0
+
 $currentLocation = Get-Location
 try {
     LogInfo "*** BUILD: $Target ($Configuration) in $repositoryDir"
     Set-Location $repositoryDir
     DependsOn "Prelude"
     Invoke-Expression "Target_$normalizedTarget"
+    Write-Host ""
     LogInfo "DONE"
+}
+catch [System.Exception] {
+    $errorMessage = "$_"
+    if ($errorMessage.StartsWith("The term 'Target_$normalizedTarget' is not recognized")) {
+        LogError("Target $Target is not recognized")
+    } else {
+        LogError($errorMessage)
+    }
+    $exitResult = 1
 }
 finally {
     $stopwatch.Stop()
     LogInfo "*** Completed in: $($stopwatch.Elapsed)"
     Set-Location $currentLocation
 }
+
+Exit $exitResult
