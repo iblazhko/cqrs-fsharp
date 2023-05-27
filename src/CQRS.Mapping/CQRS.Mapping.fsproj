@@ -17,24 +17,24 @@
 
   <ItemGroup>
     <Compile Include="DtoError.fs" />
-    <Compile Include="NullableDtoMapper.fs" />
+    <Compile Include="NullableDto'.fs" />
     <Compile Include="InventoryValueTypesMapper.fs" />
-    <Compile Include="CreateInventoryMapper.fs" />
-    <Compile Include="RenameInventoryMapper.fs" />
-    <Compile Include="AddItemsToInventoryMapper.fs" />
-    <Compile Include="RemoveItemsFromInventoryMapper.fs" />
-    <Compile Include="DeactivateInventoryMapper.fs" />
-    <Compile Include="InventoryCreatedMapper.fs" />
-    <Compile Include="InventoryRenamedMapper.fs" />
-    <Compile Include="ItemsAddedToInventoryMapper.fs" />
-    <Compile Include="ItemsRemovedFromInventoryMapper.fs" />
-    <Compile Include="ItemInStockMapper.fs" />
-    <Compile Include="RequestedMoreItemsThanHaveInStockMapper.fs" />
-    <Compile Include="ItemWentOutOfStockMapper.fs" />
-    <Compile Include="InventoryDeactivatedMapper.fs" />
-    <Compile Include="InventoryCommandMapper.fs" />
-    <Compile Include="InventoryEventMapper.fs" />
-    <Compile Include="InventoryStateMapper.fs" />
+    <Compile Include="CreateInventory'.fs" />
+    <Compile Include="RenameInventory'.fs" />
+    <Compile Include="AddItemsToInventory'.fs" />
+    <Compile Include="RemoveItemsFromInventory'.fs" />
+    <Compile Include="DeactivateInventory'.fs" />
+    <Compile Include="InventoryCreated'.fs" />
+    <Compile Include="InventoryRenamed'.fs" />
+    <Compile Include="ItemsAddedToInventory'.fs" />
+    <Compile Include="ItemsRemovedFromInventory'.fs" />
+    <Compile Include="ItemInStock'.fs" />
+    <Compile Include="RequestedMoreItemsThanHaveInStock'.fs" />
+    <Compile Include="ItemWentOutOfStock'.fs" />
+    <Compile Include="InventoryDeactivated'.fs" />
+    <Compile Include="InventoryCommand'.fs" />
+    <Compile Include="InventoryEvent'.fs" />
+    <Compile Include="InventoryState'.fs" />
   </ItemGroup>
 
 </Project>

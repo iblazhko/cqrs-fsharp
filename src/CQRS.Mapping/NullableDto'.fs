@@ -2,7 +2,8 @@ namespace CQRS.Mapping
 
 open FPrimitive
 
-module NullableDtoMapper =
+[<RequireQualifiedAccess>]
+module NullableDto' =
     let ofNullable<'Tdto when 'Tdto: null> (dto: 'Tdto) =
         if isNull dto then
             Error(ErrorsByTag(seq { (typedefof<'Tdto>.Name, [ "DTO should not be null" ]) }))

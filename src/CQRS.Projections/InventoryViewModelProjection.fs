@@ -8,24 +8,24 @@ open CQRS.Ports.ProjectionStore
 let apply (vm: InventoryViewModel) (evt: InventoryEvent) =
     match evt with
     | InventoryCreated x ->
-        vm.InventoryId <- x.InventoryId |> InventoryIdMapper.toDTO
-        vm.Name <- x.Name |> InventoryNameMapper.toDTO
+        vm.InventoryId <- x.InventoryId |> InventoryId'.toDTO
+        vm.Name <- x.Name |> InventoryName'.toDTO
         vm.IsActive <- x.IsActive
         vm
     | InventoryRenamed x ->
-        vm.Name <- x.NewName |> InventoryNameMapper.toDTO
+        vm.Name <- x.NewName |> InventoryName'.toDTO
         vm
     | ItemsAddedToInventory x ->
-        vm.StockQuantity <- x.NewStockQuantity |> StockQuantityMapper.toDTO
+        vm.StockQuantity <- x.NewStockQuantity |> StockQuantity'.toDTO
         vm
     | ItemsRemovedFromInventory x ->
-        vm.StockQuantity <- x.NewStockQuantity |> StockQuantityMapper.toDTO
+        vm.StockQuantity <- x.NewStockQuantity |> StockQuantity'.toDTO
         vm
     | InventoryDeactivated _ ->
         vm.IsActive <- false
         vm
-    | ItemInStock _ -> vm
-    | ItemWentOutOfStock _ -> vm
+    | ItemInStock _
+    | ItemWentOutOfStock _
     | RequestedMoreItemsThanHaveInStock _ -> vm
 
 let private getProjectionId _ =
