@@ -1,7 +1,8 @@
 @startuml Inventory System - Context
-scale 4
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+skinparam defaultFontName "D-DIN"
+skinparam backgroundColor #EEEEEE
 
 LAYOUT_TOP_DOWN()
 HIDE_STEREOTYPE()

@@ -1,18 +1,19 @@
 @startuml Inventory System - Containers
-scale 4
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+skinparam defaultFontName "D-DIN"
+skinparam backgroundColor #EEEEEE
 
 LAYOUT_TOP_DOWN()
 HIDE_STEREOTYPE()
 
 title Container diagram for Inventory Management System
 
-AddElementTag("microService", $shape=EightSidedShape(), $legendText="micro service (eight sided) (no text, no back color)")
+AddElementTag("microservice-component", $shape=EightSidedShape(), $legendText="microservice-component")
 
 Person(admin, "Inventory Administrator", "Creates new inventories, disables inventories, views inventory status.")
 Container(client, "Client", "ui/cli", "Front-end interface end-user interacts with")
-Rel(admin, client, "Uses")
+System_Ext(ext_client, "<&cog> Component that uses inventory", "Adds items to or removes items from an inventory.", $sprite="robot")
 
 System_Boundary(boundary_system, "Inventory Management") {
     frame "API Host" as api_host {
@@ -20,9 +21,9 @@ System_Boundary(boundary_system, "Inventory Management") {
     }
 
     frame "Application Host" as app_host {
-        Container(app, "<&cog> Application", ".net/f#", "Processes commands, adds events to event streams", $tags="microService")
-        Container(projections, "<&cog> Projections", ".net/f#", "Subscribed to events, updates view model projectsions", $tags="microService")
-        Container(query, "<&cog> Projections Query", ".net/f#", "Retrieves view models", $tags="microService")
+        Container(app, "<&cog> Application", ".net/f#", "Processes commands, adds events to event streams", $tags="microservice-component")
+        Container(projections, "<&cog> Projections", ".net/f#", "Subscribed to events, updates view model projectsions", $tags="microservice-component")
+        Container(query, "<&cog> Projections Query", ".net/f#", "Retrieves view models", $tags="microservice-component")
     }
 
     ContainerQueue(messagebus, "Message Bus", "RabbitMQ", "Inventory message queues")
@@ -46,7 +47,7 @@ System_Boundary(boundary_system, "Inventory Management") {
     Lay_D(query, projections)
 }
 
-System_Ext(ext_client, "<&cog> Component that uses inventory", "Adds items to or removes items from an inventory.", $sprite="robot")
+Rel(admin, client, "Uses")
 Rel(ext_client, api, "Uses")
 
 @enduml
