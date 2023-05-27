@@ -67,7 +67,7 @@ above), you will need it to provide input for following commands.
 ### View current state of an inventory
 
 ```bash
-dotnet run -- get-inventory --id "1c9beca4-fc8f-4241-99ab-b10f0dc7aa3c"
+dotnet run -- get --id "1c9beca4-fc8f-4241-99ab-b10f0dc7aa3c"
 ```
 
 Output:

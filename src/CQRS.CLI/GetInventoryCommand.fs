@@ -4,7 +4,7 @@ open CQRS.CLI.Settings
 open CQRS.CLI.ApiClient
 open McMaster.Extensions.CommandLineUtils
 
-let name = "get-inventory"
+let name = "get"
 
 let configuration (settings: CqrsCliSettings) (app: CommandLineApplication) =
     let inventoryId =
