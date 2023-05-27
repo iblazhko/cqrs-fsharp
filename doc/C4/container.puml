@@ -1,0 +1,52 @@
+@startuml Inventory System - Containers
+scale 4
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_TOP_DOWN()
+HIDE_STEREOTYPE()
+
+title Container diagram for Inventory Management System
+
+AddElementTag("microService", $shape=EightSidedShape(), $legendText="micro service (eight sided) (no text, no back color)")
+
+Person(admin, "Inventory Administrator", "Creates new inventories, disables inventories, views inventory status.")
+Container(client, "Client", "ui/cli", "Front-end interface end-user interacts with")
+Rel(admin, client, "Uses")
+
+System_Boundary(boundary_system, "Inventory Management") {
+    frame "API Host" as api_host {
+        Container(api, "API", ".net/f#", "Command and Query API that the client system interacts with")
+    }
+
+    frame "Application Host" as app_host {
+        Container(app, "<&cog> Application", ".net/f#", "Processes commands, adds events to event streams", $tags="microService")
+        Container(projections, "<&cog> Projections", ".net/f#", "Subscribed to events, updates view model projectsions", $tags="microService")
+        Container(query, "<&cog> Projections Query", ".net/f#", "Retrieves view models", $tags="microService")
+    }
+
+    ContainerQueue(messagebus, "Message Bus", "RabbitMQ", "Inventory message queues")
+    ContainerDb(eventstore, "Event Store", "MartenDB", "Inventory event streams")
+    ContainerDb(projectionstore, "Projection Store", "MartenDB", "Inventory view models documents")
+
+    Rel(client, api, "Uses")
+    Rel(query, api, "Retreive view model")
+    Rel(api, messagebus, "Send inventory command")
+    Rel(messagebus, app, "Consume inventory command")
+    Rel(app, eventstore, "Inventory events")
+    Rel(eventstore, messagebus, "Publish inventory events")
+    Rel(messagebus, projections, "Inventory events")
+    Rel(projections, projectionstore, "Updated view models")
+    Rel(projectionstore, query, "Retreive view models")
+
+    Lay_D(api, app)
+    Lay_D(api, query)
+    Lay_D(app, eventstore)
+    Lay_D(projections, projectionstore)
+    Lay_D(query, projections)
+}
+
+System_Ext(ext_client, "<&cog> Component that uses inventory", "Adds items to or removes items from an inventory.", $sprite="robot")
+Rel(ext_client, api, "Uses")
+
+@enduml

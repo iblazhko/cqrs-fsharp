@@ -1,0 +1,18 @@
+@startuml Inventory System - Context
+scale 4
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_TOP_DOWN()
+HIDE_STEREOTYPE()
+
+title Context diagram for Inventory Management System
+
+Person(admin, "Inventory Administrator", "Creates a new inventory, disables an inventory.")
+System(inventory_system, "Inventory Managenemt System", "Allows customers to keep track of their inventories.", $sprite="img:http://plantuml.com/logo3.png")
+System_Ext(inventory_client, "<&cog> Component that uses inventory", "Adds items to or removes items from an inventory.", $sprite="robot")
+
+Rel(admin, inventory_system, "Uses")
+Rel(inventory_client, inventory_system, "Uses")
+
+@enduml
