@@ -4,9 +4,9 @@ open System.Threading.Tasks
 open CQRS.EntityIds
 open CQRS.Ports.ProjectionStore
 open CQRS.Projections
+open CQRS.Projections.Repositories
 open FPrimitive
 open Serilog
-
 
 type DocumentQueryResult =
     | Document of InventoryViewModel
@@ -14,17 +14,14 @@ type DocumentQueryResult =
     | BadRequest of ErrorsByTag
 
 let getInventoryViewModel
-    (projectionsStore: IProjectionStore<InventoryViewModel>)
+    (projectionStore: IProjectionStore<InventoryViewModel>)
     (inventoryId: EntityId)
     : Task<DocumentQueryResult> =
     task {
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("Retrieving inventory {InventoryId}", inventoryId)
 
-        use! collection = projectionsStore.OpenDocumentCollection(InventoryCollection.InventoryProjectionId)
-
-        let documentId = inventoryId |> EntityId.toString |> DocumentId.create
-        let! document = collection.GetById(documentId)
+        let! document = inventoryId |> InventoryViewModelQueryRepository.getDocument projectionStore
 
         let result =
             match document with

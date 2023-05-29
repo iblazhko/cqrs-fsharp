@@ -1,4 +1,4 @@
-# CQRS Made Functional
+# CQRS Made (mostly) Functional
 
 [![CI Workflow](https://github.com/iblazhko/cqrs-fsharp/actions/workflows/ci-workflow.yml/badge.svg?branch=main)](https://github.com/iblazhko/cqrs-fsharp/actions/workflows/ci-workflow.yml)
 
@@ -25,7 +25,9 @@ Solution uses .NET7 / F# and has following major parts:
 - *CLI*: example of an external client that interacts with
   the system via *API*.
 
-See [“Solution Structure”](./doc/solution-structure.md) document for more information.
+See [“Architecture”](./doc/architecture.md) and
+[“Solution Structure”](./doc/solution-structure.md) documents for more
+information.
 
 ## Building and Running
 

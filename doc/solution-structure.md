@@ -16,8 +16,9 @@ Solution uses .NET7 / F# and has following major parts:
     make external HTTP/GRPC calls etc.
   - `CQRS.Application`: implements application services; handles Commands sent
     from the API.
-  - `CQRS.Application.Projections`: projects domain Events to view models
+  - `CQRS.Projections`: projects domain Events to view models
     persisted in a document-based *ProjectionStore*.
+  - `CQRS.Projections.Repositories`: retrieve document by Id.
 - *API* components
   - `CQRS.API`: sends Commands to *Application* (command API),
     uses *ProjectionStore* to retrieve view models (query API).
@@ -34,7 +35,6 @@ Solution uses .NET7 / F# and has following major parts:
     at the moment, but could be added if needed.
 - *Adapters*
   - `CQRS.Adapters.InMemoryEventStore`: in-memory adapter for *EventStore* port
-  - `CQRS.Adapters.InMemoryMessageBus`: in-memory adapter for *MessageBus* port
   - `CQRS.Adapters.InMemoryProjectionStore`: in-memory adapter for
     *ProjectionStore* port
   - `CQRS.Adapters.MartenDbEventStore`: [MartenDB](https://martendb.io/) adapter
@@ -53,3 +53,11 @@ For educational purposes *API* and *Application* have separate hosts
 projects these two hosts can be combined into one, or *Application* host
 can be split into smaller parts for better scalability (e.g. to separate
 commands handling and maintaining projections).
+
+As you have probably noticed, the solution has large number of projects, and
+many projects contain only a few files (sometimes only one). Main reason
+for using this approach is that it allows to track dependencies inside the
+codebase easily and make design mistakes more visible; this also allows us
+to avoid including “dead code” in an executable host project.
+See [“Solution Dependencies Rules”](./dependencies.md) document
+for more information.

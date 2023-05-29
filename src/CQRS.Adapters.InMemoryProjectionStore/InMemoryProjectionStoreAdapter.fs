@@ -1,4 +1,4 @@
-﻿namespace CQRS.Adapters
+﻿namespace CQRS.Adapters.ProjectionStore
 
 open System
 open System.Collections.Concurrent
@@ -8,9 +8,8 @@ open Serilog
 
 (*
 Note that that this solution has two separate hosts: Application.Host and API.Host;
-these hosts have their own instances of InMemoryProjectionStore adapter, therefore
-when using InMemoryProjectionStore adapter, documents stored in Application
-will not be visible in API.
+these hosts have their own instances of adapters, therefore when using
+InMemoryProjectionStore adapter, documents stored in Application will not be visible in API.
 
 This adapter is only suitable for unit or behavioural tests where everything
 is hosted in the same process.

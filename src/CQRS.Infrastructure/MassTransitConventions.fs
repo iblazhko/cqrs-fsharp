@@ -4,9 +4,10 @@ open System
 open System.Reflection
 open CQRS.Configuration.Infrastructure
 open CQRS.DTO
+open CQRS.Ports.Messaging
 open MassTransit
 
-let private typeOfMessageEnvelope = typedefof<Message<_>>
+let private typeOfMessageEnvelope = typedefof<Command<_>>
 let private typeOfCommandDto = typedefof<CqrsCommandDto>
 let private typeofEndpointConvention = typedefof<EndpointConvention>
 let private typeOfUri = typedefof<Uri>

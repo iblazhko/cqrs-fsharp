@@ -1,1 +1,1 @@
-﻿namespace CQRS.Adapters.InMemoryProjectionStore
+﻿namespace CQRS.Adapters.Messaging

@@ -25,9 +25,11 @@ render_puml () {
   PNG_WIDTH=$2
 
   echo $FILE
-  cat ${FILE}.puml | plantuml -tsvg -pipe > ${FILE}.svg
+  cat ${FILE}.puml | plantuml -charset UTF-8 -tsvg -pipe > ${FILE}.svg
   $INKSCAPE -w $PNG_WIDTH ${FILE}.svg -o ${FILE}.png
 }
 
 render_puml context 800
 render_puml container 1600
+render_puml component 1600
+render_puml code-cmd-handler 2500

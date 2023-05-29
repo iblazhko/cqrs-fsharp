@@ -1,10 +1,19 @@
-﻿namespace CQRS.Adapters
+﻿namespace CQRS.Adapters.EventStore
 
 open System
 open System.Collections.Concurrent
 open System.Collections.Generic
 open System.Threading.Tasks
 open CQRS.Ports.EventStore
+
+(*
+Note that that this solution has two separate hosts: Application.Host and API.Host;
+these hosts have their own instances of adapters, therefore when using
+InMemoryEventStore adapter, commands sent from API will not be visible in Application.
+
+This adapter is only suitable for unit or behavioural tests where everything
+is hosted in the same process.
+*)
 
 [<Sealed>]
 type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, eventMapper: IEventMapper<'TEvent>) =

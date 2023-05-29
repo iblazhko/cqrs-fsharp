@@ -1,6 +1,6 @@
 module CQRS.Infrastructure.EventStoreConfigurator
 
-open CQRS.Adapters
+open CQRS.Adapters.EventStore
 open CQRS.Application
 open CQRS.Ports.EventStore
 open CQRS.Ports.Messaging

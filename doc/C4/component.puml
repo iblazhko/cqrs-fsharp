@@ -1,0 +1,94 @@
+@startuml Inventory System - Component
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+skinparam defaultFontName "D-DIN"
+skinparam backgroundColor #EEEEEE
+
+LAYOUT_TOP_DOWN()
+HIDE_STEREOTYPE()
+
+title Component diagram for Inventory Management System
+right footer Version 0.1
+
+ContainerQueue(messagebus, "Message Bus", "RabbitMQ", "")
+ContainerDb(eventstore, "Event Store", "MartenDB", "")
+ContainerDb(projectionstore, "Projection Store", "MartenDB", "")
+
+Boundary(domain_boundary, "Domain") {
+    Boundary(domain_building_blocks, "") {
+        Component(value_objects, "Value Objects", "", "Building blocks for domain model.")
+        Component(entity_id, "Entity ID", "", "Entity ID types")
+    }
+
+    Boundary(domain_commands_events, "") {
+        Component(domain_commands, "Domain commands", "", "Requests to update system state.")
+        Component(domain_events, "Domain events", "", "Describe what has changed in the system.")
+    }
+
+    Boundary(domain_dto, "") {
+        Component(dto, "DTOs", "", "Serialization-friendly DTOs")
+        Component(mapping, "Mapping", "", "Domain ⟷     DTO mappers")
+    }
+
+    Boundary(domain_aggregate, "") {
+        Component(aggregate, "Inventory Aggregate", "", "Aggregate that handles domain commands\nand produces domain events")
+        Component(aggregate_state, "Inventory State", "", "Describes current state of an inventory")
+        Component(aggregate_applier, "Inventory Applier", "", "Applies domain events to state")
+    }
+
+    Rel(domain_aggregate, domain_building_blocks, "Uses")
+    Rel(domain_commands_events, domain_building_blocks, "Uses")
+    Rel(domain_dto, domain_commands_events, "Uses")
+    Rel(domain_aggregate, domain_commands_events, "Uses")
+
+    Lay_D(domain_aggregate, domain_building_blocks)
+    Lay_D(domain_dto, domain_commands_events)
+}
+
+Boundary(application_boundary, "Application") {
+    Boundary(application_env, "Environment") {
+        Component(clock_port, "Clock Port", "", "Abstraction for system clock")
+        Component(eventstore_port, "EventStore Port", "", "Abstraction for EventStore")
+    }
+
+    Boundary(application_mt, "MassTransit") {
+        Component(app_mt_consumers, "MassTransit Consumers", "", "Get Command DTO from MT ConsumeContext and\ndelegate to Command DTO Handler")
+        Rel(messagebus, app_mt_consumers, "Consume command")
+    }
+
+    Component(eventstream_event_mapper, "EventStream EventMapper", "", "Event DTO mapper required by EvenStream Port")
+    Component(eventstream_state_projection, "EventStream State Projection", "", "Events projection required by EvenStream Port")
+    Component(eventstream_publisher, "EventStream Events publisher", "", "Events publisher required by EvenStream Port")
+    Component(command_dto_handler, "Command DTO Handler", "", "Maps Command DTO to Domain command and delegates processing to Domain\n(Inventory Aggregate)")
+
+    Rel(app_mt_consumers, command_dto_handler, "Delegates DTO")
+    Rel(command_dto_handler, domain_dto, "Uses")
+    Rel(command_dto_handler, eventstore_port, "Uses")
+    Rel(command_dto_handler, domain_aggregate, "Uses")
+    Rel(eventstore_port, eventstream_event_mapper, "Uses")
+    Rel(eventstream_event_mapper, domain_dto, "Uses")
+    Rel(eventstore_port, eventstream_publisher, "Uses")
+    Rel(eventstore_port, eventstream_state_projection, "Uses")
+    Rel(eventstream_state_projection, aggregate_applier, "Uses")
+    Rel(eventstore_port, eventstore, "Uses")
+    Rel(eventstream_publisher, messagebus, "Publish events")
+}
+
+Boundary(projections_boundary, "Projections") {
+    Boundary(projections_mt, "MassTransit") {
+        Component(projections_mt_consumers, "MassTransit Consumers", "", "Get Event DTO from MT ConsumeContext and\ndelegate to Event DTO Handler")
+        Rel(messagebus, projections_mt_consumers, "Consume event")
+    }
+
+    Component(event_dto_handler, "Event DTO Handler", "", "Maps Event DTO to Domain event and delegates processing to Projection")
+    Component(projectionstore_port, "ProjectionStore Port", "", "Abstraction for Projection Store")
+    Component(vm_projection, "ViewModel Projection", "", "Inventory ViewModel Projection")
+
+    Rel(projections_mt_consumers, event_dto_handler, "Delegates DTO")
+    Rel(event_dto_handler, domain_dto, "Uses")
+    Rel(event_dto_handler, vm_projection, "Uses")
+    Rel(event_dto_handler, projectionstore_port, "Uses")
+    Rel(projectionstore_port, projectionstore, "Uses")
+}
+
+@enduml

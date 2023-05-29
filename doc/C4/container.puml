@@ -8,6 +8,7 @@ LAYOUT_TOP_DOWN()
 HIDE_STEREOTYPE()
 
 title Container diagram for Inventory Management System
+right footer Version 0.1
 
 AddElementTag("microservice-component", $shape=EightSidedShape(), $legendText="microservice-component")
 
@@ -21,6 +22,7 @@ System_Boundary(boundary_system, "Inventory Management") {
     }
 
     frame "Application Host" as app_host {
+        Container(domain, "Domain", ".net/f#", "Domain model and services")
         Container(app, "<&cog> Application", ".net/f#", "Processes commands, adds events to event streams", $tags="microservice-component")
         Container(projections, "<&cog> Projections", ".net/f#", "Subscribed to events, updates view model projectsions", $tags="microservice-component")
         Container(query, "<&cog> Projections Query", ".net/f#", "Retrieves view models", $tags="microservice-component")
@@ -31,20 +33,31 @@ System_Boundary(boundary_system, "Inventory Management") {
     ContainerDb(projectionstore, "Projection Store", "MartenDB", "Inventory view models documents")
 
     Rel(client, api, "Uses")
-    Rel(query, api, "Retreive view model")
-    Rel(api, messagebus, "Send inventory command")
-    Rel(messagebus, app, "Consume inventory command")
-    Rel(app, eventstore, "Inventory events")
-    Rel(eventstore, messagebus, "Publish inventory events")
-    Rel(messagebus, projections, "Inventory events")
-    Rel(projections, projectionstore, "Updated view models")
-    Rel(projectionstore, query, "Retreive view models")
+    Rel(query, api, "Retreive view model DTO")
+    Rel(api, messagebus, "Send inventory command DTO")
+    Rel(messagebus, app, "Consume inventory command DTO")
+    Rel(app, eventstore, "Inventory event DTOs")
+    Rel(eventstore, messagebus, "Publish inventory event DTOs")
+    Rel(messagebus, projections, "Inventory event DTOs")
+    Rel(projections, projectionstore, "Updated view model DTOs")
+    Rel(projectionstore, query, "Retreive view model DTOs")
+
+    Rel(app, domain, "Uses")
+    Rel(projections, domain, "Uses")
+
+    Lay_D(api_host, app_host)
 
     Lay_D(api, app)
     Lay_D(api, query)
+    Lay_L(app, projections)
+    Lay_L(projections, query)
+    Lay_D(app, domain)
+    Lay_D(projections, domain)
     Lay_D(app, eventstore)
     Lay_D(projections, projectionstore)
     Lay_D(query, projections)
+
+    Lay_D(messagebus, eventstore)
 }
 
 Rel(admin, client, "Uses")

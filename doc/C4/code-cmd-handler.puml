@@ -1,0 +1,118 @@
+@startuml Inventory System - Componets - Command Handling
+
+skinparam defaultFontName "D-DIN"
+skinparam backgroundColor #EEEEEE
+
+title Code - Command handling
+right footer Version 0.1
+
+participant "Client" as client
+boundary "API" as api
+control "[Ports/Adapters]\n\nMessage Bus\nAdapter" as messagebus_adapter
+queue "Message Bus" as messagebus
+control "[Application.MassTransit]\n\nMessage Consumer" as mt_consumer
+control "[Application]\n\nGeneric\nCommand DTO\nhandler" as dto_handler
+participant "[Domain]\n\nDTO Mapper" as dto_mapper
+participant "[Domain]\n\nState\nProjection" as state_projection
+entity "[Domain]\n\nAggregate" as aggregate
+control "[Ports/Adapters]\n\nEventStore\nAdapter" as eventstore_adapter
+participant "[Ports/Adapters]\n\nEventStore\nEvent Mapper" as eventstore_eventmapper
+database "EventStore" as eventstore
+
+client -> api: Submit\ncommand\nparameters
+activate api
+api -> messagebus_adapter: Send command\n[MassTransit\nDTO envelope]
+activate messagebus_adapter
+messagebus_adapter --> messagebus: Send command\n[MassTransit\nDTO envelope]
+deactivate messagebus_adapter
+deactivate api
+
+... \n ...
+
+mt_consumer <-- messagebus: Consume command\n[MassTransit\nDTO envelope]
+activate messagebus
+activate mt_consumer
+mt_consumer -> mt_consumer: Unwrap MassTransit\nConsumeContext
+mt_consumer -> dto_handler: Command DTO
+
+activate dto_handler
+dto_handler -> dto_mapper: Command DTO
+activate dto_mapper
+dto_handler <- dto_mapper: Domain Command
+deactivate dto_mapper
+|||
+
+dto_handler -> dto_handler: EventStream Id from\nDomain Command
+dto_handler -> eventstore_adapter: Get current state\nfor EventStream Id
+activate eventstore_adapter
+eventstore_adapter -> eventstore: Get events
+activate eventstore_adapter
+activate eventstore
+eventstore -> eventstore_adapter: Event DTO list
+loop for each event DTO
+    eventstore_adapter -> eventstore_eventmapper: Event DTO
+    activate eventstore_eventmapper
+    eventstore_eventmapper -> dto_mapper: Event DTO
+    activate dto_mapper
+    eventstore_eventmapper <- dto_mapper: Domain Event
+    deactivate dto_mapper
+    eventstore_adapter <- eventstore_eventmapper: Domain Event
+    deactivate eventstore_eventmapper
+end
+
+eventstore_adapter -> state_projection: Get initial state
+activate state_projection
+eventstore_adapter <- state_projection: state = initial state
+loop for each domain event evt
+    eventstore_adapter -> state_projection: evt |> apply state
+    eventstore_adapter <- state_projection: state
+end
+deactivate state_projection
+
+dto_handler <- eventstore_adapter: State
+deactivate eventstore_adapter
+
+|||
+|||
+== Domain Command Handling ==
+    dto_handler -> aggregate: Handle domain command
+    activate aggregate
+    dto_handler <- aggregate: New domain events
+    deactivate aggregate
+== ==
+|||
+|||
+
+dto_handler -> eventstore_adapter: Append events
+activate eventstore_adapter
+loop for each event DTO
+    eventstore_adapter -> eventstore_eventmapper: Domain Event
+    activate eventstore_eventmapper
+    eventstore_eventmapper -> dto_mapper: Domain Event
+    activate dto_mapper
+    eventstore_eventmapper <- dto_mapper: Event DTO
+    deactivate dto_mapper
+    eventstore_adapter <- eventstore_eventmapper: Event DTO
+    deactivate eventstore_eventmapper
+end
+deactivate eventstore_adapter
+
+dto_handler -> eventstore_adapter: Save
+activate eventstore_adapter
+eventstore_adapter -> eventstore: Append events
+deactivate eventstore_adapter
+
+eventstore_adapter --> dto_handler
+
+deactivate eventstore_adapter
+deactivate eventstore
+
+dto_handler --> mt_consumer
+deactivate dto_handler
+
+mt_consumer --> messagebus: ack
+deactivate mt_consumer
+
+deactivate messagebus
+
+@enduml

@@ -1,4 +1,4 @@
-﻿namespace CQRS.Adapters
+﻿namespace CQRS.Adapters.EventStore
 
 open System
 open System.Collections.Generic

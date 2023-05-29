@@ -96,17 +96,14 @@ type DeactivateInventory = { InventoryId: InventoryId }
 
 // Domain events
 
-// TODO: InventoryId and Name is mentioned in every domain event
+// Inventory Name is mentioned in every domain event
 //
 // In theory, we could remove this from *domain* events,
 // this information can be inferred from the state.
 //
-// InventoryId will still be needed in DTOs though, so that
-// we are able to determine which inventory event stream
-// we need to work with; and Name is a useful information
-// to have *in DTOs*.
-//
-// All this can make DTO <-> domain event mapping more complicated.
+// However Name is a useful information to have *in DTOs*,
+// and not having it in the domain events can make
+// DTO <-> domain event mapping more complicated.
 
 type InventoryCreated =
     { InventoryId: InventoryId

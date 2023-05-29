@@ -1,8 +1,5 @@
 module CQRS.Ports.Messaging.MessageContextBuilder
 
-open System
-open CQRS.DTO
-
 let getNewMessageContext clock =
     Context(
         MessageId = MessagingId.newId (),

@@ -8,6 +8,7 @@ LAYOUT_TOP_DOWN()
 HIDE_STEREOTYPE()
 
 title Context diagram for Inventory Management System
+right footer Version 0.1
 
 Person(admin, "Inventory Administrator", "Creates a new inventory, disables an inventory.")
 System(inventory_system, "Inventory Managenemt System", "Allows customers to keep track of their inventories.", $sprite="img:http://plantuml.com/logo3.png")

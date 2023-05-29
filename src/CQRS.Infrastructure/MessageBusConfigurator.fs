@@ -1,11 +1,11 @@
 module CQRS.Infrastructure.MessageBusConfigurator
 
+open CQRS.Adapters.Messaging
 open CQRS.Infrastructure.MassTransitConventions
 open Microsoft.Extensions.DependencyInjection
 open MassTransit
 open CQRS.Configuration.Infrastructure
 open CQRS.Ports.Messaging
-open CQRS.Adapters
 
 let configureServices
     (endpointsRegistration: HostEndpointsRegistration)

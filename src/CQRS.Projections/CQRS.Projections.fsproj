@@ -16,6 +16,7 @@
     <ProjectReference Include="..\CQRS.Mapping\CQRS.Mapping.fsproj" />
     <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj" />
     <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj" />
+    <ProjectReference Include="..\CQRS.Projections.Repositories\CQRS.Projections.Repositories.fsproj" />
     <ProjectReference Include="..\CQRS.Projections.ViewModels\CQRS.Projections.ViewModels.fsproj" />
   </ItemGroup>
 

@@ -1,6 +1,6 @@
 module CQRS.Application.Tests.EventStoreSessionTests
 
-open CQRS.Adapters
+open CQRS.Adapters.EventStore
 open CQRS.Application
 open CQRS.Domain.Inventory
 open CQRS.Domain.ValueTypes

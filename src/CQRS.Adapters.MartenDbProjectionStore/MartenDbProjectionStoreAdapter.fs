@@ -1,4 +1,4 @@
-﻿namespace CQRS.Adapters
+﻿namespace CQRS.Adapters.ProjectionStore
 
 open System
 open System.Threading.Tasks

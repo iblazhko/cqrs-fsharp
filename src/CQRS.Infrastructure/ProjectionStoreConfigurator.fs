@@ -1,6 +1,6 @@
 module CQRS.Infrastructure.ProjectionStoreConfigurator
 
-open CQRS.Adapters
+open CQRS.Adapters.ProjectionStore
 open CQRS.Ports.ProjectionStore
 open CQRS.Projections
 open Marten

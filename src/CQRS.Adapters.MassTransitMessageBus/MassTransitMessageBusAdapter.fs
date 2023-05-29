@@ -1,22 +1,21 @@
-﻿namespace CQRS.Adapters
+﻿namespace CQRS.Adapters.Messaging
 
 open System.Threading.Tasks
-open CQRS.DTO
 open CQRS.Ports.Messaging
-open MassTransit
 
 [<Sealed>]
-type MassTransitMessageBusAdapter(sendEndpoint: ISendEndpointProvider, publishEndpoint: IPublishEndpoint) =
+type MassTransitMessageBusAdapter
+    (sendEndpoint: MassTransit.ISendEndpointProvider, publishEndpoint: MassTransit.IPublishEndpoint) =
     interface IMessageBus with
 
-        member this.PublishEvent<'TEvent when 'TEvent :> CqrsDto>(message: Message<'TEvent>) : Task =
+        member this.PublishEvent<'TEvent>(message: Event<'TEvent>) : Task =
             task { do! publishEndpoint.Publish(message.Data, message.Data.GetType()) }
 
         member this.PublishEvent(message: obj) : Task =
             task { do! publishEndpoint.Publish(message, message.GetType()) }
 
-        member self.SendCommand<'TCommand when 'TCommand :> CqrsCommandDto>(message: Message<'TCommand>) =
-            EndpointConventionExtensions.Send(sendEndpoint, message.Data, message.Data.GetType())
+        member self.SendCommand<'TCommand>(message: Command<'TCommand>) =
+            MassTransit.EndpointConventionExtensions.Send(sendEndpoint, message.Data, message.Data.GetType())
 
         member this.SendCommand(message: obj) : Task =
-            EndpointConventionExtensions.Send(sendEndpoint, message, message.GetType())
+            MassTransit.EndpointConventionExtensions.Send(sendEndpoint, message, message.GetType())

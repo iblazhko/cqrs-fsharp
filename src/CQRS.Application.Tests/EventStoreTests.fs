@@ -1,10 +1,10 @@
 module CQRS.Application.Tests.EventStoreTests
 
+open CQRS.Adapters.EventStore
 open CQRS.Application
 open CQRS.Domain.Inventory
 open CQRS.EntityIds
 open CQRS.Ports.EventStore
-open CQRS.Adapters
 open FsUnit
 open Xunit
 
