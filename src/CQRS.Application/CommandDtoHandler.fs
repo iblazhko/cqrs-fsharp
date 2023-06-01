@@ -15,7 +15,7 @@ module CommandDtoHandler =
     let eventDtoMapper = InventoryEventStreamDtoMapper()
     let stateProjection = InventoryEventStreamProjection()
 
-    let streamIdFromCommand (cmd: InventoryCommand) =
+    let private streamIdFromCommand (cmd: InventoryCommand) =
         match cmd with
         | CreateInventory x -> x.InventoryId
         | RenameInventory x -> x.InventoryId
@@ -23,6 +23,25 @@ module CommandDtoHandler =
         | RemoveItemsFromInventory x -> x.InventoryId
         | DeactivateInventory x -> x.InventoryId
         |> InventoryEventStreamId.fromInventoryId
+
+    let private handleCreate currentState cmd =
+        task { return cmd |> InventoryAggregate.create currentState }
+
+    let private handleRename currentState cmd =
+        task { return cmd |> InventoryAggregate.rename currentState }
+
+    let private handleAddItems currentState cmd =
+        task { return cmd |> InventoryAggregate.addItems currentState }
+
+    let private handleRemoveItems currentState cmd =
+        task { return cmd |> InventoryAggregate.removeItems currentState }
+
+    let private handleDeactivate currentState env cmd =
+        task {
+            let time = env.Clock.Now()
+            let! moonPhase = env.MoonPhase.GetMoonPhase(env.Location, time)
+            return cmd |> InventoryAggregate.deactivate currentState moonPhase
+        }
 
     let handleCommand<'TCommandDto when 'TCommandDto :> CqrsCommandDto>
         (env: ApplicationEnvironment)
@@ -35,22 +54,21 @@ module CommandDtoHandler =
                 |> Result.defaultWith (fun e -> raise (CommandDtoMappingException e))
             // TODO: map error to CommandHandlerFault
 
-            // TODO: Move this code into DeactivateInventory branch
-            let time = env.Clock.Now()
-            let! moonPhase = env.MoonPhase.GetMoonPhase(env.Location, time)
-
             let streamId = command |> streamIdFromCommand
             use! streamSession = env.EventStore.Open(streamId, eventDtoMapper)
 
             let! currentState = streamSession.GetState(stateProjection)
 
-            let newEvents =
+            let! newEventsResult =
                 match command with
-                | CreateInventory x -> x |> InventoryAggregate.create currentState
-                | RenameInventory x -> x |> InventoryAggregate.rename currentState
-                | AddItemsToInventory x -> x |> InventoryAggregate.addItems currentState
-                | RemoveItemsFromInventory x -> x |> InventoryAggregate.removeItems currentState
-                | DeactivateInventory x -> x |> InventoryAggregate.deactivate currentState moonPhase
+                | CreateInventory x -> x |> handleCreate currentState
+                | RenameInventory x -> x |> handleRename currentState
+                | AddItemsToInventory x -> x |> handleAddItems currentState
+                | RemoveItemsFromInventory x -> x |> handleRemoveItems currentState
+                | DeactivateInventory x -> x |> handleDeactivate currentState env
+
+            let newEvents =
+                newEventsResult
                 |> Result.defaultWith (fun x -> raise (CommandProcessingException x))
 
             do! streamSession.AppendEvents(newEvents |> Seq.map box)
