@@ -5,8 +5,8 @@ This solution uses a mix of *Functional Core, Imperative Shell* pattern and
 
 ## Functional Core
 
-Pure functional core consists of domain model, DTOs, and mappers that translate
-between domain model and DTOs.
+Pure functional core consists of domain model, [DTO](./dto.md)s, and mappers
+that translate between domain model and DTOs.
 
 ## Imperative Shell
 

@@ -4,9 +4,9 @@ Solution uses .NET7 / F# and has following major parts:
 
 - *Core domain* components. Only types and pure functions are allowed here.
   - `CQRS.Domain`: Implements domain model and domain services.
-  - `CQRS.DTO`: Commands and Events DTOs that are shared across domain and
-    application services projects, and stored in event streams. DTOs define
-    shape of messages that go over the wire, they designed to be
+  - `CQRS.DTO`: Commands and Events [DTO](./dto.md)s that are shared across
+    domain and application services projects, and stored in event streams.
+    DTOs define shape of messages that go over the wire, they designed to be
     implementation-neutral and serialization-friendly. Essentially they are
     [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object)s that only use
     primitive CLR types.

@@ -85,7 +85,7 @@ deactivate eventstore_adapter
 
 dto_handler -> eventstore_adapter: Append events
 activate eventstore_adapter
-loop for each event DTO
+loop for each domain event
     eventstore_adapter -> eventstore_eventmapper: Domain Event
     activate eventstore_eventmapper
     eventstore_eventmapper -> dto_mapper: Domain Event
@@ -99,7 +99,7 @@ deactivate eventstore_adapter
 
 dto_handler -> eventstore_adapter: Save
 activate eventstore_adapter
-eventstore_adapter -> eventstore: Append events
+eventstore_adapter -> eventstore: Append events (DTOs)
 deactivate eventstore_adapter
 
 eventstore_adapter --> dto_handler

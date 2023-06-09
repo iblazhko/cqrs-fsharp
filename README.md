@@ -9,6 +9,9 @@ This project is intended to implement a solution with modularity
 and versioning (eventually), and serve as a boilerplate template for
 real-life projects.
 
+> It is still very much work in progress, so definitely not suitable to be
+> a template for real-life projects just yet.
+
 ## Solution Overview
 
 Solution uses .NET7 / F# and has following major parts:
