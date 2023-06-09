@@ -22,7 +22,15 @@ date or time values.
 I am calling this *representation* of domain commands and events
 ***Domain Transfer Object*** (DTO).
 
-Not to be confused with *Data Transfer Object* (also DTO) which serves slightly
-different purpose. In the true spirit of DDD, *Domain Transfer Object* shares
-abbreviation with *Data Transfer Object*, and somewhat similar to it, but means
-something different.
+Not to be confused with *Data Transfer Object* (also DTO) which may serve
+slightly different purpose. In the true spirit of DDD, *Domain Transfer Object*
+shares abbreviation with *Data Transfer Object*, and somewhat similar to it,
+but means something different.
+
+## References
+
+1. Abraham, Isaac. “F# In Action”. Manning Publications, 2023,
+   <https://www.manning.com/books/f-sharp-in-action>.
+2. Wlaschin, Scott. “Domain Modeling Made Functional”. The Pragmatic
+   Programmers, 2018-01,
+   <https://pragprog.com/titles/swdddf/domain-modeling-made-functional/>.
