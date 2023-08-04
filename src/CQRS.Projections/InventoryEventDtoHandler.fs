@@ -1,4 +1,4 @@
-module CQRS.Projections.DtoEventHandler
+module CQRS.Projections.InventoryEventDtoHandler
 
 open System.Threading.Tasks
 open CQRS.DTO
@@ -15,7 +15,7 @@ open FsToolkit.ErrorHandling
 // This context structure is not an idiomatic FP w.r.t. dependencies handling,
 // but it is good enough for the purpose of this solution, and this component is
 // not in the Domain where this approach probably would not be acceptable.
-type DomainEventHandlerContext<'TEventDto, 'TViewModel when 'TEventDto :> CqrsDto and 'TViewModel: null> =
+type DomainEventDtoHandlerContext<'TEventDto, 'TViewModel when 'TEventDto :> CqrsDto and 'TViewModel: null> =
     { ProjectionStore: IProjectionStore<'TViewModel>
       DocumentCollectionIdFromEvent: InventoryEvent -> DocumentCollectionId
       DocumentIdFromEvent: InventoryEvent -> DocumentId
@@ -24,9 +24,9 @@ type DomainEventHandlerContext<'TEventDto, 'TViewModel when 'TEventDto :> CqrsDt
 exception EventDtoMappingException of ErrorsByTag
 
 let handleEvent<'TEventDto, 'TViewModel when 'TEventDto :> CqrsEventDto and 'TViewModel: null>
-    (context: DomainEventHandlerContext<'TEventDto, 'TViewModel>)
+    (context: DomainEventDtoHandlerContext<'TEventDto, 'TViewModel>)
     (dto: 'TEventDto)
-    : Task = // TODO: Use Result<Task,EventHandlerFault>
+    : Task = // TODO: Use Task<Result<unit,EventHandlerFailure>>
     task {
         let evt =
             dto
@@ -38,5 +38,5 @@ let handleEvent<'TEventDto, 'TViewModel when 'TEventDto :> CqrsEventDto and 'TVi
 
         use! documentCollection = context.ProjectionStore.OpenDocumentCollection<'TViewModel>(documentCollectionId)
         do! documentCollection.Update(documentId, context.ViewModelUpdateAction evt)
-    // TODO: map ProjectionStore errors to EventHandlerFault
+    // TODO: map ProjectionStore errors to EventHandlerFailure
     }

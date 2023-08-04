@@ -11,9 +11,15 @@ open FsToolkit.ErrorHandling
 exception CommandDtoMappingException of ErrorsByTag
 exception CommandProcessingException of InventoryFailure
 
-module CommandDtoHandler =
-    let eventDtoMapper = InventoryEventStreamDtoMapper()
-    let stateProjection = InventoryEventStreamProjection()
+type CommandHandlerFailure =
+    | CommandDtoMappingError of ErrorsByTag
+    | CommandProcessingError of InventoryFailure
+    | EventStreamError of ErrorsByTag
+
+module InventoryCommandDtoHandler =
+
+    let private eventDtoMapper = InventoryEventStreamDtoMapper()
+    let private stateProjection = InventoryEventStreamProjection()
 
     let private streamIdFromCommand (cmd: InventoryCommand) =
         match cmd with
@@ -46,13 +52,13 @@ module CommandDtoHandler =
     let handleCommand<'TCommandDto when 'TCommandDto :> CqrsCommandDto>
         (env: ApplicationEnvironment)
         (dto: 'TCommandDto)
-        : Task = // TODO: Use Result<Task,CommandHandlerFault>
+        : Task = // TODO: Use Task<Result<unit,CommandHandlerFailure>
         task {
             let command =
                 dto
                 |> InventoryCommand'.ofDTO
                 |> Result.defaultWith (fun e -> raise (CommandDtoMappingException e))
-            // TODO: map error to CommandHandlerFault
+            // TODO: map error to CommandHandlerFailure
 
             let streamId = command |> streamIdFromCommand
             use! streamSession = env.EventStore.Open(streamId, eventDtoMapper)
@@ -73,5 +79,5 @@ module CommandDtoHandler =
 
             do! streamSession.AppendEvents(newEvents |> Seq.map box)
             do! env.EventStore.Save(streamSession)
-        // TODO: map EventStore errors to CommandHandlerFault
+        // TODO: map EventStore errors to CommandHandlerFailure
         }

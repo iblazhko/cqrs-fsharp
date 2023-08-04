@@ -50,7 +50,7 @@ let handleInventoryEvent<'TEventDto, 'TViewModel when 'TEventDto :> CqrsEventDto
     (dto: 'TEventDto)
     =
     dto
-    |> DtoEventHandler.handleEvent
+    |> InventoryEventDtoHandler.handleEvent
         { ProjectionStore = projectionStore
           DocumentCollectionIdFromEvent = getProjectionId
           DocumentIdFromEvent = getDocumentId

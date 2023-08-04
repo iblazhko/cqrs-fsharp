@@ -140,10 +140,9 @@ type MartenDbEventStore(documentStore: IDocumentStore, eventPublisher: IEventPub
             let mtEvents = eventStream.Events |> Seq.map (fun x -> x.Event)
 
             match eventStream.StreamVersion with
-            | EventStreamVersion.New ->
-                session.MartenSession.Events.StartStream(session.EventStreamId, mtEvents)
-                |> ignore
-            | _ -> session.MartenSession.Events.Append(session.EventStreamId, mtEvents) |> ignore
+            | EventStreamVersion.New -> session.MartenSession.Events.StartStream(session.EventStreamId, mtEvents)
+            | _ -> session.MartenSession.Events.Append(session.EventStreamId, mtEvents)
+            |> ignore
 
             do! session.MartenSession.SaveChangesAsync()
 

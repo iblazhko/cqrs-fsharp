@@ -16,5 +16,5 @@ let handleCommand<'T when 'T :> CqrsCommandDto and 'T: not struct>
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("[MESSAGE-BUS] {MessageType} {@Message}", message.GetType().FullName, message)
 
-        do! message |> CommandDtoHandler.handleCommand env
+        do! message |> InventoryCommandDtoHandler.handleCommand env
     }

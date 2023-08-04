@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <Compile Include="InventoryProjectionDocumentId.fs" />
-    <Compile Include="DtoEventHandler.fs" />
+    <Compile Include="InventoryEventDtoHandler.fs" />
     <Compile Include="InventoryViewModelProjection.fs" />
   </ItemGroup>
 

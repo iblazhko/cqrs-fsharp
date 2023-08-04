@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # Render PlantUML files as PNG
 #
@@ -15,10 +15,28 @@
 # value but it is not necessary when rendering SVG.
 #
 # Prerequisites:
-# * PlantUML (`brew install plantuml`)
-# * Inkscape (`flatpak install org.inkscape.Inkscape`)
+# * PlantUML (`brew install plantuml` / [download](https://plantuml.com/))
+# * Inkscape (`flatpak install org.inkscape.Inkscape` / [download](https://inkscape.org/))
 
-INKSCAPE=/var/lib/flatpak/exports/bin/org.inkscape.Inkscape
+if [[ "$OSTYPE" == "linux"* ]]; then
+    INKSCAPE=/var/lib/flatpak/exports/bin/org.inkscape.Inkscape
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    INKSCAPE=/Applications/Inkscape.app/Contents/MacOS/inkscape
+else
+    echo "OS $OSTYPE is not supported"
+    exit 1
+fi
+
+plantuml --version 1>/dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "PlantUML could not be starfted"
+    exit 1
+fi
+
+if [ ! -f "$INKSCAPE" ]; then
+    echo "Inkscape not found at $INKSCAPE"
+    exit 1
+fi
 
 render_puml () {
   FILE=$1

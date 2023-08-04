@@ -104,3 +104,10 @@ module EmailAddress =
         |> Spec.createModel EmailAddress x
 
     let value (EmailAddress x) = x
+
+
+type ServiceId = private ServiceId of System.Guid
+
+module ServiceId =
+    let newId () = (ServiceId(System.Guid.NewGuid()))
+    let value (ServiceId x) = x

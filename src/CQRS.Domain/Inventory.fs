@@ -180,9 +180,3 @@ type ValidationFailure =
 
 // All failures
 type InventoryFailure = ValidationFailure of ValidationFailure
-
-// Everything that can happen with Inventory
-type DomainMessage =
-    | InventoryCommand of InventoryCommand
-    | InventoryEvent of InventoryEvent
-    | InventoryFailure of InventoryFailure
