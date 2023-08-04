@@ -22,9 +22,8 @@
          DTO ⬄ Domain mappers
    3. `API`
       1. MUST NOT depend on any project from `Adapters`, only on `Ports`
-      2. MAY depend on `CQRS.DTO` (specifically on command DTOs) and use
-         them as request body in command API. A.t.m. only
-         `CreateInventoryCommand` DTO is used for that
+      2. Depends on `CQRS.DTO` (specifically on command DTOs) and uses
+         DTOs as request body in command API.
       3. Depends on `CQRS.Projections.ViewModels` and exposes them as
          Query API response
    4. `Ports`
@@ -44,5 +43,5 @@
    7. `Hosts`
       1. `Application.Host` MUST NOT depend on `API`
       2. `API.Host` MUST NOT depend on `Application`
-   8. `Client` MUST ONLY depend on `CQRS.DTO` (command DTOs) and
+3. **`Client`** MUST ONLY depend on `CQRS.DTO` (command DTOs) and
       `CQRS.Projections.ViewModels`

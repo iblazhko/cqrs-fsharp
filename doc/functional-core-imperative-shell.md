@@ -24,7 +24,7 @@ publishing events using *MessageBus Port*, storing events using
 > with all of the I/O invocations lifted to the outer shell described below.
 
 Application implements generic Command DTO handler that is using
-EventStore Port, and Event DTO handler that uses ProjectionStore Port.
+*EventStore Port*, and Event DTO handler that uses *ProjectionStore Port*.
 
 ## Imperative Shell
 
@@ -40,12 +40,12 @@ Non-pure imperative shell consists of two main parts:
 * Input triggers. Here we take inputs from either API calls or incoming
   messages, and call Application layer (as described above) that
   follows functional style, but directly uses Ports for communicating with
-  external services (mainly EventStore and Projections Store).
+  external services (mainly *EventStore Port* and *Projections Store Port*).
   Code in the imperative shell itself can mix imperative and functional styles.
   * API calls are handled by ASP.NET Core, with a bit of help from
     `FSharp.MinimalApi` library to simplify endpoints registration.
-    API can send commands using Message Bus Port, or query view models
-    using ProjectionStore Port
+    API can send commands using *MessageBus Port*, or query view models
+    using *ProjectionStore Port*
   * Messages are handled using MassTransit, and we define MassTransit-specific
     message consumers that unwrap MassTransit consume context and pass on DTO
     into a generic Application of Projection DTO handler.
