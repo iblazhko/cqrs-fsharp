@@ -32,10 +32,10 @@ module PositiveInteger =
         let (PositiveInteger n) = x
         let (PositiveInteger m) = y
 
-        if m >= n then
-            failwith $"Subtraction '{n}-{m}' produced a non-positive number"
-
-        PositiveInteger(n - m)
+        if m < n then
+            Ok(PositiveInteger(n - m))
+        else
+            Error $"Subtraction '{n}-{m}' produced a non-positive number"
 
     let greaterThan x y =
         let (PositiveInteger n) = x

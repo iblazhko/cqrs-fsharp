@@ -49,12 +49,14 @@ module StockQuantity =
 
     let subtract (stockQuantity: StockQuantity) (n: PositiveInteger) =
         match stockQuantity with
-        | Empty -> failwith "Cannot subtract from Empty"
+        | Empty -> Error "Cannot subtract from Empty"
         | InventoryCount count ->
             if (equals stockQuantity n) then
-                Empty
+                Ok Empty
             else
-                InventoryCount(PositiveInteger.subtract count n)
+                match PositiveInteger.subtract count n with
+                | Ok x -> Ok(InventoryCount(x))
+                | Error e -> Error e
 
 // State
 (*

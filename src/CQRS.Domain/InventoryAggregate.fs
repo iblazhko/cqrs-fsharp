@@ -1,7 +1,6 @@
 module CQRS.Domain.InventoryAggregate
 
 open CQRS.Domain.Moon
-open CQRS.Domain.ValueTypes
 open CQRS.Domain.Inventory
 
 let private invokeIfNew (state: InventoryState) (action: unit -> InventoryEvent seq) =
@@ -45,13 +44,13 @@ let private getNotEnoughStockEvent (x: InventoryState) requestedCount =
           StockQuantity = x.StockQuantity
           RequestedCount = requestedCount }
 
-let private getRemovedFromInventoryEvent (x: InventoryState) removedCount =
+let private getRemovedFromInventoryEvent (x: InventoryState) removedCount newQuantity =
     ItemsRemovedFromInventory
         { InventoryId = x.InventoryId
           Name = x.Name
           RemovedCount = removedCount
           OldStockQuantity = x.StockQuantity
-          NewStockQuantity = StockQuantity.subtract x.StockQuantity removedCount }
+          NewStockQuantity = newQuantity }
 
 let create (state: InventoryState) (cmd: CreateInventory) =
     invokeIfNew state (fun () ->
@@ -90,18 +89,17 @@ let addItems (state: InventoryState) (cmd: AddItemsToInventory) =
 
 let removeItems (state: InventoryState) (cmd: RemoveItemsFromInventory) =
     invokeIfExists state cmd.InventoryId (fun x ->
-        let count = cmd.Count
+        let removedCount = cmd.Count
 
-        seq {
-            match x.StockQuantity with
-            | StockQuantity.Empty -> getNotEnoughStockEvent x count
-            | StockQuantity.InventoryCount available ->
-                match available with
-                | amount when PositiveInteger.greaterThan amount count -> getRemovedFromInventoryEvent x count
-                | amount when PositiveInteger.equal amount count ->
-                    yield! [ getRemovedFromInventoryEvent x count; getWentOutOfStockEvent x ]
-                | _ -> getNotEnoughStockEvent x count
-        })
+        match StockQuantity.subtract x.StockQuantity removedCount with
+        | Ok newQuantity ->
+            match newQuantity with
+            | Empty ->
+                [ (getRemovedFromInventoryEvent state removedCount newQuantity)
+                  (getWentOutOfStockEvent state) ]
+            | _ -> [ (getRemovedFromInventoryEvent state removedCount newQuantity) ]
+        | Error _ -> [ getNotEnoughStockEvent x removedCount ]
+        |> List.toSeq)
 
 // Random business rule: cannot deactivate an inventory when the moon is in full phase
 let deactivate (state: InventoryState) (moonPhase: MoonPhase) (cmd: DeactivateInventory) =
