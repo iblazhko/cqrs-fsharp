@@ -6,25 +6,25 @@ open CQRS.Domain.Inventory
 
 let private invokeIfNew (state: InventoryState) (action: unit -> InventoryEvent seq) =
     match state with
-    | x when not x.IsNew -> Error(ValidationFailure(AlreadyExists x.InventoryId))
-    | x when not x.IsActive -> Error(ValidationFailure(Deactivated x.InventoryId))
+    | x when not x.IsNew -> Error(AlreadyExists x.InventoryId)
+    | x when not x.IsActive -> Error(Deactivated x.InventoryId)
     | _ -> Ok(action ())
 
 let private invokeIfExists (state: InventoryState) (id: InventoryId) (action: InventoryState -> InventoryEvent seq) =
     match state with
-    | x when x.IsNew -> Error(ValidationFailure(DoesNotExist x.InventoryId))
-    | x when not x.IsActive -> Error(ValidationFailure(Deactivated x.InventoryId))
-    | x when not (x.InventoryId = id) -> Error(ValidationFailure(InventoryIdMismatch(x.InventoryId, id)))
+    | x when x.IsNew -> Error(DoesNotExist x.InventoryId)
+    | x when not x.IsActive -> Error(Deactivated x.InventoryId)
+    | x when not (x.InventoryId = id) -> Error(InventoryIdMismatch(x.InventoryId, id))
     | x -> Ok(action x)
 
 let private deactivateIfEmpty (state: InventoryState) (id: InventoryId) (action: InventoryState -> InventoryEvent seq) =
     match state with
-    | x when x.IsNew -> Error(ValidationFailure(DoesNotExist x.InventoryId))
-    | x when not x.IsActive -> Error(ValidationFailure(Deactivated x.InventoryId))
-    | x when not (x.InventoryId = id) -> Error(ValidationFailure(InventoryIdMismatch(x.InventoryId, id)))
+    | x when x.IsNew -> Error(DoesNotExist x.InventoryId)
+    | x when not x.IsActive -> Error(Deactivated x.InventoryId)
+    | x when not (x.InventoryId = id) -> Error(InventoryIdMismatch(x.InventoryId, id))
     | x ->
         match x.StockQuantity with
-        | StockQuantity.InventoryCount _ -> Error(ValidationFailure(CannotDeactivateNonEmpty x.InventoryId))
+        | StockQuantity.InventoryCount _ -> Error(CannotDeactivateNonEmpty x.InventoryId)
         | StockQuantity.Empty -> Ok(action x)
 
 let private getInStockEvent (x: InventoryState) count =
@@ -106,7 +106,7 @@ let removeItems (state: InventoryState) (cmd: RemoveItemsFromInventory) =
 // Random business rule: cannot deactivate an inventory when the moon is in full phase
 let deactivate (state: InventoryState) (moonPhase: MoonPhase) (cmd: DeactivateInventory) =
     match moonPhase with
-    | FullMoon -> Error(ValidationFailure(CannotDeactivateWhenMoonIsFull cmd.InventoryId))
+    | FullMoon -> Error(CannotDeactivateWhenMoonIsFull cmd.InventoryId)
     | _ ->
         deactivateIfEmpty state cmd.InventoryId (fun x ->
             seq {

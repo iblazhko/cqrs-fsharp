@@ -168,7 +168,7 @@ type InventoryEvent =
     | InventoryDeactivated of InventoryDeactivated
 
 // All domain validation failures
-type ValidationFailure =
+type InventoryFailure =
     | DoesNotExist of InventoryId
     | AlreadyExists of InventoryId
     | Deactivated of InventoryId
@@ -177,6 +177,3 @@ type ValidationFailure =
     | CannotRequestMoreThanHaveInStock of InventoryId
     | InventoryIdMismatch of InventoryId * InventoryId
     | ValidationError of ErrorsByTag
-
-// All failures
-type InventoryFailure = ValidationFailure of ValidationFailure

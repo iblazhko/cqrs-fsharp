@@ -7,28 +7,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharpPlus" />
-    <PackageReference Include="FsToolkit.ErrorHandling" />
-    <PackageReference Include="FsToolkit.ErrorHandling.TaskResult" />
+    <PackageReference Include="FSharpPlus"/>
+    <PackageReference Include="FsToolkit.ErrorHandling"/>
+    <PackageReference Include="FsToolkit.ErrorHandling.TaskResult"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Domain\CQRS.Domain.fsproj" />
-    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj" />
-    <ProjectReference Include="..\CQRS.Mapping\CQRS.Mapping.fsproj" />
-    <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj" />
-    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj" />
-    <ProjectReference Include="..\CQRS.Ports.Time\CQRS.Ports.Time.fsproj" />
+    <ProjectReference Include="..\CQRS.Domain\CQRS.Domain.fsproj"/>
+    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj"/>
+    <ProjectReference Include="..\CQRS.Mapping\CQRS.Mapping.fsproj"/>
+    <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj"/>
+    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj"/>
+    <ProjectReference Include="..\CQRS.Ports.Time\CQRS.Ports.Time.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="IMoonPhaseService.fs" />
-    <Compile Include="ApplicationEnvironment.fs" />
-    <Compile Include="InventoryEventStreamId.fs" />
-    <Compile Include="InventoryEventStreamDtoMapper.fs" />
-    <Compile Include="InventoryEventStreamProjection.fs" />
-    <Compile Include="InventoryCommandDtoHandler.fs" />
-    <Compile Include="EventStoreEventsPublisher.fs" />
+    <Compile Include="IMoonPhaseService.fs"/>
+    <Compile Include="ApplicationEnvironment.fs"/>
+    <Compile Include="InventoryEventStreamId.fs"/>
+    <Compile Include="InventoryEventStreamDtoMapper.fs"/>
+    <Compile Include="InventoryEventStreamProjection.fs"/>
+    <Compile Include="InventoryCommandDtoHandler.fs"/>
+    <Compile Include="EventStoreEventsPublisher.fs"/>
   </ItemGroup>
 
 </Project>
