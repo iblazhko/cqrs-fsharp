@@ -30,6 +30,10 @@ module InventoryName =
     let create (n: MediumString) = InventoryName n
     let value (InventoryName n) = n
 
+type SubtractFailure =
+    | CannotSubtractFromEmpty
+    | SubtractValueOutOfRange of string
+
 type StockQuantity =
     | Empty
     | InventoryCount of PositiveInteger
@@ -49,14 +53,14 @@ module StockQuantity =
 
     let subtract (stockQuantity: StockQuantity) (n: PositiveInteger) =
         match stockQuantity with
-        | Empty -> Error "Cannot subtract from Empty"
+        | Empty -> Error(CannotSubtractFromEmpty)
         | InventoryCount count ->
             if (equals stockQuantity n) then
                 Ok Empty
             else
                 match PositiveInteger.subtract count n with
                 | Ok x -> Ok(InventoryCount(x))
-                | Error e -> Error e
+                | Error e -> Error(SubtractValueOutOfRange(e))
 
 // State
 (*
@@ -169,7 +173,7 @@ type InventoryEvent =
     | RequestedMoreItemsThanHaveInStock of RequestedMoreItemsThanHaveInStock
     | InventoryDeactivated of InventoryDeactivated
 
-// All domain validation failures
+// All domain failures
 type InventoryFailure =
     | DoesNotExist of InventoryId
     | AlreadyExists of InventoryId
