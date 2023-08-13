@@ -2,6 +2,7 @@
 
 skinparam defaultFontName "D-DIN"
 skinparam backgroundColor #EEEEEE
+scale 2500 width
 
 title Code - Command handling
 right footer Version 0.1

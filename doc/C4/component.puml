@@ -3,6 +3,7 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 skinparam defaultFontName "D-DIN"
 skinparam backgroundColor #EEEEEE
+scale 1600 width
 
 LAYOUT_TOP_DOWN()
 HIDE_STEREOTYPE()
