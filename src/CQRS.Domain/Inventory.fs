@@ -70,8 +70,8 @@ type InventoryState =
   | InactiveInventory of InactiveInventory
   | Inventory of Inventory
 
-This would make aggregate cleaner, but OTOH it would make appliers more complicated
-because we will not be able to use "{ with Property=NewValue }" syntax.
+This could make aggregate cleaner, but OTOH it would make appliers more complicated
+because we will not be able to use "{ with Property = newValue }" syntax.
 *)
 type InventoryState =
     { InventoryId: InventoryId

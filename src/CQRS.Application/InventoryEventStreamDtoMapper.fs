@@ -18,7 +18,7 @@ type InventoryEventStreamDtoMapper() =
     interface IEventMapper<InventoryEvent> with
         member this.FromDomainEvent(domainEvent) =
             match domainEvent with
-            | :? InventoryEvent as x -> x |> InventoryEvent'.toDTO :> obj
+            | :? InventoryEvent as x -> x |> InventoryEvent'.toDTO |> box
             | _ -> raise (UnknownEventTypeException(domainEvent.GetType().FullName))
 
         member this.ToDomainEvent(dtoWithMetadata) =

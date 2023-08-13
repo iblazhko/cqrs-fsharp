@@ -112,7 +112,7 @@ let ``EventStore Contains can handle non-existing streams`` () =
 let ``EventStore Contains does not take into account new streams that have not been saved yet`` () =
     task {
         let streamId = getRandomStreamId ()
-        use! x = eventStore.Open<InventoryEvent, InventoryState>(streamId, eventMapper)
+        use! _x = eventStore.Open<InventoryEvent, InventoryState>(streamId, eventMapper)
 
         let! exists = eventStore.Contains streamId
         exists |> should be False

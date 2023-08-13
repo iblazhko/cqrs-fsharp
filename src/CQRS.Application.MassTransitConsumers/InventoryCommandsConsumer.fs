@@ -2,7 +2,6 @@ namespace CQRS.Application.MassTransitConsumers
 
 open CQRS.Application
 open CQRS.DTO.V1
-open CQRS.Domain.Moon
 open CQRS.Ports.EventStore
 open CQRS.Ports.Time
 open MassTransit

@@ -18,7 +18,7 @@ let private eventStore =
     new InMemoryEventStore(SystemTextJsonEventSerializer(), None) :> IEventStore
 
 [<Fact>]
-let ``EventStoreSession GetAllEvents return a new EventStream if the underlying stream is empty`` () =
+let ``EventStoreSession GetAllEvents returns a new EventStream if the underlying stream is empty`` () =
     task {
         let streamId = getRandomStreamId ()
         use! eventStreamSession = eventStore.Open<InventoryEvent, InventoryState>(streamId, eventMapper)
@@ -50,7 +50,7 @@ let ``EventStoreSession AppendEvents appends events with no metadata`` () =
                     Name = inventoryName
                     IsActive = true } ]
 
-        let genericEvents = domainEvents |> List.map (fun e -> e :> obj)
+        let genericEvents = domainEvents |> List.map box
 
         do! eventStreamSession.AppendEvents(genericEvents)
 
@@ -80,7 +80,7 @@ let ``EventStoreSession AppendEventsWithMetadata appends events with provided me
         let eventsWithMetadata =
             domainEvents
             |> List.map (fun e ->
-                let genericEvent = e :> obj
+                let genericEvent = e |> box
 
                 { EventWithMetadata.Event = genericEvent
                   EventType = genericEvent.GetType()
@@ -123,7 +123,7 @@ let ``EventStoreSession GetAllEvents concatenates existing events and new events
                     Name = inventoryName
                     IsActive = true } ]
 
-        let existingGenericEvents = existingDomainEvents |> List.map (fun e -> e :> obj)
+        let existingGenericEvents = existingDomainEvents |> List.map box
 
         do! existingEventStreamSession.AppendEvents(existingGenericEvents)
 
@@ -138,7 +138,7 @@ let ``EventStoreSession GetAllEvents concatenates existing events and new events
                     OldName = inventoryName
                     NewName = inventoryNewName } ]
 
-        let newGenericEvents = newDomainEvents |> List.map (fun e -> e :> obj)
+        let newGenericEvents = newDomainEvents |> List.map box
 
         do! newEventStreamSession.AppendEvents(newGenericEvents)
 
