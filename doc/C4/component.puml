@@ -27,7 +27,7 @@ Boundary(domain_boundary, "Domain") {
 
     Boundary(domain_dto, "") {
         Component(dto, "DTOs", "", "Serialization-friendly DTOs")
-        Component(mapping, "Mapping", "", "Domain ⟷     DTO mappers")
+        Component(mapping, "Mapping", "", "Domain ⟷ DTO mappers")
     }
 
     Boundary(domain_aggregate, "") {
