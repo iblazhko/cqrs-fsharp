@@ -26,7 +26,8 @@ let private mapApiResult<'T> (result: ApiResult<'T>) : IResult =
     match result with
     | Success s -> Ok(s) :> IResult
     | ValidationError v -> BadRequest(v) :> IResult
-    | OperationError e -> (Problem(JsonSerializer.Serialize(e), statusCode = int HttpStatusCode.BadRequest) :> IResult)
+    | OperationError e ->
+        (Problem(JsonSerializer.Serialize(e), statusCode = int HttpStatusCode.InternalServerError) :> IResult)
     | NotFound -> (Problem(statusCode = int HttpStatusCode.NotFound) :> IResult)
 
 module private ApiRouteHandlers =
