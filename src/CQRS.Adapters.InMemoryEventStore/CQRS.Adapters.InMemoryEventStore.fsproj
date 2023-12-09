@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj" />
+    <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="InMemoryEventStoreAdapter.fs" />
+    <Compile Include="InMemoryEventStoreAdapter.fs"/>
   </ItemGroup>
 
 </Project>

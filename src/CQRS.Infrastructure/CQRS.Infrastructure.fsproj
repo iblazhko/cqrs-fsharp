@@ -7,48 +7,48 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Marten" />
-    <PackageReference Include="MassTransit.RabbitMQ" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-    <PackageReference Include="Npgsql" />
-    <PackageReference Include="Serilog" />
-    <PackageReference Include="Serilog.AspNetCore" />
-    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Marten"/>
+    <PackageReference Include="MassTransit.RabbitMQ"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    <PackageReference Include="Npgsql"/>
+    <PackageReference Include="Serilog"/>
+    <PackageReference Include="Serilog.AspNetCore"/>
+    <PackageReference Include="Serilog.Sinks.Console"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Adapters.InMemoryEventStore\CQRS.Adapters.InMemoryEventStore.fsproj" />
-    <ProjectReference Include="..\CQRS.Adapters.InMemoryProjectionStore\CQRS.Adapters.InMemoryProjectionStore.fsproj" />
-    <ProjectReference Include="..\CQRS.Adapters.MartenDbEventStore\CQRS.Adapters.MartenDbEventStore.fsproj" />
-    <ProjectReference Include="..\CQRS.Adapters.MartenDbProjectionStore\CQRS.Adapters.MartenDbProjectionStore.fsproj" />
-    <ProjectReference Include="..\CQRS.Adapters.MassTransitMessageBus\CQRS.Adapters.MassTransitMessageBus.fsproj" />
-    <ProjectReference Include="..\CQRS.Application\CQRS.Application.fsproj" />
-    <ProjectReference Include="..\CQRS.Configuration\CQRS.Configuration.fsproj" />
-    <ProjectReference Include="..\CQRS.Domain\CQRS.Domain.fsproj" />
-    <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj" />
-    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj" />
-    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj" />
-    <ProjectReference Include="..\CQRS.Projections\CQRS.Projections.fsproj" />
+    <ProjectReference Include="..\CQRS.Adapters.InMemoryEventStore\CQRS.Adapters.InMemoryEventStore.fsproj"/>
+    <ProjectReference Include="..\CQRS.Adapters.InMemoryProjectionStore\CQRS.Adapters.InMemoryProjectionStore.fsproj"/>
+    <ProjectReference Include="..\CQRS.Adapters.MartenDbEventStore\CQRS.Adapters.MartenDbEventStore.fsproj"/>
+    <ProjectReference Include="..\CQRS.Adapters.MartenDbProjectionStore\CQRS.Adapters.MartenDbProjectionStore.fsproj"/>
+    <ProjectReference Include="..\CQRS.Adapters.MassTransitMessageBus\CQRS.Adapters.MassTransitMessageBus.fsproj"/>
+    <ProjectReference Include="..\CQRS.Application\CQRS.Application.fsproj"/>
+    <ProjectReference Include="..\CQRS.Configuration\CQRS.Configuration.fsproj"/>
+    <ProjectReference Include="..\CQRS.Domain\CQRS.Domain.fsproj"/>
+    <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj"/>
+    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj"/>
+    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj"/>
+    <ProjectReference Include="..\CQRS.Projections\CQRS.Projections.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="InfrastructureWaitPolicy.fs" />
-    <Compile Include="PostgresHealthCheck.fs" />
-    <Compile Include="RabbitMqHealthCheck.fs" />
-    <Compile Include="MartenDbConfigurator.fs" />
-    <Compile Include="EventStoreConfigurator.fs" />
-    <Compile Include="ProjectionStoreConfigurator.fs" />
-    <Compile Include="MassTransitConventions.fs" />
-    <Compile Include="EndpointsRegistration.fs" />
-    <Compile Include="MessageBusConfigurator.fs" />
-    <Compile Include="ApplicationEnvironmentConfigurator.fs" />
-    <Compile Include="HealthcheckConfigurator.fs" />
-    <Compile Include="LoggingConfigurator.fs" />
-    <Compile Include="Startup.fs" />
+    <Compile Include="InfrastructureWaitPolicy.fs"/>
+    <Compile Include="PostgresHealthCheck.fs"/>
+    <Compile Include="RabbitMqHealthCheck.fs"/>
+    <Compile Include="MartenDbConfigurator.fs"/>
+    <Compile Include="EventStoreConfigurator.fs"/>
+    <Compile Include="ProjectionStoreConfigurator.fs"/>
+    <Compile Include="MassTransitConventions.fs"/>
+    <Compile Include="EndpointsRegistration.fs"/>
+    <Compile Include="MessageBusConfigurator.fs"/>
+    <Compile Include="ApplicationEnvironmentConfigurator.fs"/>
+    <Compile Include="HealthcheckConfigurator.fs"/>
+    <Compile Include="LoggingConfigurator.fs"/>
+    <Compile Include="Startup.fs"/>
   </ItemGroup>
 
 </Project>

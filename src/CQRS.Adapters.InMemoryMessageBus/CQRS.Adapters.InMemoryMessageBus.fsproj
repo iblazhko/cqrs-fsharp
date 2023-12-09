@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj" />
+    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="InMemoryMemoryBusAdapter.fs" />
+    <Compile Include="InMemoryMemoryBusAdapter.fs"/>
   </ItemGroup>
 
 </Project>

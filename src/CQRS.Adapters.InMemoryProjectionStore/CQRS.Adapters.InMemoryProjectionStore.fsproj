@@ -7,15 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj" />
+    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="InMemoryProjectionStoreAdapter.fs" />
+    <Compile Include="InMemoryProjectionStoreAdapter.fs"/>
   </ItemGroup>
 
 </Project>

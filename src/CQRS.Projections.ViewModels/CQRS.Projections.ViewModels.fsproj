@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj" />
+    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="InventoryCollection.fs" />
-    <Compile Include="InventoryViewModel.fs" />
+    <Compile Include="InventoryCollection.fs"/>
+    <Compile Include="InventoryViewModel.fs"/>
   </ItemGroup>
 
 </Project>

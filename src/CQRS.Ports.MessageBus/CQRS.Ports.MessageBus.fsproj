@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Message.fs" />
-    <Compile Include="MessageBus.fs" />
-    <Compile Include="MessageContextBuilder.fs" />
+    <Compile Include="Message.fs"/>
+    <Compile Include="MessageBus.fs"/>
+    <Compile Include="MessageContextBuilder.fs"/>
   </ItemGroup>
 
 </Project>

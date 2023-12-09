@@ -8,19 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" />
-    <PackageReference Include="Bogus" />
-    <PackageReference Include="FsToolkit.ErrorHandling" />
-    <PackageReference Include="FsUnit" />
-    <PackageReference Include="FsUnit.xUnit" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="xunit" />
-    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="coverlet.collector"/>
+    <PackageReference Include="Bogus"/>
+    <PackageReference Include="FsToolkit.ErrorHandling"/>
+    <PackageReference Include="FsUnit"/>
+    <PackageReference Include="FsUnit.xUnit"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+    <PackageReference Include="xunit"/>
+    <PackageReference Include="xunit.runner.visualstudio"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Tests.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="Tests.fs"/>
+    <Compile Include="Program.fs"/>
   </ItemGroup>
 
 </Project>

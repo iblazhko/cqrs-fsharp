@@ -14,31 +14,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
-    <PackageReference Include="Microsoft.Extensions.Logging" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
-    <PackageReference Include="System.Data.SqlClient" />
+    <PackageReference Include="FSharp.Core"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
+    <PackageReference Include="Microsoft.Extensions.Logging"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Console"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug"/>
+    <PackageReference Include="System.Data.SqlClient"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.API\CQRS.API.fsproj" />
-    <ProjectReference Include="..\CQRS.Configuration\CQRS.Configuration.fsproj" />
-    <ProjectReference Include="..\CQRS.Infrastructure\CQRS.Infrastructure.fsproj" />
-    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj" />
+    <ProjectReference Include="..\CQRS.API\CQRS.API.fsproj"/>
+    <ProjectReference Include="..\CQRS.Configuration\CQRS.Configuration.fsproj"/>
+    <ProjectReference Include="..\CQRS.Infrastructure\CQRS.Infrastructure.fsproj"/>
+    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="ApiRoutes.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="Program.fs"/>
   </ItemGroup>
 
 </Project>

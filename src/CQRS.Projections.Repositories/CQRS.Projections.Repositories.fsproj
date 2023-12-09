@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj" />
-    <ProjectReference Include="..\CQRS.Projections.ViewModels\CQRS.Projections.ViewModels.fsproj" />
+    <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj"/>
+    <ProjectReference Include="..\CQRS.Projections.ViewModels\CQRS.Projections.ViewModels.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="InventoryViewModelQueryRepository.fs" />
+    <Compile Include="InventoryViewModelQueryRepository.fs"/>
   </ItemGroup>
 
 </Project>

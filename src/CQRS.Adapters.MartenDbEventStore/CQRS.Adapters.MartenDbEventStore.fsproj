@@ -7,16 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Marten" />
-    <PackageReference Include="Serilog" />
+    <PackageReference Include="Marten"/>
+    <PackageReference Include="Serilog"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj" />
+    <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="MartenDbEventStoreAdapter.fs" />
+    <Compile Include="MartenDbEventStoreAdapter.fs"/>
   </ItemGroup>
 
 </Project>

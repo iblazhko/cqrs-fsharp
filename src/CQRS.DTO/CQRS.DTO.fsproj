@@ -7,18 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="System.Text.Json"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj" />
+    <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Json.fs" />
-    <Compile Include="CqrsDto.fs" />
-    <Compile Include="V1\InventoryMessages.fs" />
-    <Compile Include="V1\InventoryState.fs" />
+    <Compile Include="Json.fs"/>
+    <Compile Include="CqrsDto.fs"/>
+    <Compile Include="V1\InventoryMessages.fs"/>
+    <Compile Include="V1\InventoryState.fs"/>
   </ItemGroup>
 
 </Project>

@@ -7,17 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Adapters.MassTransitMessageBus\CQRS.Adapters.MassTransitMessageBus.fsproj" />
-    <ProjectReference Include="..\CQRS.Projections\CQRS.Projections.fsproj" />
+    <ProjectReference Include="..\CQRS.Adapters.MassTransitMessageBus\CQRS.Adapters.MassTransitMessageBus.fsproj"/>
+    <ProjectReference Include="..\CQRS.Projections\CQRS.Projections.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="MassTransitDtoConsumer.fs" />
-    <Compile Include="InventoryProjectionConsumer.fs" />
+    <Compile Include="MassTransitDtoConsumer.fs"/>
+    <Compile Include="InventoryProjectionConsumer.fs"/>
   </ItemGroup>
 
 </Project>

@@ -7,16 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Marten" />
-    <PackageReference Include="Serilog" />
+    <PackageReference Include="Marten"/>
+    <PackageReference Include="Serilog"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj" />
+    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="MartenDbProjectionStoreAdapter.fs" />
+    <Compile Include="MartenDbProjectionStoreAdapter.fs"/>
   </ItemGroup>
 
 </Project>

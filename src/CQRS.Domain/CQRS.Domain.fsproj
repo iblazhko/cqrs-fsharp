@@ -7,20 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FPrimitive" />
-    <PackageReference Include="FSharp.Core" />
+    <PackageReference Include="FPrimitive"/>
+    <PackageReference Include="FSharp.Core"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj" />
+    <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="ValueTypes.fs" />
-    <Compile Include="Moon.fs" />
-    <Compile Include="Inventory.fs" />
-    <Compile Include="InventoryAggregate.fs" />
-    <Compile Include="InventoryStateProjection.fs" />
+    <Compile Include="ValueTypes.fs"/>
+    <Compile Include="Moon.fs"/>
+    <Compile Include="Inventory.fs"/>
+    <Compile Include="InventoryAggregate.fs"/>
+    <Compile Include="InventoryStateProjection.fs"/>
   </ItemGroup>
 
 </Project>

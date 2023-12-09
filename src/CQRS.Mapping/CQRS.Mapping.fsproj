@@ -7,34 +7,34 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FsToolkit.ErrorHandling" />
+    <PackageReference Include="FsToolkit.ErrorHandling"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Domain\CQRS.Domain.fsproj" />
-    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj" />
+    <ProjectReference Include="..\CQRS.Domain\CQRS.Domain.fsproj"/>
+    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="DtoError.fs" />
-    <Compile Include="NullableDto'.fs" />
-    <Compile Include="InventoryValueTypesMapper.fs" />
-    <Compile Include="CreateInventory'.fs" />
-    <Compile Include="RenameInventory'.fs" />
-    <Compile Include="AddItemsToInventory'.fs" />
-    <Compile Include="RemoveItemsFromInventory'.fs" />
-    <Compile Include="DeactivateInventory'.fs" />
-    <Compile Include="InventoryCreated'.fs" />
-    <Compile Include="InventoryRenamed'.fs" />
-    <Compile Include="ItemsAddedToInventory'.fs" />
-    <Compile Include="ItemsRemovedFromInventory'.fs" />
-    <Compile Include="ItemInStock'.fs" />
-    <Compile Include="RequestedMoreItemsThanHaveInStock'.fs" />
-    <Compile Include="ItemWentOutOfStock'.fs" />
-    <Compile Include="InventoryDeactivated'.fs" />
-    <Compile Include="InventoryCommand'.fs" />
-    <Compile Include="InventoryEvent'.fs" />
-    <Compile Include="InventoryState'.fs" />
+    <Compile Include="DtoError.fs"/>
+    <Compile Include="NullableDto'.fs"/>
+    <Compile Include="InventoryValueTypesMapper.fs"/>
+    <Compile Include="CreateInventory'.fs"/>
+    <Compile Include="RenameInventory'.fs"/>
+    <Compile Include="AddItemsToInventory'.fs"/>
+    <Compile Include="RemoveItemsFromInventory'.fs"/>
+    <Compile Include="DeactivateInventory'.fs"/>
+    <Compile Include="InventoryCreated'.fs"/>
+    <Compile Include="InventoryRenamed'.fs"/>
+    <Compile Include="ItemsAddedToInventory'.fs"/>
+    <Compile Include="ItemsRemovedFromInventory'.fs"/>
+    <Compile Include="ItemInStock'.fs"/>
+    <Compile Include="RequestedMoreItemsThanHaveInStock'.fs"/>
+    <Compile Include="ItemWentOutOfStock'.fs"/>
+    <Compile Include="InventoryDeactivated'.fs"/>
+    <Compile Include="InventoryCommand'.fs"/>
+    <Compile Include="InventoryEvent'.fs"/>
+    <Compile Include="InventoryState'.fs"/>
   </ItemGroup>
 
 </Project>

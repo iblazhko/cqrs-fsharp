@@ -1,13 +1,15 @@
 module CQRS.API.Host.Program
 
-open CQRS.API.Host.ApiRoutes
+open System
 open CQRS.Configuration
 open CQRS.DTO
 open CQRS.Infrastructure
-open CQRS.Infrastructure.Startup
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Hosting
+
+open CQRS.API.ApiRoutes
+open CQRS.Infrastructure.Startup
 
 [<EntryPoint>]
 let main (args: string[]) =

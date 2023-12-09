@@ -7,15 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit" />
+    <PackageReference Include="MassTransit"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj" />
+    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="MassTransitMessageBusAdapter.fs" />
+    <Compile Include="MassTransitMessageBusAdapter.fs"/>
   </ItemGroup>
 
 </Project>

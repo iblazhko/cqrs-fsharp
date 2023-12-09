@@ -1,31 +1,35 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
     <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FPrimitive" />
-    <PackageReference Include="FSharp.Core" />
-    <PackageReference Include="Microsoft.Extensions.Logging" />
-    <PackageReference Include="Serilog" />
+    <PackageReference Include="FPrimitive"/>
+    <PackageReference Include="FSharp.Core"/>
+    <PackageReference Include="FsToolkit.ErrorHandling.TaskResult"/>
+    <PackageReference Include="Microsoft.Extensions.Logging"/>
+    <PackageReference Include="Serilog"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj" />
-    <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj" />
-    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj" />
-    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj" />
-    <ProjectReference Include="..\CQRS.Projections.Repositories\CQRS.Projections.Repositories.fsproj" />
-    <ProjectReference Include="..\CQRS.Projections.ViewModels\CQRS.Projections.ViewModels.fsproj" />
+    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj"/>
+    <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj"/>
+    <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj"/>
+    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj"/>
+    <ProjectReference Include="..\CQRS.Ports.Time\CQRS.Ports.Time.fsproj"/>
+    <ProjectReference Include="..\CQRS.Projections.Repositories\CQRS.Projections.Repositories.fsproj"/>
+    <ProjectReference Include="..\CQRS.Projections.ViewModels\CQRS.Projections.ViewModels.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="AcceptedResponse.fs" />
-    <Compile Include="HandlersMessageBusAdapter.fs" />
-    <Compile Include="HandlersProjectionsAdapter.fs" />
+    <Compile Include="AcceptedResponse.fs"/>
+    <Compile Include="HandlersMessageBusAdapter.fs"/>
+    <Compile Include="HandlersProjectionsAdapter.fs"/>
+    <Compile Include="ApiRoutes.fs"/>
   </ItemGroup>
 
 </Project>

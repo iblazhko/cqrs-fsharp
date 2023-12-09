@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FPrimitive" />
-    <PackageReference Include="FSharp.Core" />
+    <PackageReference Include="FPrimitive"/>
+    <PackageReference Include="FSharp.Core"/>
   </ItemGroup>
 
   <ItemGroup>
-      <Compile Include="EntityId.fs" />
+    <Compile Include="EntityId.fs"/>
   </ItemGroup>
 
 </Project>

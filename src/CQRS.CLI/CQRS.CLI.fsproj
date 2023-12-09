@@ -14,48 +14,48 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flurl.Http" />
-    <PackageReference Include="FSharp.Core" />
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-    <PackageReference Include="Microsoft.Extensions.Logging" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
-    <PackageReference Include="Serilog" />
-    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Flurl.Http"/>
+    <PackageReference Include="FSharp.Core"/>
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    <PackageReference Include="Microsoft.Extensions.Logging"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Console"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug"/>
+    <PackageReference Include="Serilog"/>
+    <PackageReference Include="Serilog.Sinks.Console"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Settings.fs" />
-    <Compile Include="FlurlFsharp.fs" />
-    <Compile Include="ApiClient.fs" />
-    <Compile Include="CreateInventoryCommand.fs" />
-    <Compile Include="RenameInventoryCommand.fs" />
-    <Compile Include="AddItemsToInventoryCommand.fs" />
-    <Compile Include="RemoveItemsFromInventoryCommand.fs" />
-    <Compile Include="DeactivateInventoryCommand.fs" />
-    <Compile Include="GetInventoryCommand.fs" />
-    <Compile Include="Program.fs" />
+    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Settings.fs"/>
+    <Compile Include="FlurlFsharp.fs"/>
+    <Compile Include="ApiClient.fs"/>
+    <Compile Include="CreateInventoryCommand.fs"/>
+    <Compile Include="RenameInventoryCommand.fs"/>
+    <Compile Include="AddItemsToInventoryCommand.fs"/>
+    <Compile Include="RemoveItemsFromInventoryCommand.fs"/>
+    <Compile Include="DeactivateInventoryCommand.fs"/>
+    <Compile Include="GetInventoryCommand.fs"/>
+    <Compile Include="Program.fs"/>
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj" />
   </ItemGroup>
 
 </Project>
