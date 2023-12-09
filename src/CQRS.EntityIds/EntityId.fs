@@ -21,4 +21,9 @@ module EntityId =
     let toString id = (id |> value).ToString("N")
 
     let fromString propertyName (idStr: string) =
-        EntityIdRawValue.Parse(idStr) |> create propertyName
+        let success, id = EntityIdRawValue.TryParse(idStr)
+
+        if success then
+            id |> create propertyName
+        else
+            Error(ErrorsByTag(seq { (propertyName, [ $"Could not parse Id value '{idStr}'" ]) }))
