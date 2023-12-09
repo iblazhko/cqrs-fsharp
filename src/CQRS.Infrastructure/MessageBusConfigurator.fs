@@ -17,8 +17,8 @@ let configureServices
         | Some e -> e.assemblies |> List.iter configure.AddConsumers
         | None -> ()
 
-        configure.AddBus(fun (registrationContext: IBusRegistrationContext) ->
-            Bus.Factory.CreateUsingRabbitMq(fun configurator ->
+        configure.UsingRabbitMq(fun registrationContext ->
+            fun configurator ->
                 configurator.Host(
                     settings.RabbitMq.Endpoint.Host,
                     settings.RabbitMq.VirtualHost,
@@ -31,7 +31,7 @@ let configureServices
                 | Some e ->
                     let formatter = PrefixedSnakeCaseEndpointNameFormatter(e.queuePrefix)
                     configurator.ConfigureEndpoints(registrationContext, formatter)
-                | None -> ())))
+                | None -> ()))
     |> ignore
 
     match endpointsRegistration.SendConventions with

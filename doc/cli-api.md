@@ -109,15 +109,15 @@ Instead of using CLI you can call API endpoints directly using CURL, Postman,
 httpie etc.
 
 ```bash
-curl -X POST http://localhost:17322/api/v1/inventories \
+curl -X POST http://localhost:17322/v1/inventories \
    -H 'Content-Type: application/json' \
    -d '{"Name": "ABC-123"}'
 
-curl -X GET  http://localhost:17322/api/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656
+curl -X GET  http://localhost:17322/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656
 
-curl -X POST http://localhost:17322/api/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656/add/10
+curl -X POST http://localhost:17322/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656/add/10
 
-curl -X POST http://localhost:17322/api/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656/remove/5
+curl -X POST http://localhost:17322/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656/remove/5
 
-curl -X POST http://localhost:17322/api/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656/deactivate
+curl -X POST http://localhost:17322/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656/deactivate
 ```

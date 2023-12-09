@@ -42,8 +42,7 @@ Non-pure imperative shell consists of two main parts:
   follows functional style, but directly uses Ports for communicating with
   external services (mainly *EventStore Port* and *Projections Store Port*).
   Code in the imperative shell itself can mix imperative and functional styles.
-  * API calls are handled by ASP.NET Core, with a bit of help from
-    `FSharp.MinimalApi` library to simplify endpoints registration.
+  * API calls are handled by ASP.NET Core Minimal API.
     API can send commands using *MessageBus Port*, or query view models
     using *ProjectionStore Port*
   * Messages are handled using MassTransit, and we define MassTransit-specific

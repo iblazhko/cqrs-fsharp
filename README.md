@@ -14,7 +14,7 @@ real-life projects.
 
 ## Solution Overview
 
-Solution uses .NET7 / F# and has following major parts:
+Solution uses .NET 8 / F# and has following major parts:
 
 - *Core domain* components. Only types and pure functions are allowed here.
 - *Application* services that are aware of the outside world and intended
@@ -36,7 +36,7 @@ information.
 
 ### Prerequisites
 
-- .NET SDK 7.0: <https://dotnet.microsoft.com/download>
+- .NET 8.0 SDK: <https://dotnet.microsoft.com/download>
 - PowerShell Core: <https://github.com/powershell/powershell>
 - Docker with Docker Compose: <https://www.docker.com/>
 

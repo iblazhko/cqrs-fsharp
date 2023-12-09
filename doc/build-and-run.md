@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- .NET SDK 7.0: <https://dotnet.microsoft.com/download>
+- .NET 8.0 SDK: <https://dotnet.microsoft.com/download>
 - PowerShell Core: <https://github.com/powershell/powershell>
 - Docker with Docker Compose: <https://www.docker.com/>
 

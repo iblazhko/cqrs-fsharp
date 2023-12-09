@@ -4,7 +4,7 @@ services:
   ## Infrastructure
 
   rabbitmq:
-    image: rabbitmq:3.11-management
+    image: rabbitmq:3.12-management
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
     environment:
@@ -18,7 +18,7 @@ services:
       - cqrs-net
 
   postgres:
-    image: postgres:15.3
+    image: postgres:16.1
     volumes:
       - postgres-data:/var/lib/postgresql
     ports:

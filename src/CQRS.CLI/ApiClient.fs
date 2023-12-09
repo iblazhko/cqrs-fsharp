@@ -6,7 +6,7 @@ open Flurl
 open Serilog
 
 [<Literal>]
-let private inventoriesEndpoint = "/api/v1/inventories"
+let private inventoriesEndpoint = "/v1/inventories"
 
 let private getWithResponseBody (url: Url) =
     Log.Logger.Information("[GET>] {Url}", url)

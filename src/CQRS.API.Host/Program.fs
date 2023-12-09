@@ -32,8 +32,7 @@ let main (args: string[]) =
 
     let app = builder.Build()
     app |> configureApp settings
-
-    app.MapGroup("api") |> routes.Apply |> ignore
+    app |> configureApiRoutes
 
     app.Run()
     0
