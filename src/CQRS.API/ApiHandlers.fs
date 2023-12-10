@@ -28,24 +28,36 @@ let mapApiResult<'T> (result: ApiResult<'T>) : IResult =
         Problem(JsonSerializer.Serialize(e), statusCode = int HttpStatusCode.InternalServerError) :> IResult
     | NotFound -> Problem(statusCode = int HttpStatusCode.NotFound) :> IResult
 
-let private mapOperationResult result =
+let private mapCommandOperationResult result =
     match result with
     | Ok success -> Success success
     | Error error -> OperationError error
 
-let private validatingApiHandler validationResult operation =
+let private mapQueryOperationResult result =
+    match result with
+    | ProjectionHandlers.DocumentQueryResult.Document vm -> Success vm
+    | ProjectionHandlers.DocumentQueryResult.NotFound -> NotFound
+    | ProjectionHandlers.DocumentQueryResult.BadRequest error -> OperationError error
+
+let private validatingApiHandler validationResult operation mapper =
     task {
         let! apiResult =
             task {
                 match validationResult with
                 | Ok validInput ->
                     let! result = validInput |> operation
-                    return result |> mapOperationResult
+                    return result |> mapper
                 | Error error -> return ValidationError error
             }
 
         return apiResult
     }
+
+let private validatingCommandApiHandler validationResult operation =
+    validatingApiHandler validationResult operation mapCommandOperationResult
+
+let private validatingQueryApiHandler validationResult operation =
+    validatingApiHandler validationResult operation mapQueryOperationResult
 
 module CommandApiHandlers =
     let createInventory
@@ -55,7 +67,7 @@ module CommandApiHandlers =
         : Task<ApiResult<AcceptedResponse>> =
         task {
             let! result = cmd |> MessageBusHandlers.createInventory messageBus clock
-            return result |> mapOperationResult
+            return result |> mapCommandOperationResult
         }
 
     let renameInventory
@@ -64,7 +76,7 @@ module CommandApiHandlers =
         (messageBus: IMessageBus)
         (clock: IClock)
         : Task<ApiResult<AcceptedResponse>> =
-        validatingApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
+        validatingCommandApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
             let cmd = RenameInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value
             cmd.NewName <- name
@@ -76,7 +88,7 @@ module CommandApiHandlers =
         (messageBus: IMessageBus)
         (clock: IClock)
         : Task<ApiResult<AcceptedResponse>> =
-        validatingApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
+        validatingCommandApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
             let cmd = AddItemsToInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value
             cmd.Count <- count
@@ -90,7 +102,7 @@ module CommandApiHandlers =
         (messageBus: IMessageBus)
         (clock: IClock)
         : Task<ApiResult<AcceptedResponse>> =
-        validatingApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
+        validatingCommandApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
             let cmd = RemoveItemsFromInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value
             cmd.Count <- count
@@ -99,7 +111,7 @@ module CommandApiHandlers =
 
 
     let deactivateInventory (id: string) (messageBus: IMessageBus) (clock: IClock) : Task<ApiResult<AcceptedResponse>> =
-        validatingApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
+        validatingCommandApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
             let cmd = DeactivateInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value
 
@@ -110,16 +122,5 @@ module QueryApiHandlers =
         (id: string)
         (projectionStore: IProjectionStore<InventoryViewModel>)
         : Task<ApiResult<InventoryViewModel>> =
-        task {
-            let inventoryIdResult = id |> EntityId.fromString "InventoryId"
-
-            match inventoryIdResult with
-            | Ok inventoryId ->
-                let! result = inventoryId |> ProjectionHandlers.getInventoryViewModel projectionStore
-
-                match result with
-                | ProjectionHandlers.DocumentQueryResult.Document vm -> return Success vm
-                | ProjectionHandlers.DocumentQueryResult.NotFound -> return NotFound
-                | ProjectionHandlers.DocumentQueryResult.BadRequest error -> return OperationError error
-            | Error error -> return ValidationError error
-        }
+        validatingQueryApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
+            inventoryId |> ProjectionHandlers.getInventoryViewModel projectionStore)
