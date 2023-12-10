@@ -1,4 +1,4 @@
-module CQRS.API.HandlersMessageBusAdapter
+module CQRS.API.MessageBusHandlers
 
 open System.Threading.Tasks
 open CQRS.DTO.V1

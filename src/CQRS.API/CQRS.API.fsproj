@@ -27,8 +27,9 @@
 
   <ItemGroup>
     <Compile Include="AcceptedResponse.fs"/>
-    <Compile Include="HandlersMessageBusAdapter.fs"/>
-    <Compile Include="HandlersProjectionsAdapter.fs"/>
+    <Compile Include="MessageBusHandlers.fs"/>
+    <Compile Include="ProjectionHandlers.fs"/>
+    <Compile Include="ApiHandlers.fs"/>
     <Compile Include="ApiRoutes.fs"/>
   </ItemGroup>
 

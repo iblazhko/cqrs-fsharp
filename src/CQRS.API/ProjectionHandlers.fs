@@ -1,4 +1,4 @@
-module CQRS.API.HandlersProjectionsAdapter
+module CQRS.API.ProjectionHandlers
 
 open System.Threading.Tasks
 open CQRS.EntityIds
