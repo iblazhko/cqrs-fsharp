@@ -1,11 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <IsPackable>false</IsPackable>
-    <GenerateProgramFile>false</GenerateProgramFile>
-    <IsPackable>false</IsPackable>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +16,6 @@
 
   <ItemGroup>
     <Compile Include="Tests.fs"/>
-    <Compile Include="Program.fs"/>
   </ItemGroup>
 
 </Project>

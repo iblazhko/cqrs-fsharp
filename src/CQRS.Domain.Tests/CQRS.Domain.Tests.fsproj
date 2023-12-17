@@ -1,12 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <GenerateProgramFile>false</GenerateProgramFile>
-    <IsPackable>false</IsPackable>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Bogus"/>
     <PackageReference Include="coverlet.collector"/>
@@ -23,9 +16,8 @@
 
   <ItemGroup>
     <Compile Include="ResultCheck.fs"/>
-    <Compile Include="InventoryEventsApplierTest.fs"/>
-    <Compile Include="InventoryAggregateTest.fs"/>
-    <Compile Include="Program.fs"/>
+    <Compile Include="InventoryEventsApplierTests.fs" />
+    <Compile Include="InventoryAggregateTests.fs" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <GenerateProgramFile>false</GenerateProgramFile>
-    <IsPackable>false</IsPackable>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="coverlet.collector"/>
     <PackageReference Include="Bogus"/>
@@ -20,7 +13,6 @@
 
   <ItemGroup>
     <Compile Include="Tests.fs"/>
-    <Compile Include="Program.fs"/>
   </ItemGroup>
 
 </Project>
