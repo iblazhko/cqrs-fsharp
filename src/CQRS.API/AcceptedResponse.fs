@@ -8,7 +8,7 @@ type AcceptedResponse =
       Timestamp: string }
 
 module AcceptedResponse =
-    let fromEntityId (context: CQRS.Ports.Messaging.Context) entityId =
+    let create (context: CQRS.Ports.Messaging.Context) entityId =
         { EntityId = entityId
           MessageId = context.MessageId.ToString()
           CorrelationId = context.CorrelationId.ToString()

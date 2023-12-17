@@ -50,7 +50,7 @@ module DocumentId =
     let value (s: DocumentId) = s
 
 
-// This type is to be used by implementations of IProjectionStore/IProjectionDocumentCollection
+// This type is intended to be used by implementations of IProjectionStore/IProjectionDocumentCollection
 [<AllowNullLiteral>]
 type DocumentEnvelope<'TViewModel when 'TViewModel: null>() =
     member val Id: DocumentId = DocumentId.Empty with get, set

@@ -41,13 +41,13 @@ type EventMetadata =
       CorrelationId: EventId
       CausationId: EventId }
 
-// This type is to be used by IEventStore implementations
+// This type is intended to be used by IEventStore implementations
 type SerializedEventWithMetadata =
     { Event: string
       EventTypeName: string
       Metadata: EventMetadata option }
 
-// This type is to be used by IEventStore implementations
+// This type is intended to be used by IEventStore implementations
 type SerializedEventStream =
     { StreamId: EventStreamId
       StreamVersion: EventStreamVersion
