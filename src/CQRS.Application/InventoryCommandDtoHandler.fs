@@ -28,7 +28,7 @@ module InventoryCommandDtoHandler =
         | AddItemsToInventory x -> x.InventoryId
         | RemoveItemsFromInventory x -> x.InventoryId
         | DeactivateInventory x -> x.InventoryId
-        |> InventoryEventStreamId.fromInventoryId
+        |> InventoryEventStreamId.create
 
     let private handleCreate currentState cmd =
         task { return cmd |> InventoryAggregate.create currentState }

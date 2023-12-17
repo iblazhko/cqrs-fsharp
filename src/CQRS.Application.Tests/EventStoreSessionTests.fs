@@ -40,7 +40,7 @@ let ``EventStoreSession AppendEvents appends events with no metadata`` () =
             |> Result.defaultWith (fun _ -> failwith "Failed to create inventory name")
             |> InventoryName.create
 
-        let streamId = inventoryId |> InventoryEventStreamId.fromInventoryId
+        let streamId = inventoryId |> InventoryEventStreamId.create
 
         use! eventStreamSession = eventStore.Open<InventoryEvent, InventoryState>(streamId, eventMapper)
 
@@ -68,7 +68,7 @@ let ``EventStoreSession AppendEventsWithMetadata appends events with provided me
             |> Result.defaultWith (fun _ -> failwith "Failed to create inventory name")
             |> InventoryName.create
 
-        let streamId = inventoryId |> InventoryEventStreamId.fromInventoryId
+        let streamId = inventoryId |> InventoryEventStreamId.create
 
         use! eventStreamSession = eventStore.Open<InventoryEvent, InventoryState>(streamId, eventMapper)
 
@@ -112,7 +112,7 @@ let ``EventStoreSession GetAllEvents concatenates existing events and new events
             |> Result.defaultWith (fun _ -> failwith "Failed to create inventory name")
             |> InventoryName.create
 
-        let streamId = inventoryId |> InventoryEventStreamId.fromInventoryId
+        let streamId = inventoryId |> InventoryEventStreamId.create
 
         // set up existing events
         use! existingEventStreamSession = eventStore.Open<InventoryEvent, InventoryState>(streamId, eventMapper)
