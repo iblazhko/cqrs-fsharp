@@ -4,46 +4,49 @@
   </PropertyGroup>
   <!-- App Packages -->
   <ItemGroup>
-    <PackageVersion Include="Bogus" Version="34.0.2"/>
-    <PackageVersion Include="Flurl.Http" Version="3.2.4"/>
-    <PackageVersion Include="FSharp.Core" Version="8.0.100"/>
-    <PackageVersion Include="FSharpPlus" Version="1.5.0"/>
-    <PackageVersion Include="FPrimitive" Version="3.2.2"/>
-    <PackageVersion Include="FsToolkit.ErrorHandling" Version="4.12.0"/>
-    <PackageVersion Include="FsToolkit.ErrorHandling.TaskResult" Version="4.12.0"/>
-    <PackageVersion Include="Marten" Version="6.4.0"/>
-    <PackageVersion Include="MassTransit" Version="8.1.2"/>
-    <PackageVersion Include="MassTransit.RabbitMQ" Version="8.1.2"/>
-    <PackageVersion Include="McMaster.Extensions.CommandLineUtils" Version="4.1.0"/>
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0"/>
-    <PackageVersion Include="Npgsql" Version="8.0.1"/>
-    <PackageVersion Include="Polly" Version="8.2.0"/>
-    <PackageVersion Include="Polly.Contrib.WaitAndRetry" Version="1.1.1"/>
-    <PackageVersion Include="Serilog" Version="3.1.1"/>
-    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.0"/>
-    <PackageVersion Include="Serilog.Sinks.Console" Version="5.0.1"/>
-    <PackageVersion Include="System.Data.SqlClient" Version="4.8.5"/>
-    <PackageVersion Include="System.Text.Json" Version="8.0.0"/>
+    <PackageVersion Include="Bogus" Version="35.0.1" />
+    <PackageVersion Include="Flurl.Http" Version="4.0.0" />
+    <PackageVersion Include="FSharp.Core" Version="8.0.100" />
+    <PackageVersion Include="FSharpPlus" Version="1.5.0" />
+    <PackageVersion Include="FPrimitive" Version="3.2.2" />
+    <PackageVersion Include="FsToolkit.ErrorHandling" Version="4.13.0" />
+    <PackageVersion Include="FsToolkit.ErrorHandling.TaskResult" Version="4.13.0" />
+    <PackageVersion Include="Marten" Version="6.4.1" />
+    <PackageVersion Include="MassTransit" Version="8.1.3" />
+    <PackageVersion Include="MassTransit.RabbitMQ" Version="8.1.3" />
+    <PackageVersion Include="McMaster.Extensions.CommandLineUtils" Version="4.1.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+    <PackageVersion Include="Npgsql" Version="8.0.1" />
+    <PackageVersion Include="Polly" Version="8.2.0" />
+    <PackageVersion Include="Polly.Contrib.WaitAndRetry" Version="1.1.1" />
+    <PackageVersion Include="Serilog" Version="3.1.1" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="5.0.1" />
+    <PackageVersion Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.0" />
   </ItemGroup>
   <!-- Test Packages -->
   <ItemGroup>
-    <PackageVersion Include="coverlet.collector" Version="6.0.0"/>
-    <PackageVersion Include="FsUnit" Version="5.6.1"/>
-    <PackageVersion Include="FsUnit.xUnit" Version="5.6.1"/>
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
-    <PackageVersion Include="xunit" Version="2.6.3"/>
-    <PackageVersion Include="xunit.runner.console" Version="2.6.3"/>
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.5"/>
+    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+    <PackageVersion Include="FsUnit" Version="5.6.1" />
+    <PackageVersion Include="FsUnit.xUnit" Version="5.6.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageVersion Include="xunit" Version="2.6.4" />
+    <PackageVersion Include="xunit.runner.console" Version="2.6.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
   </ItemGroup>
 </Project>
