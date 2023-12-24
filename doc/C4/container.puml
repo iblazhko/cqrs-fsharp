@@ -20,13 +20,13 @@ System_Ext(ext_client, "<&cog> Component that uses inventory", "Adds items to or
 System_Boundary(boundary_system, "Inventory Management") {
     frame "API Host" as api_host {
         Container(api, "API", ".net/f#", "Command and Query API that the client system interacts with")
+        Container(query, "<&cog> Projections Query", ".net/f#", "Retrieves view models", $tags="microservice-component")
     }
 
     frame "Application Host" as app_host {
         Container(domain, "Domain", ".net/f#", "Domain model and services")
         Container(app, "<&cog> Application", ".net/f#", "Processes commands, adds events to event streams", $tags="microservice-component")
         Container(projections, "<&cog> Projections", ".net/f#", "Subscribed to events, updates view model projectsions", $tags="microservice-component")
-        Container(query, "<&cog> Projections Query", ".net/f#", "Retrieves view models", $tags="microservice-component")
     }
 
     ContainerQueue(messagebus, "Message Bus", "RabbitMQ", "Inventory message queues")
@@ -46,12 +46,14 @@ System_Boundary(boundary_system, "Inventory Management") {
     Rel(app, domain, "Uses")
     Rel(projections, domain, "Uses")
 
+    Lay_D(client, api_host)
+    Lay_D(ext_client, api_host)
+
     Lay_D(api_host, app_host)
 
-    Lay_D(api, app)
     Lay_D(api, query)
+
     Lay_L(app, projections)
-    Lay_L(projections, query)
     Lay_D(app, domain)
     Lay_D(projections, domain)
     Lay_D(app, eventstore)

@@ -1,11 +1,12 @@
 {
     "cSpell.words": [
         "CQRS",
-        "Ionide",
-        "Postgres",
         "dockerize",
         "dto",
         "eventstore",
-        "rabbitmq"
+        "Ionide",
+        "Postgres",
+        "rabbitmq",
+        "Serilog"
     ]
 }

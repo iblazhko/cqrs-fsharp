@@ -16,7 +16,7 @@ Solution uses .NET7 / F# and has following major parts:
     make external HTTP/GRPC calls etc.
   - `CQRS.Application`: implements application services; handles Commands sent
     from the API.
-  - `CQRS.Projections`: projects domain Events to view models
+  - `CQRS.Projections`: projects domain Events to view models.
     persisted in a document-based *ProjectionStore*.
   - `CQRS.Projections.Repositories`: retrieve document by Id.
 - *API* components
@@ -28,7 +28,7 @@ Solution uses .NET7 / F# and has following major parts:
   - `CQRS.Ports.MessageBus`: message bus abstraction for sending commands and
     publishing events. Note that registration of messages consumers is not
     a part of this abstraction - it is a part of *Application* host that rely
-    on a specific *MessageBus* adapter.
+    on a specific *MessageBus* adapter
   - `CQRS.Ports.ProjectionStore`: abstraction for persisting event
     projections in denormalized form (document store). Normalized form
     (relational database) projections are not a part of this abstraction
