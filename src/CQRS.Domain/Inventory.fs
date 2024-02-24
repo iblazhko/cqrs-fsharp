@@ -16,7 +16,7 @@ module InventoryId =
 
     let value (InventoryId id) = id
 
-    let rec toString (InventoryId id) =
+    let toString (InventoryId id) =
         $"{stringPrefix}{(id |> EntityId.toString)}"
 
     let fromString propertyName (s: string) =

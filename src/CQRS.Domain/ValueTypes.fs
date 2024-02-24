@@ -7,6 +7,7 @@ These value types are domain-specific, but not entity-specific.
 https://pragprog.com/book/swdddf/domain-modeling-made-functional
 *)
 
+open CQRS.EntityIds
 open FPrimitive
 
 type PositiveInteger = private PositiveInteger of int
@@ -106,8 +107,8 @@ module EmailAddress =
     let value (EmailAddress x) = x
 
 
-type ServiceId = private ServiceId of System.Guid
+type ServiceId = private ServiceId of EntityId
 
 module ServiceId =
-    let newId () = ServiceId(System.Guid.NewGuid())
+    let newId () = ServiceId(EntityId.newId ())
     let value (ServiceId x) = x

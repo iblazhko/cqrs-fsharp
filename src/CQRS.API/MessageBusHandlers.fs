@@ -26,7 +26,7 @@ let createInventory
 
         do! messageBus.SendCommand(Command<CreateInventoryCommand>(Data = cmd, Context = messageContext))
 
-        return Ok(cmd.InventoryId.ToString() |> AcceptedResponse.create messageContext)
+        return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
     }
 
 let renameInventory
@@ -42,7 +42,7 @@ let renameInventory
 
         do! messageBus.SendCommand(Command<RenameInventoryCommand>(Data = cmd, Context = messageContext))
 
-        return Ok(cmd.InventoryId.ToString() |> AcceptedResponse.create messageContext)
+        return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
     }
 
 let addItemsToInventory
@@ -58,7 +58,7 @@ let addItemsToInventory
 
         do! messageBus.SendCommand(Command<AddItemsToInventoryCommand>(Data = cmd, Context = messageContext))
 
-        return Ok(cmd.InventoryId.ToString() |> AcceptedResponse.create messageContext)
+        return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
     }
 
 let removeItemsFromInventory
@@ -74,7 +74,7 @@ let removeItemsFromInventory
 
         do! messageBus.SendCommand(Command<RemoveItemsFromInventoryCommand>(Data = cmd, Context = messageContext))
 
-        return Ok(cmd.InventoryId.ToString() |> AcceptedResponse.create messageContext)
+        return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
     }
 
 let deactivateInventory

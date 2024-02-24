@@ -14,7 +14,7 @@ open System
 // each particular read projection that is driven by a use case.
 [<AllowNullLiteral>]
 type InventoryViewModel() =
-    member val InventoryId: Guid = Guid.Empty with get, set
+    member val InventoryId: string = String.Empty with get, set
     member val Name: string = String.Empty with get, set
     member val StockQuantity: int = 0 with get, set
     member val IsActive: bool = false with get, set
