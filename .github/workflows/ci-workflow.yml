@@ -11,7 +11,7 @@ jobs:
           echo "The job was triggered on ${{ github.repository }}/${{ github.ref }} by ${{ github.event_name }} event from ${{ github.actor }}."
           echo "This job is now running on ${{ runner.os }}."
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v3
         with:
