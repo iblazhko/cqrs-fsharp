@@ -1,6 +1,6 @@
 # Solution Structure
 
-Solution uses .NET7 / F# and has following major parts:
+Solution uses .NET 8 / F# and has following major parts:
 
 - *Core domain* components. Only types and pure functions are allowed here.
   - `CQRS.Domain`: Implements domain model and domain services.
@@ -45,7 +45,7 @@ Solution uses .NET7 / F# and has following major parts:
     [MassTransit](https://masstransit.io/) /
     [RabbitMQ](https://www.rabbitmq.com/) adapter for *MessageBus* port
 - Client (`CQRS.Client`): example of an external client that interacts with
-  the system via API.
+  the system via API
 - Benchmark tests (`benchmark`). (WIP)
 
 For educational purposes *API* and *Application* have separate hosts

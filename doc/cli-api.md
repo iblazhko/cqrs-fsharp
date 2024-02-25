@@ -103,9 +103,9 @@ to add/remove items or rename it.
 dotnet run -- deactivate --id 4IVPNNHXSOZI
 ```
 
-## CURL or Postman
+## Using API Directly
 
-Instead of using CLI you can call API endpoints directly using CURL, Postman,
+Instead of using CLI you can call API endpoints directly using curl, Postman,
 httpie etc.
 
 ```bash

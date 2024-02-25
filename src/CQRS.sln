@@ -85,15 +85,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_devops_", "_devops_", "{26
 	ProjectSection(SolutionItems) = preProject
 		..\build.ps1 = ..\build.ps1
 		..\docker-compose.yaml = ..\docker-compose.yaml
-		CQRS.Application.Host\cqrs-app.Dockerfile = CQRS.Application.Host\cqrs-app.Dockerfile
 		CQRS.API.Host\cqrs-api.Dockerfile = CQRS.API.Host\cqrs-api.Dockerfile
+		CQRS.Application.Host\cqrs-app.Dockerfile = CQRS.Application.Host\cqrs-app.Dockerfile
 		CQRS.CLI\cqrs-cli.Dockerfile = CQRS.CLI\cqrs-cli.Dockerfile
+		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_doc_", "_doc_", "{F423C139-AC78-4C95-AB12-CD4C90731DB4}"
 	ProjectSection(SolutionItems) = preProject
 		..\README.md = ..\README.md
+		..\doc\architecture.md = ..\doc\architecture.md
+		..\doc\build-and-run.md = ..\doc\build-and-run.md
+		..\doc\cli-api.md = ..\doc\cli-api.md
+		..\doc\dependencies.md = ..\doc\dependencies.md
+		..\doc\dto.md = ..\doc\dto.md
+		..\doc\functional-core-imperative-shell.md = ..\doc\functional-core-imperative-shell.md
+		..\doc\solution-structure.md = ..\doc\solution-structure.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_scratchpad_", "_scratchpad_", "{8328D7DD-2274-404E-BE1D-A496666732F6}"
