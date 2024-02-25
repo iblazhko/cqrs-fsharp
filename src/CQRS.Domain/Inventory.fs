@@ -17,11 +17,11 @@ module InventoryId =
     let value (InventoryId id) = id
 
     let toString (InventoryId id) =
-        $"{stringPrefix}{(id |> EntityId.toString)}"
+        $"{stringPrefix}{(id |> EntityId.value)}"
 
     let fromString propertyName (s: string) =
         s.Substring(stringPrefix.Length)
-        |> EntityId.fromString propertyName
+        |> EntityId.create propertyName
         |> Result.map InventoryId
 
 type InventoryName = private InventoryName of MediumString

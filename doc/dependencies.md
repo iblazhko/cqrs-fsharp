@@ -3,9 +3,9 @@
 1. **`Core`**. Projects in this group (`Domain`, `DTO`, `Mapping`) MUST NOT
    depend on any project from `Server` (i.e. there should be no dependencies on
    Ports, Application, or Projections). The only external libraries used there
-   are `FPrimitive` (for declaring value objects constraints) and
+   are `FPrimitive` (for declaring value objects constraints),
    `FSToolkit.ErrorHandling` (for generic `ErrorsByTag` type and errors
-   handling).
+   handling), and `Nanoid` (for short ids generation).
 2. **`Server`**
    1. `Application`
       1. MUST NOT depend on any project from `Adapters`, only on `Ports`

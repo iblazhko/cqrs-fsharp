@@ -3,6 +3,7 @@
   <ItemGroup>
     <PackageReference Include="FPrimitive"/>
     <PackageReference Include="FSharp.Core"/>
+    <PackageReference Include="Nanoid" />
   </ItemGroup>
 
   <ItemGroup>

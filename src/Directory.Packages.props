@@ -4,7 +4,6 @@
   </PropertyGroup>
   <!-- App Packages -->
   <ItemGroup>
-    <PackageVersion Include="Bogus" Version="35.4.0" />
     <PackageVersion Include="Flurl.Http" Version="4.0.2" />
     <PackageVersion Include="FSharp.Core" Version="8.0.200" />
     <PackageVersion Include="FSharpPlus" Version="1.6.1" />
@@ -27,6 +26,7 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+    <PackageVersion Include="Nanoid" Version="3.0.0" />
     <PackageVersion Include="Npgsql" Version="8.0.2" />
     <PackageVersion Include="Polly" Version="8.3.0" />
     <PackageVersion Include="Polly.Contrib.WaitAndRetry" Version="1.1.1" />
@@ -38,6 +38,7 @@
   </ItemGroup>
   <!-- Test Packages -->
   <ItemGroup>
+    <PackageVersion Include="Bogus" Version="35.4.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

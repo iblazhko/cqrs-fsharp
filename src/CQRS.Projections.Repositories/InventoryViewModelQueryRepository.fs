@@ -8,7 +8,7 @@ let getDocument (projectionStore: IProjectionStore<InventoryViewModel>) inventor
     task {
         use! collection = projectionStore.OpenDocumentCollection(InventoryCollection.InventoryProjectionId)
 
-        let documentId = inventoryId |> EntityId.toString |> DocumentId.create
+        let documentId = inventoryId |> EntityId.value |> DocumentId.create
         let! document = collection.GetById(documentId)
 
         return document

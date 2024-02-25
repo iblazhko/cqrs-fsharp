@@ -1,7 +1,7 @@
 namespace CQRS.EntityIds
 
-open System
 open FPrimitive
+open NanoidDotNet
 
 // type alias shared with DTOs
 type EntityIdRawValue = string
@@ -9,23 +9,28 @@ type EntityIdRawValue = string
 type EntityId = private EntityId of EntityIdRawValue
 
 module EntityId =
-    let private normalize (id: String) = id.ToUpperInvariant()
+    [<Literal>]
+    let private idAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-    let newId () = EntityId(Guid.NewGuid().ToString("N") |> normalize) // TODO: replace with shorter id
+    [<Literal>]
+    let private idLength = 12
+
+    (*
+    As per https://zelark.github.io/nano-id-cc/
+    with the alphabet and length above at 1000 IDs / hour rate
+    ~41 years or 363M IDs needed in order to have a 1% probability of at least one collision
+    *)
+
+    let private normalize (id: string) = id.ToUpperInvariant()
+
+    let newId () = EntityId(Nanoid.Generate(idAlphabet, idLength))
 
     let create propertyName (id: EntityIdRawValue) =
         Spec.def
-        |> Spec.notEqual EntityIdRawValue.Empty (propertyName + " should be specified")
+        |> Spec.notEmpty $"{propertyName} should be specified"
+        |> Spec.length idLength $"{propertyName} should be {idLength} characters long"
+        |> Spec.alphanum $"{propertyName} should only contain alphanumeric characters"
         |> Spec.createModel EntityId (id |> normalize)
 
     let value (EntityId id) = id
 
-    let toString id = id |> value
-
-    let fromString propertyName (idStr: string) =
-        let success = not (String.IsNullOrWhiteSpace(idStr))
-
-        if success then
-            idStr |> create propertyName
-        else
-            Error(ErrorsByTag(seq { (propertyName, [ $"Could not parse Id value '{idStr}'" ]) }))

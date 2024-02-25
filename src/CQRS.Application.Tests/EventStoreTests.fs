@@ -9,7 +9,7 @@ open FsUnit
 open Xunit
 
 let private getRandomStreamId () =
-    EntityId.newId () |> EntityId.toString |> EventStreamId.create
+    EntityId.newId () |> EntityId.value |> EventStreamId.create
 
 let private eventMapper = InventoryEventStreamDtoMapper()
 

@@ -76,7 +76,7 @@ module CommandApiHandlers =
         (messageBus: IMessageBus)
         (clock: IClock)
         : Task<ApiResult<AcceptedResponse>> =
-        validatingCommandApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
+        validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = RenameInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value
             cmd.NewName <- name
@@ -88,7 +88,7 @@ module CommandApiHandlers =
         (messageBus: IMessageBus)
         (clock: IClock)
         : Task<ApiResult<AcceptedResponse>> =
-        validatingCommandApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
+        validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = AddItemsToInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value
             cmd.Count <- count
@@ -102,7 +102,7 @@ module CommandApiHandlers =
         (messageBus: IMessageBus)
         (clock: IClock)
         : Task<ApiResult<AcceptedResponse>> =
-        validatingCommandApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
+        validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = RemoveItemsFromInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value
             cmd.Count <- count
@@ -111,7 +111,7 @@ module CommandApiHandlers =
 
 
     let deactivateInventory (id: string) (messageBus: IMessageBus) (clock: IClock) : Task<ApiResult<AcceptedResponse>> =
-        validatingCommandApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
+        validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = DeactivateInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value
 
@@ -122,5 +122,5 @@ module QueryApiHandlers =
         (id: string)
         (projectionStore: IProjectionStore<InventoryViewModel>)
         : Task<ApiResult<InventoryViewModel>> =
-        validatingQueryApiHandler (id |> EntityId.fromString "InventoryId") (fun inventoryId ->
+        validatingQueryApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             inventoryId |> ProjectionHandlers.getInventoryViewModel projectionStore)

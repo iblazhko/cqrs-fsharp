@@ -53,7 +53,7 @@ Output:
 
 ```json
 {
-  "entityId": "1c9beca4-fc8f-4241-99ab-b10f0dc7aa3c",
+  "entityId": "4IVPNNHXSOZI",
   "messageId": "6605a0ed-edb1-4098-8f43-6de7361306d8",
   "correlationId": "40f8b0ac-bc8a-4980-a65f-c6092c7295cf",
   "causationId": "00000000-0000-0000-0000-000000000000",
@@ -61,20 +61,20 @@ Output:
 }
 ```
 
-Note the `entityId` value (`1c9beca4-fc8f-4241-99ab-b10f0dc7aa3c` in the output
-above), you will need it to provide input for following commands.
+Note the `entityId` value (`4IVPNNHXSOZI` in the output above), you will need it
+to provide input for following commands.
 
 ### View current state of an inventory
 
 ```bash
-dotnet run -- get --id "1c9beca4-fc8f-4241-99ab-b10f0dc7aa3c"
+dotnet run -- get --id 4IVPNNHXSOZI
 ```
 
 Output:
 
 ```json
 {
-  "inventoryId": "1c9beca4-fc8f-4241-99ab-b10f0dc7aa3c",
+  "inventoryId": "4IVPNNHXSOZI",
   "name": "ABC-123",
   "stockQuantity": 0,
   "isActive": true
@@ -84,13 +84,13 @@ Output:
 ### Add items to an inventory
 
 ```bash
-dotnet run -- add-items --id "1c9beca4-fc8f-4241-99ab-b10f0dc7aa3c" --count 5
+dotnet run -- add-items --id 4IVPNNHXSOZI --count 5
 ```
 
 ### Remove items from an inventory
 
 ```bash
-dotnet run -- remove-items --id "1c9beca4-fc8f-4241-99ab-b10f0dc7aa3c" --count 2
+dotnet run -- remove-items --id 4IVPNNHXSOZI --count 2
 ```
 
 ### Deactivate an inventory
@@ -100,7 +100,7 @@ Request will only be processed when the inventory is empty, i.e. has
 to add/remove items or rename it.
 
 ```bash
-dotnet run -- deactivate --id "1c9beca4-fc8f-4241-99ab-b10f0dc7aa3c"
+dotnet run -- deactivate --id 4IVPNNHXSOZI
 ```
 
 ## CURL or Postman
@@ -113,11 +113,11 @@ curl -X POST http://localhost:17322/v1/inventories \
    -H 'Content-Type: application/json' \
    -d '{"Name": "ABC-123"}'
 
-curl -X GET  http://localhost:17322/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656
+curl -X GET  http://localhost:17322/v1/inventories/4IVPNNHXSOZI
 
-curl -X POST http://localhost:17322/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656/add/10
+curl -X POST http://localhost:17322/v1/inventories/4IVPNNHXSOZI/add/10
 
-curl -X POST http://localhost:17322/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656/remove/5
+curl -X POST http://localhost:17322/v1/inventories/4IVPNNHXSOZI/remove/5
 
-curl -X POST http://localhost:17322/v1/inventories/60460fd4-80c9-46a6-808f-10b2bd85c656/deactivate
+curl -X POST http://localhost:17322/v1/inventories/4IVPNNHXSOZI/deactivate
 ```
