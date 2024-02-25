@@ -44,7 +44,7 @@ module InventoryCommandDtoHandler =
 
     let private handleDeactivate currentState env cmd =
         task {
-            let time = env.Clock.Now()
+            let time = env.Clock.GetUtcNow()
             let! moonPhase = env.MoonPhase.GetMoonPhase(env.Location, time)
             return cmd |> InventoryAggregate.deactivate currentState moonPhase
         }

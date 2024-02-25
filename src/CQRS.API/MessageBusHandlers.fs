@@ -1,10 +1,10 @@
 module CQRS.API.MessageBusHandlers
 
+open System
 open System.Threading.Tasks
 open CQRS.DTO.V1
 open CQRS.EntityIds
 open CQRS.Ports.Messaging
-open CQRS.Ports.Time
 open FPrimitive
 open Serilog
 
@@ -12,14 +12,14 @@ open CQRS.Ports.Messaging.MessageContextBuilder
 
 let createInventory
     (messageBus: IMessageBus)
-    (clock: IClock)
+    (clock: TimeProvider)
     (cmd: CreateInventoryCommand)
     : Task<Result<AcceptedResponse, ErrorsByTag>> =
     task {
         if (cmd.InventoryId = EntityIdRawValue.Empty) then
             cmd.InventoryId <- (EntityId.newId () |> EntityId.value)
 
-        let messageContext = getNewMessageContext (clock.Now())
+        let messageContext = getNewMessageContext (clock.GetUtcNow())
 
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("Creating inventory {InventoryId}", cmd.InventoryId)
@@ -31,11 +31,11 @@ let createInventory
 
 let renameInventory
     (messageBus: IMessageBus)
-    (clock: IClock)
+    (clock: TimeProvider)
     (cmd: RenameInventoryCommand)
     : Task<Result<AcceptedResponse, ErrorsByTag>> =
     task {
-        let messageContext = getNewMessageContext (clock.Now())
+        let messageContext = getNewMessageContext (clock.GetUtcNow())
 
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("Renaming inventory {InventoryId} to {InventoryName}", cmd.InventoryId, cmd.NewName)
@@ -47,11 +47,11 @@ let renameInventory
 
 let addItemsToInventory
     (messageBus: IMessageBus)
-    (clock: IClock)
+    (clock: TimeProvider)
     (cmd: AddItemsToInventoryCommand)
     : Task<Result<AcceptedResponse, ErrorsByTag>> =
     task {
-        let messageContext = getNewMessageContext (clock.Now())
+        let messageContext = getNewMessageContext (clock.GetUtcNow())
 
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("Adding {Count} items to inventory {InventoryId}", cmd.Count, cmd.InventoryId)
@@ -63,11 +63,11 @@ let addItemsToInventory
 
 let removeItemsFromInventory
     (messageBus: IMessageBus)
-    (clock: IClock)
+    (clock: TimeProvider)
     (cmd: RemoveItemsFromInventoryCommand)
     : Task<Result<AcceptedResponse, ErrorsByTag>> =
     task {
-        let messageContext = getNewMessageContext (clock.Now())
+        let messageContext = getNewMessageContext (clock.GetUtcNow())
 
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("Removing {Count} items from inventory {InventoryId}", cmd.Count, cmd.InventoryId)
@@ -79,11 +79,11 @@ let removeItemsFromInventory
 
 let deactivateInventory
     (messageBus: IMessageBus)
-    (clock: IClock)
+    (clock: TimeProvider)
     (cmd: DeactivateInventoryCommand)
     : Task<Result<AcceptedResponse, ErrorsByTag>> =
     task {
-        let messageContext = getNewMessageContext (clock.Now())
+        let messageContext = getNewMessageContext (clock.GetUtcNow())
 
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("Deactivating inventory {InventoryId}", cmd.InventoryId)

@@ -30,9 +30,9 @@
       1. MUST NOT depend on any project from `Core`
       2. MUST NOT depend on any project from `Application` or `Projections`
       3. One `Port` SHOULD NOT depend on another `Port`. Ideally a `Port` should
-         be fully self-contained. In theory, there can be exceptions, e.g.
-         `Ports.Time` is a cross-cutting concern and could be shared, but this
-         should be used with caution
+         be fully self-contained. In theory, there can be exceptions and
+         if a port encapsulates cross-cutting concern it could be used in
+         other ports, but this should be used with caution
    5. `Adapters`
       1. MUST NOT depend on any project from `Core`
       2. MUST NOT depend on any project from `Application` or `Projections`

@@ -17,7 +17,6 @@
     <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj"/>
     <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj"/>
     <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj"/>
-    <ProjectReference Include="..\CQRS.Ports.Time\CQRS.Ports.Time.fsproj"/>
     <ProjectReference Include="..\CQRS.Projections.Repositories\CQRS.Projections.Repositories.fsproj"/>
     <ProjectReference Include="..\CQRS.Projections.ViewModels\CQRS.Projections.ViewModels.fsproj"/>
   </ItemGroup>

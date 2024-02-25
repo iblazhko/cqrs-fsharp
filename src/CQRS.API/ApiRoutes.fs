@@ -6,7 +6,6 @@ open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http
 open CQRS.Ports.ProjectionStore
 open CQRS.Ports.Messaging
-open CQRS.Ports.Time
 open CQRS.Projections
 open CQRS.DTO.V1
 
@@ -28,39 +27,39 @@ let configureApiRoutes (app: WebApplication) =
 
     app.MapPost(
         "/v1/inventories",
-        Func<CreateInventoryCommand, IMessageBus, IClock, Task<IResult>>
-            (fun (cmd: CreateInventoryCommand) (messageBus: IMessageBus) (clock: IClock) ->
+        Func<CreateInventoryCommand, IMessageBus, TimeProvider, Task<IResult>>
+            (fun (cmd: CreateInventoryCommand) (messageBus: IMessageBus) (clock: TimeProvider) ->
                 useApiHandler (fun () -> CommandApiHandlers.createInventory cmd messageBus clock))
     )
     |> ignore
 
     app.MapPost(
         "/v1/inventories/{id}/rename/{name}",
-        Func<string, string, IMessageBus, IClock, Task<IResult>>
-            (fun (id: string) (name: string) (messageBus: IMessageBus) (clock: IClock) ->
+        Func<string, string, IMessageBus, TimeProvider, Task<IResult>>
+            (fun (id: string) (name: string) (messageBus: IMessageBus) (clock: TimeProvider) ->
                 useApiHandler (fun () -> CommandApiHandlers.renameInventory id name messageBus clock))
     )
     |> ignore
 
     app.MapPost(
         "/v1/inventories/{id}/add/{count}",
-        Func<string, int, IMessageBus, IClock, Task<IResult>>
-            (fun (id: string) (count: int) (messageBus: IMessageBus) (clock: IClock) ->
+        Func<string, int, IMessageBus, TimeProvider, Task<IResult>>
+            (fun (id: string) (count: int) (messageBus: IMessageBus) (clock: TimeProvider) ->
                 useApiHandler (fun () -> CommandApiHandlers.addItemsToInventory id count messageBus clock))
     )
     |> ignore
 
     app.MapPost(
         "/v1/inventories/{id}/remove/{count}",
-        Func<string, int, IMessageBus, IClock, Task<IResult>>
-            (fun (id: string) (count: int) (messageBus: IMessageBus) (clock: IClock) ->
+        Func<string, int, IMessageBus, TimeProvider, Task<IResult>>
+            (fun (id: string) (count: int) (messageBus: IMessageBus) (clock: TimeProvider) ->
                 useApiHandler (fun () -> CommandApiHandlers.removeItemsFromInventory id count messageBus clock))
     )
     |> ignore
 
     app.MapPost(
         "/v1/inventories/{id}/deactivate",
-        Func<string, IMessageBus, IClock, Task<IResult>>(fun (id: string) (messageBus: IMessageBus) (clock: IClock) ->
+        Func<string, IMessageBus, TimeProvider, Task<IResult>>(fun (id: string) (messageBus: IMessageBus) (clock: TimeProvider) ->
             useApiHandler (fun () -> CommandApiHandlers.deactivateInventory id messageBus clock))
     )
     |> ignore

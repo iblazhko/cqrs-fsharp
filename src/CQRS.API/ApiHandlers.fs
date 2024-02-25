@@ -1,5 +1,6 @@
 module CQRS.API.ApiHandlers
 
+open System
 open System.Net
 open System.Text.Json
 open System.Threading.Tasks
@@ -8,7 +9,6 @@ open FPrimitive
 open CQRS.EntityIds
 open CQRS.Ports.ProjectionStore
 open CQRS.Ports.Messaging
-open CQRS.Ports.Time
 open CQRS.Projections
 open CQRS.DTO.V1
 
@@ -63,7 +63,7 @@ module CommandApiHandlers =
     let createInventory
         (cmd: CreateInventoryCommand)
         (messageBus: IMessageBus)
-        (clock: IClock)
+        (clock: TimeProvider)
         : Task<ApiResult<AcceptedResponse>> =
         task {
             let! result = cmd |> MessageBusHandlers.createInventory messageBus clock
@@ -74,7 +74,7 @@ module CommandApiHandlers =
         (id: string)
         (name: string)
         (messageBus: IMessageBus)
-        (clock: IClock)
+        (clock: TimeProvider)
         : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = RenameInventoryCommand()
@@ -86,7 +86,7 @@ module CommandApiHandlers =
         (id: string)
         (count: int)
         (messageBus: IMessageBus)
-        (clock: IClock)
+        (clock: TimeProvider)
         : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = AddItemsToInventoryCommand()
@@ -100,7 +100,7 @@ module CommandApiHandlers =
         (id: string)
         (count: int)
         (messageBus: IMessageBus)
-        (clock: IClock)
+        (clock: TimeProvider)
         : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = RemoveItemsFromInventoryCommand()
@@ -110,7 +110,7 @@ module CommandApiHandlers =
             cmd |> MessageBusHandlers.removeItemsFromInventory messageBus clock)
 
 
-    let deactivateInventory (id: string) (messageBus: IMessageBus) (clock: IClock) : Task<ApiResult<AcceptedResponse>> =
+    let deactivateInventory (id: string) (messageBus: IMessageBus) (clock: TimeProvider) : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = DeactivateInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value

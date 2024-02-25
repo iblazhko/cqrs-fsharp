@@ -1,10 +1,10 @@
 namespace CQRS.Application
 
+open System
 open CQRS.Ports.EventStore
-open CQRS.Ports.Time
 
 type ApplicationEnvironment =
     { Location: Location
-      Clock: IClock
+      Clock: TimeProvider
       EventStore: IEventStore
       MoonPhase: IMoonPhaseService }

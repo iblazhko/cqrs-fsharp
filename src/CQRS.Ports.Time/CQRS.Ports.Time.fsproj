@@ -1,7 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <Compile Include="Clock.fs"/>
-  </ItemGroup>
-
-</Project>

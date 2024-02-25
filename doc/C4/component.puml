@@ -48,7 +48,6 @@ Boundary(domain_boundary, "Domain") {
 
 Boundary(application_boundary, "Application") {
     Boundary(application_env, "Environment") {
-        Component(clock_port, "Clock Port", "", "Abstraction for system clock")
         Component(eventstore_port, "EventStore Port", "", "Abstraction for EventStore")
     }
 
