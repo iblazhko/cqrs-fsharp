@@ -1,6 +1,5 @@
 module CQRS.API.Host.Program
 
-open System
 open CQRS.Configuration
 open CQRS.DTO
 open CQRS.Infrastructure

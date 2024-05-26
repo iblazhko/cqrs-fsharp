@@ -10,7 +10,7 @@
     <PackageVersion Include="FPrimitive" Version="3.2.2" />
     <PackageVersion Include="FsToolkit.ErrorHandling" Version="4.15.2" />
     <PackageVersion Include="FsToolkit.ErrorHandling.TaskResult" Version="4.15.2" />
-    <PackageVersion Include="Marten" Version="7.15.0" />
+    <PackageVersion Include="Marten" Version="7.16.0" />
     <PackageVersion Include="MassTransit" Version="8.2.2" />
     <PackageVersion Include="MassTransit.RabbitMQ" Version="8.2.2" />
     <PackageVersion Include="McMaster.Extensions.CommandLineUtils" Version="4.1.1" />
@@ -45,10 +45,10 @@
     </PackageVersion>
     <PackageVersion Include="FsUnit" Version="6.0.0" />
     <PackageVersion Include="FsUnit.xUnit" Version="6.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageVersion Include="xunit" Version="2.8.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageVersion Include="xunit" Version="2.8.1" />
     <PackageVersion Include="xunit.runner.console" Version="2.6.3" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.0">
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>

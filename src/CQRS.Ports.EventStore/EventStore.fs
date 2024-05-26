@@ -68,7 +68,7 @@ type IEventSerializer =
     abstract member Serialize: (obj * Type) -> string
     abstract member Deserialize: (string * Type) -> obj
 
-// 'TEvent is supposed to be a discriminated union in F# or OneOf<E1,E2,..> in C#
+// 'TEvent is supposed to be a discriminated union in F# or OneOf<E1,E2,...> in C#
 [<Interface>]
 type IEventMapper<'TEvent> =
     abstract member ToDomainEvent: EventWithMetadata -> 'TEvent
@@ -78,7 +78,7 @@ type IEventMapper<'TEvent> =
 type IEventPublisher =
     abstract member Publish: EventWithMetadata seq -> Task
 
-// 'TEvent is supposed to be a discriminated union in F# or OneOf<E1,E2,..> in C#
+// 'TEvent is supposed to be a discriminated union in F# or OneOf<E1,E2,...> in C#
 [<Interface>]
 type IEventStreamProjection<'TEvent, 'TState> =
     abstract member GetInitialState: EventStreamId -> 'TState

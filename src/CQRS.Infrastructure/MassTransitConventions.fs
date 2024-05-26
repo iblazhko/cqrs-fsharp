@@ -12,9 +12,15 @@ let private typeOfCommandDto = typedefof<CqrsCommandDto>
 let private typeofEndpointConvention = typedefof<EndpointConvention>
 let private typeOfUri = typedefof<Uri>
 
+let private removeStringSuffix (suffixes: string array) (s: string) =
+    match suffixes |> Seq.tryFind (fun x -> s.EndsWith(x, StringComparison.Ordinal)) with
+    | Some x -> s.Substring(0, s.Length - x.Length)
+    | None -> s
+
 type PrefixedSnakeCaseEndpointNameFormatter(prefix: string) =
     inherit SnakeCaseEndpointNameFormatter()
-    override self.SanitizeName(name: string) = base.SanitizeName $"{prefix}:{name}"
+    override self.SanitizeName(name: string) = base.SanitizeName $"{prefix}:{name}" |> removeStringSuffix [|"_command"; "_event"|]
+
 
 let private methodEndpointConventionMap =
     typeofEndpointConvention.GetMethod("Map", [| typeOfUri |])
@@ -38,5 +44,3 @@ let registerSendConventionForAssembly (settings: MassTransitSettings) (queuePref
     |> Array.toSeq
     |> Seq.filter (fun x -> (not x.IsAbstract) && typeOfCommandDto.IsAssignableFrom(x))
     |> registerSendConventionForTypes settings queuePrefix
-
-// Message<DTO when DTO :> CqrsDto>

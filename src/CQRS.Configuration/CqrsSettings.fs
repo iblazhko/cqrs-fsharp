@@ -21,7 +21,7 @@ type CqrsHostSettings() =
         |> appendSettingSection this.MassTransit (nameof this.MassTransit)
         |> appendSettingSection this.InfrastructureStartup (nameof this.InfrastructureStartup)
         |> appendSettingSection this.Logging (nameof this.Logging)
-        |> fun b -> b.ToString()
+        |> _.ToString()
 
 
 module CqrsSettingsLoader =
