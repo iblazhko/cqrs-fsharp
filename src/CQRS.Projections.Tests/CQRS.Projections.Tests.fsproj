@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Tests.fs"/>
+    <Compile Include="InventoryViewModelProjectionTests.fs" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,3 @@
-version: "3"
-
 # NOTE: this file is supposed to be joined with the `docker-compose.yaml`
 # Current directory is the root of this repository where the main `docker-compose.yaml` is located.
 

@@ -16,7 +16,7 @@ services:
       - cqrs-net
 
   postgres:
-    image: postgres:16.3
+    image: postgres:16.4
     volumes:
       - postgres-data:/var/lib/postgresql
     ports:

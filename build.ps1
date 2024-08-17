@@ -26,7 +26,7 @@ $buildCoreVersionFile = Join-Path $repositoryDir "version.yaml"
 $buildCoreVersion = $(Get-Content "$buildCoreVersionFile").Substring("version:".Length).Trim()
 $buildVersion = "$buildCoreVersion$VersionSuffix"
 
-$normalizedTarget = $Target.Replace(".", "_")
+$dockerComposeProject = "cqrs"
 
 # This build system expects following solution layout:
 # solution_root/               -- $repositoryDir
@@ -133,43 +133,31 @@ Function Step_PruneDocker {
     $pruneDir = $repositoryDir
     LogWarning "Pruning $pruneDir Docker artifacts"
 
-    LogCmd "docker container prune -f"
-    & docker container prune -f | Out-Null
+    foreach ($resource in @('container', 'image', 'volume', 'network')) {
+        LogCmd "docker $resource prune -f"
+        & docker $resource prune -f | Out-Null
+    }
 
-    # TODO: scan docker-compose.yaml for 'service: <service-name>' with 'dockerfile:' present
-    'cqrs-server-application', 'cqrs-server-api', 'cqrs-client' | ForEach-Object {
-        $dockerImage = "$($_):latest"
-        $dockerImageInfo = & docker image ls $dockerImage -q
-        if ($dockerImageInfo) {
-            LogCmd "docker image rm $dockerImage -f"
-            & docker rmi $dockerImage -f | Out-Null
+    $dockerImages = $(docker image ls --format "{{.Repository}}")
+    foreach ($image in $dockerImages) {
+        if ($image.StartsWith("${dockerComposeProject}-")) {
+            LogCmd "docker image rm $image"
+            & docker image rm $image | Out-Null
         }
     }
 
-    $dockerVolumesList = & docker volume ls -q
-    # TODO: scan docker-compose.yaml 'volumes:' section
-    'cqrs_postgres-data', 'cqrs_rabbitmq-data' | ForEach-Object {
-        $dockerVolume = $_
-        $dockerVolumeInfo = & docker volume ls --filter name=$dockerImage -q
-        if ($dockerVolumeInfo) {
-            LogCmd "docker volume rm $dockerVolume -f"
-            & docker volume rm $dockerVolume -f | Out-Null
+    $dockerVolumes = $(docker volume ls --format "{{.Name}}")
+    foreach ($volume in $dockerVolumes) {
+        if ($volume.StartsWith("${dockerComposeProject}_")) {
+            LogCmd "docker volume rm $volume"
+            & docker volume rm $volume | Out-Null
         }
     }
-
-    LogCmd "docker image prune -f"
-    & docker image prune -f | Out-Null
-
-    LogCmd "docker volume prune -f"
-    & docker volume prune -f | Out-Null
-
-    LogCmd "docker network prune -f"
-    & docker network prune -f | Out-Null
 }
 
 Function Step_DotnetClean {
-    LogStep "dotnet clean $dotnetSolutionFile --verbosity $DotnetVerbosity"
-    & dotnet clean "$dotnetSolutionFile" --verbosity $DotnetVerbosity
+    LogStep "dotnet clean $dotnetSolutionFile --verbosity $DotnetVerbosity -nologo"
+    & dotnet clean "$dotnetSolutionFile" --verbosity $DotnetVerbosity -nologo
     if (-Not ($?)) { exit $LastExitCode }
 }
 
@@ -207,9 +195,9 @@ Function Step_DotnetTest {
 }
 
 Function Step_DockerComposeStart {
-    LogStep "docker compose -p cqrs up --build --abort-on-container-exit"
+    LogStep "docker compose -p $dockerComposeProject up --build --abort-on-container-exit"
     $composeArguments = 'compose', `
-        '-p', 'cqrs', `
+        '-p', $dockerComposeProject, `
         'up', `
         '--build', `
         '--abort-on-container-exit'
@@ -217,13 +205,12 @@ Function Step_DockerComposeStart {
 }
 
 Function Step_DockerComposeStartDetached {
-    LogStep "docker compose -p cqrs up --build -d"
+    LogStep "docker compose -p $dockerComposeProject up --build --detach"
     $composeArguments = 'compose', `
-        '-p', 'cqrs', `
+        '-p', $dockerComposeProject, `
         'up', `
         '--build', `
-        '--abort-on-container-exit'
-        '-d'
+        '--detach'
     Start-Process -FilePath 'docker' -ArgumentList $composeArguments -WorkingDirectory "$repositoryDir"
     if (-Not ($?)) { exit $LastExitCode }
 }
@@ -231,7 +218,7 @@ Function Step_DockerComposeStartDetached {
 Function Step_DockerComposeStop {
     LogStep "docker compose -p cqrs down"
     $composeArguments = 'compose', `
-        '-p', 'cqrs', `
+        '-p', $dockerComposeProject, `
         '-f', './docker-compose.yaml', `
         '-f', './benchmark/docker-compose.yaml', `
         'down'
@@ -239,9 +226,9 @@ Function Step_DockerComposeStop {
 }
 
 Function Step_DockerComposeBenchmark {
-    LogStep "docker-compose -p cqrs -f ./docker-compose.yaml -f ./benchmark/docker-compose-yaml up --build --exit-code-from benchmark-test-runner --abort-on-container-exit"
+    LogStep "docker-compose -p $dockerComposeProject -f ./docker-compose.yaml -f ./benchmark/docker-compose-yaml up --build --exit-code-from benchmark-test-runner --abort-on-container-exit"
     $composeArguments = 'compose', `
-        '-p', 'cqrs', `
+        '-p', $dockerComposeProject, `
         '-f', './docker-compose.yaml', `
         '-f', './benchmark/docker-compose.yaml', `
         'up', `
@@ -274,19 +261,6 @@ Function Step_DockerExtractBenchmarkReport {
     Remove-Item -Path $tempVolumeDir -Recurse -Force | Out-Null
 }
 
-#######################################################################
-# DEPENDENCIES TRACKING
-
-$targetCalls = @{ }
-Function DependsOn {
-    Param([ValidateNotNullOrEmpty()] [string]$Target)
-    $normalizedTarget = $Target.Replace(".", "_")
-
-    if (-Not $targetCalls.ContainsKey($Target)) {
-        Invoke-Expression "Target_$normalizedTarget"
-        $targetCalls.Add($Target, $(Get-Date))
-    }
-}
 
 #######################################################################
 # PRELUDE TARGET
@@ -298,6 +272,7 @@ Function Target_Prelude {
     PreludeStep_ValidateDotNetCli
     PreludeStep_ValidateDockerCli
 }
+
 
 #######################################################################
 # TARGETS
@@ -324,7 +299,7 @@ Function Target_Dotnet_Test {
 
     LogTarget "DotNet.Test"
     $projects = Get-ChildItem -Path $srcDir -Filter "*.Tests.?sproj" -Recurse -File
-    Foreach ($projectFile in $projects) {
+    foreach ($projectFile in $projects) {
         Step_DotnetTest $projectFile
     }
 }
@@ -334,7 +309,7 @@ Function Target_Dotnet_Publish {
 
     LogTarget "DotNet.Publish"
     $dockerfiles = Get-ChildItem -Path $srcDir -Filter "*.Dockerfile" -Recurse -File
-    Foreach ($dockerFile in $dockerfiles) {
+    foreach ($dockerFile in $dockerfiles) {
         LogInfo "Dockerfile found: $dockerFile"
         $projectDirectory = $dockerFile.Directory
         $projectFile = Get-ChildItem -Path $projectDirectory -Filter "*.?sproj" | Select-Object -First 1
@@ -388,18 +363,25 @@ Function Target_FullBuild {
     DependsOn "Dotnet.Publish"
 }
 
+
 #######################################################################
-# PRUNE TARGETS
+# DEPENDENCIES TRACKING
 
-if ($Target -eq "Prune") {
-    Step_PruneBuild
-    Exit 0
+$targetCalls = @{ }
+Function DependsOn {
+    Param([ValidateNotNullOrEmpty()] [string]$Target)
+    if (-Not $targetCalls.ContainsKey($Target)) {
+        Invoke_BuildTarget $Target
+        $targetCalls.Add($Target, $(Get-Date))
+    }
 }
 
-if ($Target -eq "Prune.Docker") {
-    Step_PruneDocker
-    Exit 0
+Function Invoke_BuildTarget {
+    Param([ValidateNotNullOrEmpty()] [string]$Target)
+    $normalizedTarget = $Target.Replace(".", "_")
+    Invoke-Expression "Target_$normalizedTarget"
 }
+
 
 #######################################################################
 # MAIN ENTRY POINT
@@ -410,16 +392,25 @@ $currentLocation = Get-Location
 try {
     LogInfo "*** BUILD: $Target ($Configuration) in $repositoryDir"
     Set-Location $repositoryDir
-    DependsOn "Prelude"
-    Invoke-Expression "Target_$normalizedTarget"
+
+    switch ($Target) {
+        "Prune" { Step_PruneBuild }
+        "Prune.Docker" { Step_PruneDocker }
+        default {
+            DependsOn "Prelude"
+            Invoke_BuildTarget $Target
+        }
+    }
     Write-Host ""
     LogInfo "DONE"
 }
 catch [System.Exception] {
     $errorMessage = "$_"
-    if ($errorMessage.StartsWith("The term 'Target_$normalizedTarget' is not recognized")) {
+    if ($errorMessage.StartsWith("The term 'Target_$Target' is not recognized") -Or
+        $errorMessage.StartsWith("The term 'Target_$normalizedTarget' is not recognized")) {
         LogError("Target $Target is not recognized")
-    } else {
+    }
+    else {
         LogError($errorMessage)
     }
     $exitResult = 1

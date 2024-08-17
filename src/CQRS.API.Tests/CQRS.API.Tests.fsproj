@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Tests.fs"/>
+    <Compile Include="ApiTests.fs" />
   </ItemGroup>
 
 </Project>
