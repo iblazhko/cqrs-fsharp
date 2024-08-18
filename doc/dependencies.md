@@ -45,3 +45,5 @@
       2. `API.Host` MUST NOT depend on `Application`
 3. **`Client`** MUST ONLY depend on `CQRS.DTO` (command DTOs) and
       `CQRS.Projections.ViewModels`
+
+These rules are checked in [Architecture Tests](../src/CQRS.Architecture.Tests/DependenciesTests.fs).
