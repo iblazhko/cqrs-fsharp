@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj"/>
+    <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj" />
     <ProjectReference Include="..\CQRS.Projections.ViewModels\CQRS.Projections.ViewModels.fsproj"/>
   </ItemGroup>
 

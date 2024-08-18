@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+
+        <IsPackable>false</IsPackable>
+        <GenerateProgramFile>false</GenerateProgramFile>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="DependenciesTests.fs" />
+        <Compile Include="Program.fs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.visualstudio" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CQRS.Adapters.InMemoryEventStore\CQRS.Adapters.InMemoryEventStore.fsproj" />
+      <ProjectReference Include="..\CQRS.Adapters.InMemoryMessageBus\CQRS.Adapters.InMemoryMessageBus.fsproj" />
+      <ProjectReference Include="..\CQRS.Adapters.InMemoryProjectionStore\CQRS.Adapters.InMemoryProjectionStore.fsproj" />
+      <ProjectReference Include="..\CQRS.Adapters.MartenDbEventStore\CQRS.Adapters.MartenDbEventStore.fsproj" />
+      <ProjectReference Include="..\CQRS.Adapters.MartenDbProjectionStore\CQRS.Adapters.MartenDbProjectionStore.fsproj" />
+      <ProjectReference Include="..\CQRS.Adapters.MassTransitMessageBus\CQRS.Adapters.MassTransitMessageBus.fsproj" />
+      <ProjectReference Include="..\CQRS.API.Host\CQRS.API.Host.fsproj" />
+      <ProjectReference Include="..\CQRS.API\CQRS.API.fsproj" />
+      <ProjectReference Include="..\CQRS.Application.Host\CQRS.Application.Host.fsproj" />
+      <ProjectReference Include="..\CQRS.Application.MassTransitConsumers\CQRS.Application.MassTransitConsumers.fsproj" />
+      <ProjectReference Include="..\CQRS.Application\CQRS.Application.fsproj" />
+      <ProjectReference Include="..\CQRS.CLI\CQRS.CLI.fsproj" />
+      <ProjectReference Include="..\CQRS.Configuration\CQRS.Configuration.fsproj" />
+      <ProjectReference Include="..\CQRS.Domain\CQRS.Domain.fsproj" />
+      <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj" />
+      <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj" />
+      <ProjectReference Include="..\CQRS.Infrastructure\CQRS.Infrastructure.fsproj" />
+      <ProjectReference Include="..\CQRS.Mapping\CQRS.Mapping.fsproj" />
+      <ProjectReference Include="..\CQRS.Ports.EventStore\CQRS.Ports.EventStore.fsproj" />
+      <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj" />
+      <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj" />
+      <ProjectReference Include="..\CQRS.Projections.MassTransitConsumers\CQRS.Projections.MassTransitConsumers.fsproj" />
+      <ProjectReference Include="..\CQRS.Projections.Repositories\CQRS.Projections.Repositories.fsproj" />
+      <ProjectReference Include="..\CQRS.Projections.ViewModels\CQRS.Projections.ViewModels.fsproj" />
+      <ProjectReference Include="..\CQRS.Projections\CQRS.Projections.fsproj" />
+    </ItemGroup>
+
+</Project>
