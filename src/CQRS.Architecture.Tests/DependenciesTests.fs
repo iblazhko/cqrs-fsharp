@@ -1,5 +1,6 @@
 module DependenciesTests
 
+open System
 open System.Reflection
 open Xunit
 
@@ -16,8 +17,10 @@ let private applicationLayer =
 
 let private projectionsLayer =
     [ Assembly.Load("CQRS.Projections")
-      Assembly.Load("CQRS.Projections.MassTransitConsumers")
-      Assembly.Load("CQRS.Projections.Repositories") ]
+      Assembly.Load("CQRS.Projections.MassTransitConsumers") ]
+
+let private projectionsRepositoriesLayer =
+    [ Assembly.Load("CQRS.Projections.Repositories") ]
 
 let private projectionsViewModelsLayer =
     [ Assembly.Load("CQRS.Projections.ViewModels") ]
@@ -41,6 +44,17 @@ let private apiHostLayer = [ Assembly.Load("CQRS.API.Host") ]
 let private applicationHostLayer = [ Assembly.Load("CQRS.Application.Host") ]
 let private cliHostLayer = [ Assembly.Load("CQRS.CLI") ]
 
+let private coreGroup = domainLayer @ domainDtoLayer
+let private serverGroup = applicationLayer @ projectionsLayer @ projectionsViewModelsLayer @ portsLayer @ adaptersLayer
+
+let private assemblyDependencies (assemblyUnderTest: Assembly) (otherAssembly: Assembly) =
+    Seq.ofArray (assemblyUnderTest.GetReferencedAssemblies())
+    |> Seq.choose (fun x -> if x.FullName = otherAssembly.FullName then Some x else None)
+
+let private assemblyLayerDependencies (assemblyUnderTest: Assembly) (otherLayer: Assembly list) =
+    Seq.ofList otherLayer
+    |> Seq.fold (fun d a -> Seq.append d (assemblyDependencies assemblyUnderTest a)) Seq.empty
+
 let private assemblyHasDependency (assemblyUnderTest: Assembly) (otherAssembly: Assembly) =
     Seq.ofArray (assemblyUnderTest.GetReferencedAssemblies())
     |> Seq.exists (fun x -> x.FullName = otherAssembly.FullName)
@@ -53,15 +67,8 @@ let private layerHasDependency (layerUnderTest: Assembly list) (otherLayer: Asse
     |> Seq.exists (fun x -> otherAssemblies |> Seq.exists (assemblyHasDependency x))
 
 [<Fact>]
-let ``Domain MUST NOT depend on other layers`` () =
-    Assert.False(layerHasDependency domainLayer applicationLayer)
-    Assert.False(layerHasDependency domainDtoLayer applicationLayer)
-    Assert.False(layerHasDependency domainLayer projectionsLayer)
-    Assert.False(layerHasDependency domainDtoLayer projectionsLayer)
-    Assert.False(layerHasDependency domainLayer portsLayer)
-    Assert.False(layerHasDependency domainDtoLayer portsLayer)
-    Assert.False(layerHasDependency domainLayer adaptersLayer)
-    Assert.False(layerHasDependency domainDtoLayer adaptersLayer)
+let ``Core MUST NOT depend on Server`` () =
+    Assert.False(layerHasDependency coreGroup serverGroup)
 
 [<Fact>]
 let ``Application MUST NOT depend on Adapters, only on Ports`` () =
@@ -107,9 +114,24 @@ let ``API MUST NOT depend on Adapters, only on Ports`` () =
     Assert.False(layerHasDependency apiLayer adaptersLayer)
 
 [<Fact>]
+let ``API MUST NOT depend on Application`` () =
+    Assert.False(layerHasDependency apiLayer applicationLayer)
+
+[<Fact>]
+let ``API MUST NOT depend on Projections internal implementation`` () =
+    Assert.False(layerHasDependency apiLayer projectionsLayer)
+
+[<Fact>]
+let ``API depends on Projections Repositories`` () =
+    Assert.True(layerHasDependency apiLayer projectionsRepositoriesLayer)
+
+[<Fact>]
+let ``API depends on Projections ViewModels`` () =
+    Assert.True(layerHasDependency apiLayer projectionsViewModelsLayer)
+
+[<Fact>]
 let ``Ports MUST NOT depend on Domain`` () =
-    Assert.False(layerHasDependency portsLayer domainLayer)
-    Assert.False(layerHasDependency portsLayer domainDtoLayer)
+    Assert.False(layerHasDependency portsLayer coreGroup)
 
 [<Fact>]
 let ``Ports MUST NOT depend on Application`` () =
@@ -120,9 +142,30 @@ let ``Ports MUST NOT depend on Projections`` () =
     Assert.False(layerHasDependency portsLayer projectionsLayer)
 
 [<Fact>]
+let ``Port SHOULD NOT depend on another Port`` () =
+    let ports = Seq.ofList portsLayer
+    let portsDependingOnAnotherPort =
+        ports
+        |> Seq.choose
+               (fun x -> if layerHasDependency
+                              [x]
+                              (ports |> Seq.choose (fun y -> if x.FullName = y.FullName then None else Some y) |> Seq.toList)
+                         then Some (x.GetName().Name)
+                         else None)
+    Assert.Empty(portsDependingOnAnotherPort)
+
+[<Fact>]
+let ``Adapter MUST implement only one Port`` () =
+    let adaptersImplementingMoreThanOnePort = String.Join(", ",
+        adaptersLayer
+        |> Seq.ofList
+        |> Seq.choose(fun x -> if (assemblyLayerDependencies x portsLayer |> Seq.length) > 1 then Some (x.GetName().Name) else None)
+        |> Seq.toArray)
+    Assert.Empty(adaptersImplementingMoreThanOnePort)
+
+[<Fact>]
 let ``Adapters MUST NOT depend on Domain`` () =
-    Assert.False(layerHasDependency adaptersLayer domainLayer)
-    Assert.False(layerHasDependency adaptersLayer domainDtoLayer)
+    Assert.False(layerHasDependency adaptersLayer coreGroup)
 
 [<Fact>]
 let ``Adapters MUST NOT depend on Application`` () =
