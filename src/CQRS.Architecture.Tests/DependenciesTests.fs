@@ -144,14 +144,14 @@ let ``Ports MUST NOT depend on Projections`` () =
 [<Fact>]
 let ``Port SHOULD NOT depend on another Port`` () =
     let ports = Seq.ofList portsLayer
-    let portsDependingOnAnotherPort =
+    let portsDependingOnAnotherPort = String.Join(", ",
         ports
         |> Seq.choose
                (fun x -> if layerHasDependency
                               [x]
                               (ports |> Seq.choose (fun y -> if x.FullName = y.FullName then None else Some y) |> Seq.toList)
                          then Some (x.GetName().Name)
-                         else None)
+                         else None))
     Assert.Empty(portsDependingOnAnotherPort)
 
 [<Fact>]
@@ -159,8 +159,7 @@ let ``Adapter MUST implement only one Port`` () =
     let adaptersImplementingMoreThanOnePort = String.Join(", ",
         adaptersLayer
         |> Seq.ofList
-        |> Seq.choose(fun x -> if (assemblyLayerDependencies x portsLayer |> Seq.length) > 1 then Some (x.GetName().Name) else None)
-        |> Seq.toArray)
+        |> Seq.choose(fun x -> if (assemblyLayerDependencies x portsLayer |> Seq.length) > 1 then Some (x.GetName().Name) else None))
     Assert.Empty(adaptersImplementingMoreThanOnePort)
 
 [<Fact>]
