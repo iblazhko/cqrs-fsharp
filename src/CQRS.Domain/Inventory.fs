@@ -107,7 +107,7 @@ type DeactivateInventory = { InventoryId: InventoryId }
 // In theory, we could remove this from *domain* events,
 // this information can be inferred from the state.
 //
-// However Name is a useful information to have *in DTOs*,
+// However, Name is useful information to have *in DTOs*,
 // and not having it in the domain events can make
 // DTO <-> domain event mapping more complicated.
 

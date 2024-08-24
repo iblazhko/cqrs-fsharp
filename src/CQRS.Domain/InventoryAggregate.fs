@@ -95,11 +95,12 @@ let removeItems (state: InventoryState) (cmd: RemoveItemsFromInventory) =
         | Ok newQuantity ->
             match newQuantity with
             | Empty ->
-                [ (getRemovedFromInventoryEvent state removedCount newQuantity)
-                  (getWentOutOfStockEvent state) ]
-            | _ -> [ (getRemovedFromInventoryEvent state removedCount newQuantity) ]
-        | Error _ -> [ getNotEnoughStockEvent x removedCount ]
-        |> List.toSeq)
+                seq {
+                    getRemovedFromInventoryEvent state removedCount newQuantity
+                    getWentOutOfStockEvent state
+                }
+            | _ -> seq { getRemovedFromInventoryEvent state removedCount newQuantity }
+        | Error _ -> seq { getNotEnoughStockEvent x removedCount })
 
 // Random business rule: cannot deactivate an inventory when the moon is in full phase
 let deactivate (state: InventoryState) (moonPhase: MoonPhase) (cmd: DeactivateInventory) =
