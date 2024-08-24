@@ -25,8 +25,7 @@ let apply (vm: InventoryViewModel) (evt: InventoryEvent) =
         vm.IsActive <- false
         vm
     | ItemInStock _
-    | ItemWentOutOfStock _
-    | RequestedMoreItemsThanHaveInStock _ -> vm
+    | ItemWentOutOfStock _ -> vm
 
 let private getProjectionId _ =
     InventoryCollection.InventoryProjectionId
@@ -39,7 +38,6 @@ let private getDocumentId evt =
     | ItemsRemovedFromInventory x -> x.InventoryId
     | ItemInStock x -> x.InventoryId
     | ItemWentOutOfStock x -> x.InventoryId
-    | RequestedMoreItemsThanHaveInStock x -> x.InventoryId
     | InventoryDeactivated x -> x.InventoryId
     |> InventoryProjectionDocumentId.fromInventoryId
 

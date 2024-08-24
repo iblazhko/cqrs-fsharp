@@ -23,7 +23,6 @@
     <Compile Include="ItemsAddedToInventory'.fs"/>
     <Compile Include="ItemsRemovedFromInventory'.fs"/>
     <Compile Include="ItemInStock'.fs"/>
-    <Compile Include="RequestedMoreItemsThanHaveInStock'.fs"/>
     <Compile Include="ItemWentOutOfStock'.fs"/>
     <Compile Include="InventoryDeactivated'.fs"/>
     <Compile Include="InventoryCommand'.fs"/>

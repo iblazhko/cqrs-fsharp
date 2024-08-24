@@ -121,20 +121,3 @@ let ``Apply ItemWentOutOfStock event`` () =
           StockQuantity = currentState.StockQuantity
           IsNew = currentState.IsNew
           IsActive = currentState.IsActive }
-
-[<Fact>]
-let ``Apply RequestedMoreItemsThanHaveInStock event`` () =
-    let evt =
-        InventoryEvent.RequestedMoreItemsThanHaveInStock
-            { InventoryId = inventoryId
-              Name = inventoryName
-              StockQuantity = testStockQuantity 10
-              RequestedCount = testStockQuantityNumber 15 }
-
-    InventoryStateProjection.apply currentState evt
-    |> assertState
-        { InventoryId = currentState.InventoryId
-          Name = currentState.Name
-          StockQuantity = currentState.StockQuantity
-          IsNew = currentState.IsNew
-          IsActive = currentState.IsActive }

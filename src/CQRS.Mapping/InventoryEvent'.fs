@@ -14,7 +14,6 @@ let toDTO (evt: InventoryEvent) =
     | ItemsRemovedFromInventory x -> x |> ItemsRemovedFromInventory'.toDTO :> CqrsEventDto
     | ItemInStock x -> x |> ItemInStock'.toDTO :> CqrsEventDto
     | ItemWentOutOfStock x -> x |> ItemWentOutOfStock'.toDTO :> CqrsEventDto
-    | RequestedMoreItemsThanHaveInStock x -> x |> RequestedMoreItemsThanHaveInStock'.toDTO :> CqrsEventDto
     | InventoryDeactivated x -> x |> InventoryDeactivated'.toDTO :> CqrsEventDto
 
 let ofDTO (dto: CqrsEventDto) =
@@ -31,10 +30,6 @@ let ofDTO (dto: CqrsEventDto) =
         |> Result.map InventoryEvent.ItemsRemovedFromInventory
     | :? ItemInStockEvent as x -> x |> ItemInStock'.ofDTO |> Result.map InventoryEvent.ItemInStock
     | :? ItemWentOutOfStockEvent as x -> x |> ItemWentOutOfStock'.ofDTO |> Result.map InventoryEvent.ItemWentOutOfStock
-    | :? RequestedMoreItemsThanHaveInStockEvent as x ->
-        x
-        |> RequestedMoreItemsThanHaveInStock'.ofDTO
-        |> Result.map InventoryEvent.RequestedMoreItemsThanHaveInStock
     | :? InventoryDeactivatedEvent as x ->
         x
         |> InventoryDeactivated'.ofDTO

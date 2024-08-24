@@ -20,4 +20,3 @@ let apply (state: InventoryState) (e: InventoryEvent) : InventoryState =
             StockQuantity = x.NewStockQuantity }
     | ItemInStock _ -> state
     | ItemWentOutOfStock _ -> state
-    | RequestedMoreItemsThanHaveInStock _ -> state

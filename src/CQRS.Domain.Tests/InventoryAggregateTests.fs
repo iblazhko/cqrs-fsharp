@@ -174,38 +174,18 @@ let ``Removing all items from Inventory produces OutOfStock event`` () =
 
 [<Fact>]
 let ``Items cannot be removed if not enough items available in stock`` () =
-    let countToRemove = testStockQuantityNumber 1
-
     removeItems
         currentStateWithNoStock
         { InventoryId = inventoryId
-          Count = countToRemove }
-    |> assertAggregateSuccess (
-        seq {
-            InventoryEvent.RequestedMoreItemsThanHaveInStock
-                { InventoryId = inventoryId
-                  Name = inventoryName
-                  StockQuantity = currentStateWithNoStock.StockQuantity
-                  RequestedCount = countToRemove }
-        }
-    )
-
-    let countToRemove = testStockQuantityNumber 6
+          Count = testStockQuantityNumber 1 }
+    |> assertAggregateFailure (CannotRequestMoreThanHaveInStock inventoryId)
 
     removeItems
         { currentState with
             StockQuantity = testStockQuantity 5 }
         { InventoryId = inventoryId
-          Count = countToRemove }
-    |> assertAggregateSuccess (
-        seq {
-            InventoryEvent.RequestedMoreItemsThanHaveInStock
-                { InventoryId = inventoryId
-                  Name = inventoryName
-                  StockQuantity = currentState.StockQuantity
-                  RequestedCount = countToRemove }
-        }
-    )
+          Count = testStockQuantityNumber 6 }
+    |> assertAggregateFailure (CannotRequestMoreThanHaveInStock inventoryId)
 
 [<Fact>]
 let ``Inventory can be deactivated if no items available in stock`` () =

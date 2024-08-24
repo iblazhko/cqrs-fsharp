@@ -144,12 +144,6 @@ type ItemWentOutOfStock =
     { InventoryId: InventoryId
       Name: InventoryName }
 
-type RequestedMoreItemsThanHaveInStock =
-    { InventoryId: InventoryId
-      Name: InventoryName
-      StockQuantity: StockQuantity
-      RequestedCount: PositiveInteger }
-
 type InventoryDeactivated =
     { InventoryId: InventoryId
       Name: InventoryName }
@@ -170,7 +164,6 @@ type InventoryEvent =
     | ItemsRemovedFromInventory of ItemsRemovedFromInventory
     | ItemInStock of ItemInStock
     | ItemWentOutOfStock of ItemWentOutOfStock
-    | RequestedMoreItemsThanHaveInStock of RequestedMoreItemsThanHaveInStock
     | InventoryDeactivated of InventoryDeactivated
 
 // All domain failures

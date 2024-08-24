@@ -16,6 +16,17 @@ let private invokeIfExists (state: InventoryState) (id: InventoryId) (action: In
     | x when not (x.InventoryId = id) -> Error(InventoryIdMismatch(x.InventoryId, id))
     | x -> Ok(action x)
 
+let private invokeAsResultIfExists
+    (state: InventoryState)
+    (id: InventoryId)
+    (action: InventoryState -> Result<InventoryEvent seq, InventoryFailure>)
+    =
+    match state with
+    | x when x.IsNew -> Error(DoesNotExist x.InventoryId)
+    | x when not x.IsActive -> Error(Deactivated x.InventoryId)
+    | x when not (x.InventoryId = id) -> Error(InventoryIdMismatch(x.InventoryId, id))
+    | x -> action x
+
 let private deactivateIfEmpty (state: InventoryState) (id: InventoryId) (action: InventoryState -> InventoryEvent seq) =
     match state with
     | x when x.IsNew -> Error(DoesNotExist x.InventoryId)
@@ -25,32 +36,6 @@ let private deactivateIfEmpty (state: InventoryState) (id: InventoryId) (action:
         match x.StockQuantity with
         | StockQuantity.InventoryCount _ -> Error(CannotDeactivateNonEmpty x.InventoryId)
         | StockQuantity.Empty -> Ok(action x)
-
-let private getInStockEvent (x: InventoryState) count =
-    ItemInStock
-        { InventoryId = x.InventoryId
-          Name = x.Name
-          StockQuantity = count |> StockQuantity.create }
-
-let private getWentOutOfStockEvent (x: InventoryState) =
-    ItemWentOutOfStock
-        { InventoryId = x.InventoryId
-          Name = x.Name }
-
-let private getNotEnoughStockEvent (x: InventoryState) requestedCount =
-    RequestedMoreItemsThanHaveInStock
-        { InventoryId = x.InventoryId
-          Name = x.Name
-          StockQuantity = x.StockQuantity
-          RequestedCount = requestedCount }
-
-let private getRemovedFromInventoryEvent (x: InventoryState) removedCount newQuantity =
-    ItemsRemovedFromInventory
-        { InventoryId = x.InventoryId
-          Name = x.Name
-          RemovedCount = removedCount
-          OldStockQuantity = x.StockQuantity
-          NewStockQuantity = newQuantity }
 
 let create (state: InventoryState) (cmd: CreateInventory) =
     invokeIfNew state (fun () ->
@@ -76,31 +61,49 @@ let addItems (state: InventoryState) (cmd: AddItemsToInventory) =
         let count = cmd.Count
 
         seq {
-            ItemsAddedToInventory
-                { InventoryId = x.InventoryId
-                  Name = x.Name
-                  AddedCount = count
-                  OldStockQuantity = x.StockQuantity
-                  NewStockQuantity = StockQuantity.add x.StockQuantity count }
+            yield
+                ItemsAddedToInventory
+                    { InventoryId = x.InventoryId
+                      Name = x.Name
+                      AddedCount = count
+                      OldStockQuantity = x.StockQuantity
+                      NewStockQuantity = StockQuantity.add x.StockQuantity count }
 
             if state.StockQuantity = Empty then
-                getInStockEvent x count
+                yield
+                    ItemInStock
+                        { InventoryId = x.InventoryId
+                          Name = x.Name
+                          StockQuantity = count |> StockQuantity.create }
         })
 
 let removeItems (state: InventoryState) (cmd: RemoveItemsFromInventory) =
-    invokeIfExists state cmd.InventoryId (fun x ->
+    let getEvents (x: InventoryState) removedCount newQuantity outOfStock =
+        seq {
+            yield
+                ItemsRemovedFromInventory
+                    { InventoryId = x.InventoryId
+                      Name = x.Name
+                      RemovedCount = removedCount
+                      OldStockQuantity = x.StockQuantity
+                      NewStockQuantity = newQuantity }
+
+            if outOfStock then
+                yield
+                    ItemWentOutOfStock
+                        { InventoryId = x.InventoryId
+                          Name = x.Name }
+        }
+
+    invokeAsResultIfExists state cmd.InventoryId (fun x ->
         let removedCount = cmd.Count
 
         match StockQuantity.subtract x.StockQuantity removedCount with
         | Ok newQuantity ->
             match newQuantity with
-            | Empty ->
-                seq {
-                    getRemovedFromInventoryEvent state removedCount newQuantity
-                    getWentOutOfStockEvent state
-                }
-            | _ -> seq { getRemovedFromInventoryEvent state removedCount newQuantity }
-        | Error _ -> seq { getNotEnoughStockEvent x removedCount })
+            | Empty -> Ok(getEvents state removedCount newQuantity true)
+            | _ -> Ok(getEvents state removedCount newQuantity false)
+        | Error _ -> Error(CannotRequestMoreThanHaveInStock state.InventoryId))
 
 // Random business rule: cannot deactivate an inventory when the moon is in full phase
 let deactivate (state: InventoryState) (moonPhase: MoonPhase) (cmd: DeactivateInventory) =
