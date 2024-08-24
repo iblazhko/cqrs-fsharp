@@ -23,7 +23,6 @@ open CQRS.EntityIds
 open CQRS.DTO.V1
 open CQRS.Domain.Inventory
 open CQRS.Application
-open CQRS.Adapters
 open CQRS.Ports.EventStore
 
 let eventStore =

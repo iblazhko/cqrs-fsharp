@@ -14,10 +14,7 @@ let configureApp (app: IApplicationBuilder) =
     app
 
 let configureServices (settings: CqrsHostSettings) (services: IServiceCollection) =
-    let builder = services.AddHealthChecks()
-
-
-    builder.Services
+    services
         .AddHealthChecks()
         .Add(
             HealthCheckRegistration(
