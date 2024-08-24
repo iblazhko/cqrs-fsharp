@@ -2,7 +2,6 @@ namespace CQRS.Infrastructure
 
 open System.Threading
 open System.Threading.Tasks
-open CQRS.Configuration.Infrastructure
 open Microsoft.Extensions.Diagnostics.HealthChecks
 
 type RabbitMqHealthCheck(connectionString: string) =

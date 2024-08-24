@@ -46,7 +46,8 @@ type AddItemsToInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPha
                   EventStore = eventStore
                   MoonPhase = moonPhase }
 
-type RemoveItemsFromInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPhaseService, eventStore: IEventStore) =
+type RemoveItemsFromInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPhaseService, eventStore: IEventStore)
+    =
     interface IConsumer<RemoveItemsFromInventoryCommand> with
         member this.Consume(context) =
             context

@@ -59,8 +59,9 @@ let configureApiRoutes (app: WebApplication) =
 
     app.MapPost(
         "/v1/inventories/{id}/deactivate",
-        Func<string, IMessageBus, TimeProvider, Task<IResult>>(fun (id: string) (messageBus: IMessageBus) (clock: TimeProvider) ->
-            useApiHandler (fun () -> CommandApiHandlers.deactivateInventory id messageBus clock))
+        Func<string, IMessageBus, TimeProvider, Task<IResult>>
+            (fun (id: string) (messageBus: IMessageBus) (clock: TimeProvider) ->
+                useApiHandler (fun () -> CommandApiHandlers.deactivateInventory id messageBus clock))
     )
     |> ignore
 

@@ -19,7 +19,10 @@ let private removeStringSuffix (suffixes: string array) (s: string) =
 
 type PrefixedSnakeCaseEndpointNameFormatter(prefix: string) =
     inherit SnakeCaseEndpointNameFormatter()
-    override self.SanitizeName(name: string) = base.SanitizeName $"{prefix}:{name}" |> removeStringSuffix [|"_command"; "_event"|]
+
+    override self.SanitizeName(name: string) =
+        base.SanitizeName $"{prefix}:{name}"
+        |> removeStringSuffix [| "_command"; "_event" |]
 
 
 let private methodEndpointConventionMap =

@@ -110,7 +110,11 @@ module CommandApiHandlers =
             cmd |> MessageBusHandlers.removeItemsFromInventory messageBus clock)
 
 
-    let deactivateInventory (id: string) (messageBus: IMessageBus) (clock: TimeProvider) : Task<ApiResult<AcceptedResponse>> =
+    let deactivateInventory
+        (id: string)
+        (messageBus: IMessageBus)
+        (clock: TimeProvider)
+        : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = DeactivateInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value

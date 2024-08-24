@@ -23,7 +23,8 @@ module EntityId =
 
     let private normalize (id: string) = id.ToUpperInvariant()
 
-    let newId () = EntityId(Nanoid.Generate(idAlphabet, idLength))
+    let newId () =
+        EntityId(Nanoid.Generate(idAlphabet, idLength))
 
     let create propertyName (id: EntityIdRawValue) =
         Spec.def
@@ -33,4 +34,3 @@ module EntityId =
         |> Spec.createModel EntityId (id |> normalize)
 
     let value (EntityId id) = id
-

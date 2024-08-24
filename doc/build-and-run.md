@@ -14,9 +14,9 @@ Development environment is a personal choice, here are some options:
 - [Visual Studio](https://visualstudio.microsoft.com/)
 - [Visual Studio Code](https://code.visualstudio.com/) with following
   extensions:
-  - Ionide F# (`ionide.ionide-fsharp`)
-  - PowerShell (`ms-vscode.powershell`)
-  - Docker (`ms-azuretools.vscode-docker`)
+    - Ionide F# (`ionide.ionide-fsharp`)
+    - PowerShell (`ms-vscode.powershell`)
+    - Docker (`ms-azuretools.vscode-docker`)
 
 ## Build + Test
 
