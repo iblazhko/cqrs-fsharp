@@ -1,70 +1,11 @@
 module CQRS.Domain.Tests.InventoryAggregateTests
 
+open Xunit
 open CQRS.Domain
 open CQRS.Domain.Inventory
-open CQRS.Domain.ValueTypes
-open Xunit
-open InventoryAggregate
-
-let private testInventoryName (name: string) : InventoryName =
-    InventoryName.create (
-        match name |> MediumString.create "InventoryName" with
-        | Ok x -> x
-        | Error _ -> failwith "Internal error"
-    )
-
-let private testStockQuantityNumber (quantity: int) : PositiveInteger =
-    match quantity |> PositiveInteger.create "StockQuantity" with
-    | Ok x -> x
-    | Error _ -> failwith "Internal error"
-
-let private testStockQuantity (quantity: int) : StockQuantity =
-    StockQuantity.create (
-        match quantity |> PositiveInteger.create "StockQuantity" with
-        | Ok x -> x
-        | Error _ -> failwith "Internal error"
-    )
-
-let private inventoryId = InventoryId.newId ()
-let private inventoryName = testInventoryName "INV-123"
-
-let private newState: InventoryState =
-    { InventoryId = inventoryId
-      Name = testInventoryName "N/A"
-      StockQuantity = StockQuantity.Empty
-      IsNew = true
-      IsActive = true }
-
-let private currentState: InventoryState =
-    { InventoryId = inventoryId
-      Name = inventoryName
-      StockQuantity = testStockQuantity 5
-      IsNew = false
-      IsActive = true }
-
-let private currentStateWithNoStock: InventoryState =
-    { InventoryId = inventoryId
-      Name = inventoryName
-      StockQuantity = StockQuantity.Empty
-      IsNew = false
-      IsActive = true }
-
-let private deactivatedState: InventoryState =
-    { InventoryId = inventoryId
-      Name = inventoryName
-      StockQuantity = StockQuantity.Empty
-      IsNew = false
-      IsActive = false }
-
-let assertAggregateSuccess expectedEvents result =
-    match result with
-    | Ok actualEvents -> Assert.Equal($"%A{expectedEvents}", $"%A{actualEvents}")
-    | Error error -> Assert.Fail($"%A{error}")
-
-let assertAggregateFailure expectedFailure result =
-    match result with
-    | Ok actualEvents -> Assert.Fail($"%A{actualEvents}")
-    | Error error -> Assert.Equal($"%A{expectedFailure}", $"%A{error}")
+open CQRS.Domain.InventoryAggregate
+open CQRS.Domain.Tests.DomainTestsSetup
+open CQRS.Domain.Tests.AggregateAssertions
 
 [<Fact>]
 let ``Inventory can be created`` () =

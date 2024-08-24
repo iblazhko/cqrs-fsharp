@@ -15,9 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="ResultCheck.fs"/>
-    <Compile Include="InventoryEventsApplierTests.fs" />
-    <Compile Include="InventoryAggregateTests.fs" />
+    <Compile Include="DomainTestsSetup.fs"/>
+    <Compile Include="AggregateAssertions.fs"/>
+    <Compile Include="StateAssertions.fs"/>
+    <Compile Include="InventoryAggregateTests.fs"/>
+    <Compile Include="InventoryEventsApplierTests.fs"/>
   </ItemGroup>
 
 </Project>
