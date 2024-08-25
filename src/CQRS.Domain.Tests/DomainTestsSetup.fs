@@ -4,23 +4,21 @@ open CQRS.Domain.Inventory
 open CQRS.Domain.ValueTypes
 
 let testInventoryName (name: string) : InventoryName =
-    InventoryName.create (
-        match name |> MediumString.create "InventoryName" with
-        | Ok x -> x
-        | Error _ -> failwith "Internal error"
-    )
+    name
+    |> MediumString.create "InventoryName"
+    |> Result.defaultWith (fun _ -> failwith "Internal error")
+    |> InventoryName.create
 
 let testStockQuantityNumber (quantity: int) : PositiveInteger =
-    match quantity |> PositiveInteger.create "StockQuantity" with
-    | Ok x -> x
-    | Error _ -> failwith "Internal error"
+    quantity
+    |> PositiveInteger.create "StockQuantity"
+    |> Result.defaultWith (fun _ -> failwith "Internal error")
 
 let testStockQuantity (quantity: int) : StockQuantity =
-    StockQuantity.create (
-        match quantity |> PositiveInteger.create "StockQuantity" with
-        | Ok x -> x
-        | Error _ -> failwith "Internal error"
-    )
+    quantity
+    |> PositiveInteger.create "StockQuantity"
+    |> Result.defaultWith (fun _ -> failwith "Internal error")
+    |> StockQuantity.create
 
 let inventoryId = InventoryId.newId ()
 let inventoryName = testInventoryName "INV-123"

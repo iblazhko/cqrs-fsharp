@@ -3,10 +3,17 @@ module CQRS.Application.Tests.EventStoreTests
 open CQRS.Adapters.EventStore
 open CQRS.Application
 open CQRS.Domain.Inventory
+open CQRS.Domain.ValueTypes
 open CQRS.EntityIds
 open CQRS.Ports.EventStore
 open FsUnit
 open Xunit
+
+let testInventoryName (name: string) : InventoryName =
+    name
+    |> MediumString.create "InventoryName"
+    |> Result.defaultWith (fun _ -> failwith "Internal error")
+    |> InventoryName.create
 
 let private getRandomStreamId () =
     EntityId.newId () |> EntityId.value |> EventStreamId.create

@@ -8,23 +8,16 @@ open FsToolkit.ErrorHandling
 
 type InventoryEventStreamProjection() =
     let getIdFromStreamId (streamId: EventStreamId) : InventoryId =
-        let idResult =
-            streamId |> EventStreamId.value |> InventoryId.fromString "InventoryId"
-
-        match idResult with
-        | Ok x -> x
-        | Error _ -> failwith "Failed to create InventoryId"
+        streamId
+        |> EventStreamId.value
+        |> InventoryId.fromString "InventoryId"
+        |> Result.defaultWith (fun _ -> failwith "Failed to create InventoryId")
 
     let newInventoryName () : InventoryName =
-        let nameResult =
-            result {
-                let! ms = "N/A" |> MediumString.create "InventoryName"
-                return ms |> InventoryName.create
-            }
-
-        match nameResult with
-        | Ok x -> x
-        | Error _ -> failwith "Failed to create InventoryName"
+        "N/A"
+        |> MediumString.create "InventoryName"
+        |> Result.defaultWith (fun _ -> failwith "Failed to create InventoryName")
+        |> InventoryName.create
 
     interface IEventStreamProjection<InventoryEvent, InventoryState> with
         member this.GetInitialState(eventStreamId) =
