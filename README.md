@@ -61,9 +61,12 @@ See [“Interacting with the system using API”](./doc/cli-api.md) document.
 
 ## References
 
-1. Fowler, Martin. “Bliki: CQRS” martinfowler.com, 2011-07-14, <https://martinfowler.com/bliki/CQRS.html>.
-1. Wlaschin, Scott. “Domain Modeling Made Functional”. P1.0, The Pragmatic Programmers,
+1. Wlaschin, Scott. “Domain Modeling Made Functional”, The Pragmatic Programmers,
    2018-01, <https://pragprog.com/titles/swdddf/domain-modeling-made-functional/>.
-1. Young, Gregory. “CQRS Documents” wordpress.com,
+2. Evans, Eric. “Domain-Driven Design: Tackling Complexity in the Heart of Software”, Addison-Wesley Professional, 2003-09-11
+3. Fowler, Martin. “Bliki: CQRS” martinfowler.com, 2011-07-14, <https://martinfowler.com/bliki/CQRS.html>.
+4. Young, Gregory. “CQRS Documents” wordpress.com,
    2010-11, <https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf>.
-1. Young, Gregory. “Simple CQRS” github.com, 2015-01-13, <https://github.com/gregoryyoung/m-r>.
+5. Young, Gregory. “Simple CQRS” github.com, 2015-01-13, <https://github.com/gregoryyoung/m-r>.
+6. Fowler, Martin. “Event Sourcing” martinfowler.com, 2005-12-12, <https://martinfowler.com/eaaDev/EventSourcing.html>.
+7. Microsoft Learning. “Event Sourcing pattern”, learn.microsoft.com <https://learn.microsoft.com/en-us/azure/architecture/patterns/event-sourcing>.
