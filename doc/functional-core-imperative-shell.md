@@ -21,7 +21,7 @@ publishing events using *MessageBus Port*, storing events using
 *EventStore Port*, and communicating with external services.
 
 > *WIP*. In principle, this part can be changed to be pure functions as well,
-> with all of the I/O invocations lifted to the outer shell described below.
+> with all the I/O invocations lifted to the outer shell described below.
 
 Application implements generic Command DTO handler that is using
 *EventStore Port*, and Event DTO handler that uses *ProjectionStore Port*.
@@ -34,7 +34,7 @@ Non-pure imperative shell consists of two main parts:
   Dependency Injection components, and while implemented in F#, code there
   can be considered rather imperative. Here we prepare environment - read
   configuration from `appsettings.json` / environment variables, register
-  adapters in MS DI, register MassTransit consumers etc. Finally we start
+  adapters in MS DI, register MassTransit consumers etc. Finally, we start
   the host by using methods provided in Microsoft Hosting.
 
 * Input triggers. Here we take inputs from either API calls or incoming

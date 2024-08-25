@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - .NET 8.0 SDK: <https://dotnet.microsoft.com/download>
-- PowerShell Core: <https://github.com/powershell/powershell>
+- PowerShell: <https://github.com/powershell/powershell>
 - Docker with Docker Compose: <https://www.docker.com/>
 
 ### Development Environment
@@ -40,7 +40,7 @@ To completely remove all the intermediate build files:
 ./build.ps1 Prune
 ```
 
-To cleanup Docker containers and images, first make sure that the system
+To clean up Docker containers and images, first make sure that the system
 is stopped (see `DockerCompose.Stop` target below).
 
 Then run command

@@ -37,7 +37,7 @@ information.
 ### Prerequisites
 
 - .NET 8.0 SDK: <https://dotnet.microsoft.com/download>
-- PowerShell Core: <https://github.com/powershell/powershell>
+- PowerShell: <https://github.com/powershell/powershell>
 - Docker with Docker Compose: <https://www.docker.com/>
 
 #### Development Environment
