@@ -1,5 +1,6 @@
 module CQRS.Mapping.InventoryCommand'
 
+open System
 open CQRS.DTO
 open CQRS.DTO.V1
 open CQRS.Domain.Inventory
@@ -16,6 +17,7 @@ let toDTO (cmd: InventoryCommand) =
 
 let ofDTO (dto: CqrsCommandDto) =
     match dto with
+    | x when (isNull x) -> raise (ArgumentNullException("DTO instance is required", (nameof dto)))
     | :? CreateInventoryCommand as x -> x |> CreateInventory'.ofDTO |> Result.map InventoryCommand.CreateInventory
     | :? RenameInventoryCommand as x -> x |> RenameInventory'.ofDTO |> Result.map InventoryCommand.RenameInventory
     | :? AddItemsToInventoryCommand as x ->

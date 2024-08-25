@@ -1,5 +1,6 @@
 module CQRS.Mapping.InventoryEvent'
 
+open System
 open CQRS.DTO
 open CQRS.DTO.V1
 open CQRS.Domain.Inventory
@@ -18,6 +19,7 @@ let toDTO (evt: InventoryEvent) =
 
 let ofDTO (dto: CqrsEventDto) =
     match dto with
+    | x when (isNull x) -> raise (ArgumentNullException("DTO instance is required", (nameof dto)))
     | :? InventoryCreatedEvent as x -> x |> InventoryCreated'.ofDTO |> Result.map InventoryEvent.InventoryCreated
     | :? InventoryRenamedEvent as x -> x |> InventoryRenamed'.ofDTO |> Result.map InventoryEvent.InventoryRenamed
     | :? ItemsAddedToInventoryEvent as x ->

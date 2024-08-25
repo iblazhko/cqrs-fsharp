@@ -178,7 +178,7 @@ type MartenDbEventStore(documentStore: IDocumentStore, eventPublisher: IEventPub
         member this.Save(session) =
             match session with
             | :? MartenDbEventStreamSession<'TEvent, 'TState> as mtSession -> save mtSession
-            | _ -> failwith $"Wrong session type passed to Save"
+            | _ -> failwith $"Wrong session type passed to Save: {session.GetType().FullName}"
 
         // MartenDb IDocumentStore instance lifecycle is managed by the application host
         // hence no disposing is necessary here

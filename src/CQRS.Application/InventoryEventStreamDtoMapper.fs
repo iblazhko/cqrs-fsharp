@@ -1,5 +1,6 @@
 namespace CQRS.Application
 
+open System
 open CQRS.DTO
 open CQRS.Domain.Inventory
 open CQRS.Mapping
@@ -18,12 +19,12 @@ type InventoryEventStreamDtoMapper() =
     interface IEventMapper<InventoryEvent> with
         member this.FromDomainEvent(domainEvent) =
             match domainEvent with
+            | x when (isNull x) -> raise (ArgumentNullException("Event instance is required", (nameof domainEvent)))
             | :? InventoryEvent as x -> x |> InventoryEvent'.toDTO |> box
             | _ -> raise (UnknownEventTypeException(domainEvent.GetType().FullName))
 
-        member this.ToDomainEvent(dtoWithMetadata) =
-            let evt = dtoWithMetadata.Event
-
-            match evt with
+        member this.ToDomainEvent(dtoEventWithMetadata) =
+            match dtoEventWithMetadata.Event with
+            | x when (isNull x) -> raise (ArgumentNullException("Event instance is required", (nameof dtoEventWithMetadata)))
             | :? CqrsEventDto as x -> x |> InventoryEvent'.ofDTO |> mapOrFail
-            | _ -> raise (UnknownEventTypeException(evt.GetType().FullName))
+            | _ -> raise (UnknownEventTypeException(dtoEventWithMetadata.Event.GetType().FullName))
