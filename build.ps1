@@ -82,7 +82,7 @@ Function LogCmd {
 #######################################################################
 # STEPS
 
-Function PreludeStep_ValidateDotNetCli {
+Function PreludeStep_ValidateDotnetCli {
     LogStep "Prelude: .NET CLI"
     # Check if dotnet CLI is available
     $dotnetCmd = Get-Command dotnet -ErrorAction Ignore
@@ -264,12 +264,17 @@ Function Step_DockerExtractBenchmarkReport {
 
 #######################################################################
 # PRELUDE TARGET
-# Special target that is called automatically
+# Special targets that are called automatically
 
-Function Target_Prelude {
-    LogTarget "Prelude"
+Function Target_Prelude_DotnetCli {
+    LogTarget "Prelude - .NET CLI"
 
-    PreludeStep_ValidateDotNetCli
+    PreludeStep_ValidateDotnetCli
+}
+
+Function Target_Prelude_DockerCli {
+    LogTarget "Prelude - Docker CLI"
+
     PreludeStep_ValidateDockerCli
 }
 
@@ -278,26 +283,32 @@ Function Target_Prelude {
 # TARGETS
 
 Function Target_Dotnet_Clean {
-    LogTarget "DotNet.Clean"
+    DependsOn "Prelude.DotnetCli"
+
+    LogTarget "Dotnet.Clean"
     Step_DotnetClean
 }
 
 Function Target_Dotnet_Restore {
-    LogTarget "DotNet.Restore"
+    DependsOn "Prelude.DotnetCli"
+
+    LogTarget "Dotnet.Restore"
     Step_DotnetRestore
 }
 
 Function Target_Dotnet_Build {
-    DependsOn "Dotnet_Restore"
+    DependsOn "Prelude.DotnetCli"
+    DependsOn "Dotnet.Restore"
 
-    LogTarget "DotNet.Build"
+    LogTarget "Dotnet.Build"
     Step_DotnetBuild
 }
 
 Function Target_Dotnet_Test {
+    DependsOn "Prelude.DotnetCli"
     DependsOn "Dotnet.Build"
 
-    LogTarget "DotNet.Test"
+    LogTarget "Dotnet.Test"
     $projects = Get-ChildItem -Path $srcDir -Filter "*.Tests.?sproj" -Recurse -File
     foreach ($projectFile in $projects) {
         Step_DotnetTest $projectFile
@@ -305,9 +316,10 @@ Function Target_Dotnet_Test {
 }
 
 Function Target_Dotnet_Publish {
+    DependsOn "Prelude.DotnetCli"
     DependsOn "Dotnet.Build"
 
-    LogTarget "DotNet.Publish"
+    LogTarget "Dotnet.Publish"
     $dockerfiles = Get-ChildItem -Path $srcDir -Filter "*.Dockerfile" -Recurse -File
     foreach ($dockerFile in $dockerfiles) {
         LogInfo "Dockerfile found: $dockerFile"
@@ -319,6 +331,7 @@ Function Target_Dotnet_Publish {
 }
 
 Function Target_DockerCompose_Start {
+    DependsOn "Prelude_DockerCli"
     DependsOn "Dotnet.Publish"
 
     LogTarget "DockerCompose.Start"
@@ -332,6 +345,7 @@ Function Target_DockerCompose_Start {
 }
 
 Function Target_DockerCompose_StartDetached {
+    DependsOn "Prelude_DockerCli"
     DependsOn "Dotnet.Publish"
 
     LogTarget "DockerCompose.StartDetached"
@@ -339,11 +353,14 @@ Function Target_DockerCompose_StartDetached {
 }
 
 Function Target_DockerCompose_Stop {
+    DependsOn "Prelude_DockerCli"
+
     LogTarget "DockerCompose.Stop"
     Step_DockerComposeStop
 }
 
 Function Target_DockerCompose_Benchmark {
+    DependsOn "Prelude_DockerCli"
     DependsOn "Dotnet.Publish"
 
     LogTarget "DockerCompose.Benchmark"
@@ -394,10 +411,15 @@ try {
     Set-Location $repositoryDir
 
     switch ($Target) {
-        "Prune" { Step_PruneBuild }
-        "Prune.Docker" { Step_PruneDocker }
+        "Prune" {
+            PreludeStep_ValidateDotnetCli
+            Step_PruneBuild
+        }
+        "Prune.Docker" {
+            PreludeStep_ValidateDockerCli
+            Step_PruneDocker
+        }
         default {
-            DependsOn "Prelude"
             Invoke_BuildTarget $Target
         }
     }
