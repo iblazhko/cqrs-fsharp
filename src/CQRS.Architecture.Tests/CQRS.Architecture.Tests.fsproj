@@ -1,18 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-
-    <IsPackable>false</IsPackable>
-    <GenerateProgramFile>false</GenerateProgramFile>
-    <IsTestProject>true</IsTestProject>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="DependenciesTests.fs"/>
-    <Compile Include="Program.fs"/>
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="coverlet.collector"/>
     <PackageReference Include="Microsoft.NET.Test.Sdk"/>
@@ -46,6 +33,10 @@
     <ProjectReference Include="..\CQRS.Projections.Repositories\CQRS.Projections.Repositories.fsproj"/>
     <ProjectReference Include="..\CQRS.Projections.ViewModels\CQRS.Projections.ViewModels.fsproj"/>
     <ProjectReference Include="..\CQRS.Projections\CQRS.Projections.fsproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="DependenciesTests.fs"/>
   </ItemGroup>
 
 </Project>
