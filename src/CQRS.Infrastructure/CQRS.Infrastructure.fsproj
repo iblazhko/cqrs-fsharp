@@ -20,6 +20,7 @@
     <ProjectReference Include="..\CQRS.Adapters.MartenDbEventStore\CQRS.Adapters.MartenDbEventStore.fsproj"/>
     <ProjectReference Include="..\CQRS.Adapters.MartenDbProjectionStore\CQRS.Adapters.MartenDbProjectionStore.fsproj"/>
     <ProjectReference Include="..\CQRS.Adapters.MassTransitMessageBus\CQRS.Adapters.MassTransitMessageBus.fsproj"/>
+    <ProjectReference Include="..\CQRS.Application.CommandProcessingStatusRecording\CQRS.Application.CommandProcessingStatusRecording.fsproj" />
     <ProjectReference Include="..\CQRS.Application\CQRS.Application.fsproj"/>
     <ProjectReference Include="..\CQRS.Configuration\CQRS.Configuration.fsproj"/>
     <ProjectReference Include="..\CQRS.Domain\CQRS.Domain.fsproj"/>

@@ -4,6 +4,7 @@ open System
 open System.Net
 open System.Text.Json
 open System.Threading.Tasks
+open CQRS.Application.CommandProcessingStatusRecording
 open Microsoft.AspNetCore.Http
 open FPrimitive
 open CQRS.EntityIds
@@ -61,9 +62,9 @@ let private validatingQueryApiHandler validationResult operation =
 
 module CommandApiHandlers =
     let createInventory
-        (cmd: CreateInventoryCommand)
         (messageBus: IMessageBus)
         (clock: TimeProvider)
+        (cmd: CreateInventoryCommand)
         : Task<ApiResult<AcceptedResponse>> =
         task {
             let! result = cmd |> MessageBusHandlers.createInventory messageBus clock
@@ -71,10 +72,9 @@ module CommandApiHandlers =
         }
 
     let renameInventory
-        (id: string)
-        (name: string)
         (messageBus: IMessageBus)
         (clock: TimeProvider)
+        (id: string, name: string)
         : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = RenameInventoryCommand()
@@ -83,10 +83,9 @@ module CommandApiHandlers =
             cmd |> MessageBusHandlers.renameInventory messageBus clock)
 
     let addItemsToInventory
-        (id: string)
-        (count: int)
         (messageBus: IMessageBus)
         (clock: TimeProvider)
+        (id: string, count: int)
         : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = AddItemsToInventoryCommand()
@@ -97,10 +96,9 @@ module CommandApiHandlers =
 
 
     let removeItemsFromInventory
-        (id: string)
-        (count: int)
         (messageBus: IMessageBus)
         (clock: TimeProvider)
+        (id: string, count: int)
         : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = RemoveItemsFromInventoryCommand()
@@ -111,9 +109,9 @@ module CommandApiHandlers =
 
 
     let deactivateInventory
-        (id: string)
         (messageBus: IMessageBus)
         (clock: TimeProvider)
+        (id: string)
         : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = DeactivateInventoryCommand()
@@ -123,8 +121,22 @@ module CommandApiHandlers =
 
 module QueryApiHandlers =
     let getInventory
-        (id: string)
         (projectionStore: IProjectionStore<InventoryViewModel>)
+        (id: string)
         : Task<ApiResult<InventoryViewModel>> =
         validatingQueryApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             inventoryId |> ProjectionHandlers.getInventoryViewModel projectionStore)
+
+    let getCommandProcessingStatus
+        (projectionStore: IProjectionStore<CommandProcessingStatusViewModel>)
+        (id: string)
+        : Task<ApiResult<CommandProcessingStatusViewModel>> =
+        task {
+            let! result = MessagingId(id) |> ProjectionHandlers.getCommandProcessingStatus projectionStore
+
+            return
+                match result with
+                | ProjectionHandlers.DocumentQueryResult.Document vm -> ApiResult.Success vm
+                | ProjectionHandlers.DocumentQueryResult.NotFound -> ApiResult.NotFound
+                | ProjectionHandlers.DocumentQueryResult.BadRequest x -> ApiResult.ValidationError x
+        }

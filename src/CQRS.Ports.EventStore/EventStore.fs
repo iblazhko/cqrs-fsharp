@@ -1,6 +1,7 @@
 namespace CQRS.Ports.EventStore
 
 open System
+open System.Threading
 open System.Threading.Tasks
 
 (*
@@ -76,7 +77,7 @@ type IEventMapper<'TEvent> =
 
 [<Interface>]
 type IEventPublisher =
-    abstract member Publish: EventWithMetadata seq -> Task
+    abstract member Publish: EventWithMetadata seq * CancellationToken option -> Task
 
 // 'TEvent is supposed to be a discriminated union in F# or OneOf<E1,E2,...> in C#
 [<Interface>]

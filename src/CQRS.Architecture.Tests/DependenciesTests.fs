@@ -14,6 +14,9 @@ let private applicationLayer =
     [ Assembly.Load("CQRS.Application")
       Assembly.Load("CQRS.Application.MassTransitConsumers") ]
 
+let private applicationCommandProcessingStatusRecordingLayer =
+    [ Assembly.Load("CQRS.Application.CommandProcessingStatusRecording") ]
+
 let private projectionsLayer =
     [ Assembly.Load("CQRS.Projections")
       Assembly.Load("CQRS.Projections.MassTransitConsumers") ]
@@ -47,6 +50,7 @@ let private coreGroup = domainLayer @ domainDtoLayer
 
 let private serverGroup =
     applicationLayer
+    @ applicationCommandProcessingStatusRecordingLayer
     @ projectionsLayer
     @ projectionsViewModelsLayer
     @ portsLayer

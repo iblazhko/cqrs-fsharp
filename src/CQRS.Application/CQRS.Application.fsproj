@@ -7,6 +7,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CQRS.Application.CommandProcessingStatusRecording\CQRS.Application.CommandProcessingStatusRecording.fsproj" />
     <ProjectReference Include="..\CQRS.Domain\CQRS.Domain.fsproj"/>
     <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj"/>
     <ProjectReference Include="..\CQRS.Mapping\CQRS.Mapping.fsproj"/>

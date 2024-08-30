@@ -178,7 +178,7 @@ type InMemoryEventStore(serializer: IEventSerializer, eventPublisher: IEventPubl
                 // before we start publishing
                 do!
                     match eventPublisher with
-                    | Some p -> p.Publish(eventStream.Events)
+                    | Some p -> p.Publish(eventStream.Events, None)
                     | None -> Task.CompletedTask
 
                 eventStreams.AddOrUpdate(

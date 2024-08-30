@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="CommandProcessingStatusRecordingService.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj" />
+      <ProjectReference Include="..\CQRS.Ports.ProjectionStore\CQRS.Ports.ProjectionStore.fsproj" />
+    </ItemGroup>
+
+</Project>

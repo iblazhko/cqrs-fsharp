@@ -43,6 +43,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CQRS.API.Tests", "CQRS.API.
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CQRS.Application", "CQRS.Application\CQRS.Application.fsproj", "{376E8D7B-03EB-4F76-8265-478D6A6D7259}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CQRS.Application.CommandProcessingStatusRecording", "CQRS.Application.CommandProcessingStatusRecording\CQRS.Application.CommandProcessingStatusRecording.fsproj", "{45F419D2-0EF4-4C9A-9594-24A4EAF3D658}"
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CQRS.Application.Host", "CQRS.Application.Host\CQRS.Application.Host.fsproj", "{F61B7A64-5688-484C-B73A-BE4D2D8D3199}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CQRS.Application.MassTransitConsumers", "CQRS.Application.MassTransitConsumers\CQRS.Application.MassTransitConsumers.fsproj", "{CD1253FD-C78D-4D5F-BA2A-60EF3087A4E0}"
@@ -81,6 +82,9 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CQRS.Projections.Tests", "C
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CQRS.Projections.ViewModels", "CQRS.Projections.ViewModels\CQRS.Projections.ViewModels.fsproj", "{6CE8BF6D-3F9D-4BF4-85BA-5F535B87E4E6}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CQRS.Architecture.Tests", "CQRS.Architecture.Tests\CQRS.Architecture.Tests.fsproj", "{81AC1063-9122-4D12-B97A-E419E980A776}"
+EndProject
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_devops_", "_devops_", "{26EB687D-0F5F-4714-AEC6-3BE288A42400}"
 	ProjectSection(SolutionItems) = preProject
 		..\build.ps1 = ..\build.ps1
@@ -108,8 +112,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_scratchpad_", "_scratchpad
 	ProjectSection(SolutionItems) = preProject
 		.\scratchpad.fsx = .\scratchpad.fsx
 	EndProjectSection
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CQRS.Architecture.Tests", "CQRS.Architecture.Tests\CQRS.Architecture.Tests.fsproj", "{81AC1063-9122-4D12-B97A-E419E980A776}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -240,6 +242,10 @@ Global
 		{81AC1063-9122-4D12-B97A-E419E980A776}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81AC1063-9122-4D12-B97A-E419E980A776}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81AC1063-9122-4D12-B97A-E419E980A776}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45F419D2-0EF4-4C9A-9594-24A4EAF3D658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45F419D2-0EF4-4C9A-9594-24A4EAF3D658}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45F419D2-0EF4-4C9A-9594-24A4EAF3D658}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45F419D2-0EF4-4C9A-9594-24A4EAF3D658}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5BC6F134-B9EA-4622-8CCE-F48B0E032503} = {5F03BBC5-004F-4EE1-83DE-04DE8D1ED7EA}
@@ -279,5 +285,6 @@ Global
 		{6CE8BF6D-3F9D-4BF4-85BA-5F535B87E4E6} = {03445632-7BC9-4390-9543-A31B4E84BA2C}
 		{C70E4DBA-9856-4D03-AFA2-39CFE49EAF74} = {03445632-7BC9-4390-9543-A31B4E84BA2C}
 		{81AC1063-9122-4D12-B97A-E419E980A776} = {02789696-87D6-474B-B208-2C0FFFA742E4}
+		{45F419D2-0EF4-4C9A-9594-24A4EAF3D658} = {4DB53A34-7B56-498D-A9A0-5D0C2A43FDD8}
 	EndGlobalSection
 EndGlobal

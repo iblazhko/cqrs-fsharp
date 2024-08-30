@@ -134,7 +134,7 @@ type MartenDbEventStore(documentStore: IDocumentStore, eventPublisher: IEventPub
 
             do!
                 match eventPublisher with
-                | Some p -> p.Publish(eventStream.Events)
+                | Some p -> p.Publish(eventStream.Events, None)
                 | None -> Task.CompletedTask
 
             let mtEvents = eventStream.Events |> Seq.map (fun x -> x.Event)

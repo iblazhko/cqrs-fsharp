@@ -24,7 +24,7 @@ let createInventory
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("Creating inventory {InventoryId}", cmd.InventoryId)
 
-        do! messageBus.SendCommand(Command<CreateInventoryCommand>(Data = cmd, Context = messageContext))
+        do! messageBus.SendCommand(Command<CreateInventoryCommand>(Data = cmd, Context = messageContext), None)
 
         return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
     }
@@ -40,7 +40,7 @@ let renameInventory
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("Renaming inventory {InventoryId} to {InventoryName}", cmd.InventoryId, cmd.NewName)
 
-        do! messageBus.SendCommand(Command<RenameInventoryCommand>(Data = cmd, Context = messageContext))
+        do! messageBus.SendCommand(Command<RenameInventoryCommand>(Data = cmd, Context = messageContext), None)
 
         return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
     }
@@ -56,7 +56,7 @@ let addItemsToInventory
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("Adding {Count} items to inventory {InventoryId}", cmd.Count, cmd.InventoryId)
 
-        do! messageBus.SendCommand(Command<AddItemsToInventoryCommand>(Data = cmd, Context = messageContext))
+        do! messageBus.SendCommand(Command<AddItemsToInventoryCommand>(Data = cmd, Context = messageContext), None)
 
         return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
     }
@@ -72,7 +72,7 @@ let removeItemsFromInventory
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("Removing {Count} items from inventory {InventoryId}", cmd.Count, cmd.InventoryId)
 
-        do! messageBus.SendCommand(Command<RemoveItemsFromInventoryCommand>(Data = cmd, Context = messageContext))
+        do! messageBus.SendCommand(Command<RemoveItemsFromInventoryCommand>(Data = cmd, Context = messageContext), None)
 
         return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
     }
@@ -88,7 +88,7 @@ let deactivateInventory
         // TODO: Use explicit dependency for logging
         Log.Logger.Information("Deactivating inventory {InventoryId}", cmd.InventoryId)
 
-        do! messageBus.SendCommand(Command<DeactivateInventoryCommand>(Data = cmd, Context = messageContext))
+        do! messageBus.SendCommand(Command<DeactivateInventoryCommand>(Data = cmd, Context = messageContext), None)
 
         return Ok(cmd.InventoryId.ToString() |> AcceptedResponse.create messageContext)
     }

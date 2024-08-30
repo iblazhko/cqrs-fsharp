@@ -2,6 +2,7 @@ namespace CQRS.Application.MassTransitConsumers
 
 open System
 open CQRS.Application
+open CQRS.Application.CommandProcessingStatusRecording
 open CQRS.DTO.V1
 open CQRS.Ports.EventStore
 open MassTransit
@@ -16,7 +17,13 @@ hence need separate consumer class per command with consumer class name matching
 (`Consumer` suffix is dropped by MassTransit queue name formatter)
 *)
 
-type CreateInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPhaseService, eventStore: IEventStore) =
+type CreateInventoryCommandConsumer
+    (
+        clock: TimeProvider,
+        moonPhase: IMoonPhaseService,
+        eventStore: IEventStore,
+        commandProcessingStatusRecorder: ICommandProcessingStatusRecordingService
+    ) =
     interface IConsumer<CreateInventoryCommand> with
         member this.Consume(context) =
             context
@@ -24,9 +31,16 @@ type CreateInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPhaseSe
                 { Location = SystemLocation.location
                   Clock = clock
                   EventStore = eventStore
-                  MoonPhase = moonPhase }
+                  MoonPhase = moonPhase
+                  CommandProcessingStatusRecorder = commandProcessingStatusRecorder }
 
-type RenameInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPhaseService, eventStore: IEventStore) =
+type RenameInventoryCommandConsumer
+    (
+        clock: TimeProvider,
+        moonPhase: IMoonPhaseService,
+        eventStore: IEventStore,
+        commandProcessingStatusRecorder: ICommandProcessingStatusRecordingService
+    ) =
     interface IConsumer<RenameInventoryCommand> with
         member this.Consume(context) =
             context
@@ -34,9 +48,16 @@ type RenameInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPhaseSe
                 { Location = SystemLocation.location
                   Clock = clock
                   EventStore = eventStore
-                  MoonPhase = moonPhase }
+                  MoonPhase = moonPhase
+                  CommandProcessingStatusRecorder = commandProcessingStatusRecorder }
 
-type AddItemsToInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPhaseService, eventStore: IEventStore) =
+type AddItemsToInventoryCommandConsumer
+    (
+        clock: TimeProvider,
+        moonPhase: IMoonPhaseService,
+        eventStore: IEventStore,
+        commandProcessingStatusRecorder: ICommandProcessingStatusRecordingService
+    ) =
     interface IConsumer<AddItemsToInventoryCommand> with
         member this.Consume(context) =
             context
@@ -44,10 +65,16 @@ type AddItemsToInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPha
                 { Location = SystemLocation.location
                   Clock = clock
                   EventStore = eventStore
-                  MoonPhase = moonPhase }
+                  MoonPhase = moonPhase
+                  CommandProcessingStatusRecorder = commandProcessingStatusRecorder }
 
-type RemoveItemsFromInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPhaseService, eventStore: IEventStore)
-    =
+type RemoveItemsFromInventoryCommandConsumer
+    (
+        clock: TimeProvider,
+        moonPhase: IMoonPhaseService,
+        eventStore: IEventStore,
+        commandProcessingStatusRecorder: ICommandProcessingStatusRecordingService
+    ) =
     interface IConsumer<RemoveItemsFromInventoryCommand> with
         member this.Consume(context) =
             context
@@ -55,9 +82,16 @@ type RemoveItemsFromInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMo
                 { Location = SystemLocation.location
                   Clock = clock
                   EventStore = eventStore
-                  MoonPhase = moonPhase }
+                  MoonPhase = moonPhase
+                  CommandProcessingStatusRecorder = commandProcessingStatusRecorder }
 
-type DeactivateInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPhaseService, eventStore: IEventStore) =
+type DeactivateInventoryCommandConsumer
+    (
+        clock: TimeProvider,
+        moonPhase: IMoonPhaseService,
+        eventStore: IEventStore,
+        commandProcessingStatusRecorder: ICommandProcessingStatusRecordingService
+    ) =
     interface IConsumer<DeactivateInventoryCommand> with
         member this.Consume(context) =
             context
@@ -65,4 +99,5 @@ type DeactivateInventoryCommandConsumer(clock: TimeProvider, moonPhase: IMoonPha
                 { Location = SystemLocation.location
                   Clock = clock
                   EventStore = eventStore
-                  MoonPhase = moonPhase }
+                  MoonPhase = moonPhase
+                  CommandProcessingStatusRecorder = commandProcessingStatusRecorder }

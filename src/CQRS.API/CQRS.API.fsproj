@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CQRS.Application.CommandProcessingStatusRecording\CQRS.Application.CommandProcessingStatusRecording.fsproj" />
     <ProjectReference Include="..\CQRS.DTO\CQRS.DTO.fsproj"/>
     <ProjectReference Include="..\CQRS.EntityIds\CQRS.EntityIds.fsproj"/>
     <ProjectReference Include="..\CQRS.Ports.MessageBus\CQRS.Ports.MessageBus.fsproj"/>
