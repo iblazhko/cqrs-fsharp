@@ -8,7 +8,7 @@ param(
     [ValidateSet("Debug", "Release")]
     [string]$Configuration = "Release",
 
-    [string]$DotnetVerbosity = "quiet",
+    [string]$DotnetVerbosity = "minimal",
 
     [string]$VersionSuffix = ""
 )
@@ -215,46 +215,26 @@ function Step_DockerBuild {
 
 function Step_DockerComposeStart {
     LogStep "docker compose -p $dockerComposeProject up --build --abort-on-container-exit"
-    $composeArguments = 'compose', `
-        '-p', $dockerComposeProject, `
-        'up', `
-        '--build', `
-        '--abort-on-container-exit'
-    Start-Process -FilePath 'docker' -ArgumentList $composeArguments -WorkingDirectory $repositoryDir -Wait
+    & docker compose -p $dockerComposeProject up --build --abort-on-container-exit
+    if (-not $?) { exit $LastExitCode }
 }
 
 function Step_DockerComposeStartDetached {
     LogStep "docker compose -p $dockerComposeProject up --build --detach"
-    $composeArguments = 'compose', `
-        '-p', $dockerComposeProject, `
-        'up', `
-        '--build', `
-        '--detach'
-    Start-Process -FilePath 'docker' -ArgumentList $composeArguments -WorkingDirectory "$repositoryDir"
+    & docker compose -p $dockerComposeProject up --build --detach
     if (-not $?) { exit $LastExitCode }
 }
 
 function Step_DockerComposeStop {
-    LogStep "docker compose -p $dockerComposeProject down"
-    $composeArguments = 'compose', `
-        '-p', $dockerComposeProject, `
-        '-f', './docker-compose.yaml', `
-        '-f', './benchmark/docker-compose.yaml', `
-        'down'
-    Start-Process -FilePath 'docker' -ArgumentList $composeArguments -WorkingDirectory $repositoryDir -Wait
+    LogStep "docker compose -p $dockerComposeProject -f ./docker-compose.yaml -f ./benchmark/docker-compose.yaml down"
+    & docker compose -p $dockerComposeProject -f ./docker-compose.yaml -f ./benchmark/docker-compose.yaml down
+    if (-not $?) { exit $LastExitCode }
 }
 
 function Step_DockerComposeBenchmark {
     LogStep "docker-compose -p $dockerComposeProject -f ./docker-compose.yaml -f ./benchmark/docker-compose-yaml up --build --exit-code-from benchmark-test-runner --abort-on-container-exit"
-    $composeArguments = 'compose', `
-        '-p', $dockerComposeProject, `
-        '-f', './docker-compose.yaml', `
-        '-f', './benchmark/docker-compose.yaml', `
-        'up', `
-        '--build', `
-        '--abort-on-container-exit'
-
-    Start-Process -FilePath 'docker' -ArgumentList $composeArguments -WorkingDirectory $repositoryDir -Wait
+    & docker compose -p $dockerComposeProject -f ./docker-compose.yaml -f ./benchmark/docker-compose-yaml up --build --exit-code-from benchmark-test-runner --abort-on-container-exit
+    if (-not $?) { exit $LastExitCode }
 }
 
 function Step_DockerExtractBenchmarkReport {
@@ -271,7 +251,7 @@ function Step_DockerExtractBenchmarkReport {
     & docker rm $containerName | Out-Null
 
     $tempVolumeDir = Join-Path $benchmarkReportsDir "$tempDir"
-    Foreach ($resultsDir in $(Get-ChildItem -Path $tempVolumeDir)) {
+    foreach ($resultsDir in $(Get-ChildItem -Path $tempVolumeDir)) {
         if (-not $(Test-Path $(Join-Path $benchmarkReportsDir $resultsDir.BaseName))) {
             Move-Item -Path $resultsDir -Destination $benchmarkReportsDir
         }
