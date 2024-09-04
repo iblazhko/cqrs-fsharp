@@ -6,9 +6,9 @@ services:
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
     environment:
-      RABBITMQ_DEFAULT_USER: "cqrs_admin"
-      RABBITMQ_DEFAULT_PASS: "rS8pdo42MLFN"
-      RABBITMQ_DEFAULT_VHOST: "cqrs"
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASSWORD}"
+      RABBITMQ_DEFAULT_VHOST: "${RABBITMQ_VHOST}"
     ports:
       - 5672:5672
       - 15672:15672
@@ -22,9 +22,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: "cqrs_admin"
-      POSTGRES_PASSWORD: "p3YSB7zXN93a"
-      POSTGRES_DB: "cqrs"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_DB}"
     networks:
       - cqrs-net
 
@@ -38,14 +38,14 @@ services:
       CQRS_CqrsApp__ServiceUrl: "http://*:17321"
       CQRS_CqrsApp__MartenDb__Endpoint__Host: "postgres"
       CQRS_CqrsApp__MartenDb__Endpoint__Port: "5432"
-      CQRS_CqrsApp__MartenDb__Username: "cqrs_admin"
-      CQRS_CqrsApp__MartenDb__Password: "p3YSB7zXN93a"
-      CQRS_CqrsApp__MartenDb__Database: "cqrs"
+      CQRS_CqrsApp__MartenDb__Username: "${POSTGRES_USER}"
+      CQRS_CqrsApp__MartenDb__Password: "${POSTGRES_PASSWORD}"
+      CQRS_CqrsApp__MartenDb__Database: "${POSTGRES_DB}"
       CQRS_CqrsApp__MassTransit__RabbitMq__Endpoint__Host: "rabbitmq"
       CQRS_CqrsApp__MassTransit__RabbitMq__Endpoint__Port: "5672"
-      CQRS_CqrsApp__MassTransit__RabbitMq__Username: "cqrs_admin"
-      CQRS_CqrsApp__MassTransit__RabbitMq__Password: "rS8pdo42MLFN"
-      CQRS_CqrsApp__MassTransit__RabbitMq__VHost: "cqrs"
+      CQRS_CqrsApp__MassTransit__RabbitMq__Username: "${RABBITMQ_USER}"
+      CQRS_CqrsApp__MassTransit__RabbitMq__Password: "${RABBITMQ_PASSWORD}"
+      CQRS_CqrsApp__MassTransit__RabbitMq__VHost: "${RABBITMQ_VHOST}"
       CQRS_CqrsApp__Logging__Level: "Information"
     ports:
       - "17321:17321"
@@ -63,14 +63,14 @@ services:
       CQRS_CqrsApi__ServiceUrl: "http://*:17322"
       CQRS_CqrsApi__MartenDb__Endpoint__Host: "postgres"
       CQRS_CqrsApi__MartenDb__Endpoint__Port: "5432"
-      CQRS_CqrsApi__MartenDb__Username: "cqrs_admin"
-      CQRS_CqrsApi__MartenDb__Password: "p3YSB7zXN93a"
-      CQRS_CqrsApi__MartenDb__Database: "cqrs"
+      CQRS_CqrsApi__MartenDb__Username: "${POSTGRES_USER}"
+      CQRS_CqrsApi__MartenDb__Password: "${POSTGRES_PASSWORD}"
+      CQRS_CqrsApi__MartenDb__Database: "${POSTGRES_DB}"
       CQRS_CqrsApi__MassTransit__RabbitMq__Endpoint__Host: "rabbitmq"
       CQRS_CqrsApi__MassTransit__RabbitMq__Endpoint__Port: "5672"
-      CQRS_CqrsApi__MassTransit__RabbitMq__Username: "cqrs_admin"
-      CQRS_CqrsApi__MassTransit__RabbitMq__Password: "rS8pdo42MLFN"
-      CQRS_CqrsApi__MassTransit__RabbitMq__VHost: "cqrs"
+      CQRS_CqrsApi__MassTransit__RabbitMq__Username: "${RABBITMQ_USER}"
+      CQRS_CqrsApi__MassTransit__RabbitMq__Password: "${RABBITMQ_PASSWORD}"
+      CQRS_CqrsApi__MassTransit__RabbitMq__VHost: "${RABBITMQ_VHOST}"
       CQRS_CqrsApi__Logging__Level: "Information"
     ports:
       - "17322:17322"

@@ -215,6 +215,18 @@ function Step_DockerBuild {
 
 function Step_DockerComposeStart {
     LogStep "docker compose -p $dockerComposeProject up --build --abort-on-container-exit"
+
+    if (-not $(Test-Path ".env")) {
+        Set-Content -Path ".env" @"
+POSTGRES_USER=cqrs_admin
+POSTGRES_PASSWORD=changeit
+POSTGRES_DB=cqrs
+RABBITMQ_USER=cqrs_admin
+RABBITMQ_PASSWORD=changeit
+RABBITMQ_VHOST=cqrs
+"@
+    }
+
     & docker compose -p $dockerComposeProject up --build --abort-on-container-exit
     if (-not $?) { exit $LastExitCode }
 }

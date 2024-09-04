@@ -58,5 +58,8 @@ _ReSharper*/
 # Benchmark Test Results
 /benchmark/reports/
 
+# Local .env files
+*.env
+
 # Various temp files
 .DS_Store
