@@ -1,6 +1,7 @@
 module CQRS.Domain.Tests.InventoryAggregateTests
 
 open Xunit
+
 open CQRS.Domain
 open CQRS.Domain.Inventory
 open CQRS.Domain.InventoryAggregate

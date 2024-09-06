@@ -17,7 +17,6 @@
   <ItemGroup>
     <Compile Include="DomainTestsSetup.fs"/>
     <Compile Include="AggregateAssertions.fs"/>
-    <Compile Include="StateAssertions.fs"/>
     <Compile Include="InventoryAggregateTests.fs"/>
     <Compile Include="InventoryEventsApplierTests.fs"/>
   </ItemGroup>

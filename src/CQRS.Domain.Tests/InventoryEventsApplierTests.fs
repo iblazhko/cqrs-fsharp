@@ -1,10 +1,11 @@
 module CQRS.Domain.Tests.InventoryEventsApplierTests
 
 open Xunit
+open FsUnit
+
 open CQRS.Domain
 open CQRS.Domain.Inventory
 open CQRS.Domain.Tests.DomainTestsSetup
-open CQRS.Domain.Tests.StateAssertions
 
 [<Fact>]
 let ``Apply InventoryCreated event`` () =
@@ -15,7 +16,8 @@ let ``Apply InventoryCreated event`` () =
               IsActive = true }
 
     InventoryStateProjection.apply newState evt
-    |> assertState
+    |> should
+        equal
         { InventoryId = inventoryId
           Name = inventoryName
           StockQuantity = StockQuantity.Empty
@@ -30,7 +32,8 @@ let ``Apply InventoryDeactivated event`` () =
               Name = inventoryName }
 
     InventoryStateProjection.apply currentStateWithNoStock evt
-    |> assertState
+    |> should
+        equal
         { InventoryId = inventoryId
           Name = inventoryName
           StockQuantity = StockQuantity.Empty
@@ -48,7 +51,8 @@ let ``Apply InventoryRenamed event`` () =
               NewName = newName }
 
     InventoryStateProjection.apply currentState evt
-    |> assertState
+    |> should
+        equal
         { InventoryId = currentState.InventoryId
           Name = newName
           StockQuantity = currentState.StockQuantity
@@ -66,7 +70,8 @@ let ``Apply ItemsAddedToInventory event`` () =
               AddedCount = testStockQuantityNumber 1 }
 
     InventoryStateProjection.apply currentState evt
-    |> assertState
+    |> should
+        equal
         { InventoryId = currentState.InventoryId
           Name = currentState.Name
           StockQuantity = testStockQuantity 2
@@ -84,7 +89,8 @@ let ``Apply ItemsRemovedFromInventory event`` () =
               RemovedCount = testStockQuantityNumber 1 }
 
     InventoryStateProjection.apply currentState evt
-    |> assertState
+    |> should
+        equal
         { InventoryId = currentState.InventoryId
           Name = currentState.Name
           StockQuantity = testStockQuantity 1
@@ -100,7 +106,8 @@ let ``Apply ItemInStock event`` () =
               StockQuantity = testStockQuantity 3 }
 
     InventoryStateProjection.apply currentState evt
-    |> assertState
+    |> should
+        equal
         { InventoryId = currentState.InventoryId
           Name = currentState.Name
           StockQuantity = currentState.StockQuantity
@@ -115,7 +122,8 @@ let ``Apply ItemWentOutOfStock event`` () =
               Name = inventoryName }
 
     InventoryStateProjection.apply currentState evt
-    |> assertState
+    |> should
+        equal
         { InventoryId = currentState.InventoryId
           Name = currentState.Name
           StockQuantity = currentState.StockQuantity
