@@ -19,7 +19,6 @@ let configuration (settings: CqrsCliSettings) (app: CommandLineApplication) =
         (if inventoryId.HasValue() && count.HasValue() then
              settings.ApiServiceUrl
              |> addItemsToInventory inventoryId.ParsedValue count.ParsedValue
-
              0
          else
              app.Error.WriteLine("Inventory Id and items count must be provided")

@@ -137,7 +137,7 @@ type MartenDbEventStore(documentStore: IDocumentStore, eventPublisher: IEventPub
                 | Some p -> p.Publish(eventStream.Events, None)
                 | None -> Task.CompletedTask
 
-            let mtEvents = eventStream.Events |> Seq.map (fun x -> x.Event)
+            let mtEvents = eventStream.Events |> Seq.map (_.Event)
 
             match eventStream.StreamVersion with
             | EventStreamVersion.New -> session.MartenSession.Events.StartStream(session.EventStreamId, mtEvents)
@@ -164,7 +164,6 @@ type MartenDbEventStore(documentStore: IDocumentStore, eventPublisher: IEventPub
 
         member this.Open<'TEvent, 'TState>(streamId, eventMapper) =
             task {
-                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[EVENTSTORE] Open event stream {EventStreamId}", streamId)
 
                 let eventStreamSession =

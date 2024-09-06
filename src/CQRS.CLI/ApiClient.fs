@@ -18,7 +18,7 @@ let private getWithResponseBody (url: Url) =
     Log.Logger.Information("[GET<] {Url} {ResponseStatusCode} {@ResponseBody}", url, responseStatusCode, responseBody)
 
 let private postWithBody<'a> (body: 'a) (url: Url) =
-    Log.Logger.Information("[POST>] {Url} {DTO}", url, body)
+    Log.Logger.Information("[POST>] {Url} {@RequestBody}", url, body)
 
     let response = url |> postJson body
     let responseStatusCode = response.ResponseMessage.StatusCode

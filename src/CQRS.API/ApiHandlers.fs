@@ -91,7 +91,6 @@ module CommandApiHandlers =
             let cmd = AddItemsToInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value
             cmd.Count <- count
-
             cmd |> MessageBusHandlers.addItemsToInventory messageBus clock)
 
 
@@ -104,7 +103,6 @@ module CommandApiHandlers =
             let cmd = RemoveItemsFromInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value
             cmd.Count <- count
-
             cmd |> MessageBusHandlers.removeItemsFromInventory messageBus clock)
 
 
@@ -116,7 +114,6 @@ module CommandApiHandlers =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
             let cmd = DeactivateInventoryCommand()
             cmd.InventoryId <- inventoryId |> EntityId.value
-
             cmd |> MessageBusHandlers.deactivateInventory messageBus clock)
 
 module QueryApiHandlers =
@@ -133,7 +130,6 @@ module QueryApiHandlers =
         : Task<ApiResult<CommandProcessingStatusViewModel>> =
         task {
             let! result = MessagingId(id) |> ProjectionHandlers.getCommandProcessingStatus projectionStore
-
             return
                 match result with
                 | ProjectionHandlers.DocumentQueryResult.Document vm -> ApiResult.Success vm

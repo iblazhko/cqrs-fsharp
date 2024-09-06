@@ -52,13 +52,12 @@ module InventoryCommandDtoHandler =
     let handleCommand<'TCommandDto when 'TCommandDto :> CqrsCommandDto>
         (env: ApplicationEnvironment)
         (dto: 'TCommandDto)
-        : Task = // TODO: Use Task<Result<unit,CommandHandlerFailure>
+        : Task =
         task {
             let command =
                 dto
                 |> InventoryCommand'.ofDTO
                 |> Result.defaultWith (fun e -> raise (CommandDtoMappingException e))
-            // TODO: map error to CommandHandlerFailure
 
             let streamId = command |> streamIdFromCommand
             use! streamSession = env.EventStore.Open(streamId, eventDtoMapper)
@@ -79,5 +78,4 @@ module InventoryCommandDtoHandler =
 
             do! streamSession.AppendEvents(newEvents |> Seq.map box)
             do! env.EventStore.Save(streamSession)
-        // TODO: map EventStore errors to CommandHandlerFailure
         }

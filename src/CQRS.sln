@@ -84,7 +84,6 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CQRS.Projections.ViewModels
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CQRS.Architecture.Tests", "CQRS.Architecture.Tests\CQRS.Architecture.Tests.fsproj", "{81AC1063-9122-4D12-B97A-E419E980A776}"
 EndProject
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_devops_", "_devops_", "{26EB687D-0F5F-4714-AEC6-3BE288A42400}"
 	ProjectSection(SolutionItems) = preProject
 		..\build.ps1 = ..\build.ps1

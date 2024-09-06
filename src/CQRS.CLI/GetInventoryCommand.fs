@@ -15,7 +15,6 @@ let configuration (settings: CqrsCliSettings) (app: CommandLineApplication) =
     app.OnExecute(fun () ->
         (if inventoryId.HasValue() then
              settings.ApiServiceUrl |> getInventory inventoryId.ParsedValue
-
              0
          else
              app.Error.WriteLine("Inventory Id must be provided")

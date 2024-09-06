@@ -20,17 +20,12 @@ let getInventoryViewModel
     (inventoryId: EntityId)
     : Task<DocumentQueryResult<InventoryViewModel>> =
     task {
-        // TODO: Use explicit dependency for logging
         Log.Logger.Information("Retrieving inventory {InventoryId}", inventoryId)
-
         let! document = inventoryId |> InventoryViewModelQueryRepository.getDocument projectionStore
-
-        let result =
+        return
             match document with
             | Some vm -> Document vm
             | None -> NotFound
-
-        return result
     }
 
 let getCommandProcessingStatus
@@ -38,8 +33,8 @@ let getCommandProcessingStatus
     (commandId: MessagingId)
     : Task<DocumentQueryResult<CommandProcessingStatusViewModel>> =
     task {
+        Log.Logger.Information("Retrieving command processing status {CommandId}", commandId)
         let! result = GetCommandProcessingStatusQueryRepository.getDocument projectionStore commandId
-
         return
             match result with
             | Some vm -> Document vm

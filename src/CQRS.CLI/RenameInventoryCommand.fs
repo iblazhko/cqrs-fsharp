@@ -19,7 +19,6 @@ let configuration (settings: CqrsCliSettings) (app: CommandLineApplication) =
         (if inventoryId.HasValue() && inventoryName.HasValue() then
              settings.ApiServiceUrl
              |> renameInventory inventoryId.ParsedValue inventoryName.ParsedValue
-
              0
          else
              app.Error.WriteLine("Inventory Id and name must be provided")

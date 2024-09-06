@@ -26,7 +26,7 @@ exception EventDtoMappingException of ErrorsByTag
 let handleEvent<'TEventDto, 'TViewModel when 'TEventDto :> CqrsEventDto and 'TViewModel: null>
     (context: DomainEventDtoHandlerContext<'TEventDto, 'TViewModel>)
     (dto: 'TEventDto)
-    : Task = // TODO: Use Task<Result<unit,EventHandlerFailure>>
+    : Task =
     task {
         let evt =
             dto
@@ -38,5 +38,4 @@ let handleEvent<'TEventDto, 'TViewModel when 'TEventDto :> CqrsEventDto and 'TVi
 
         use! documentCollection = context.ProjectionStore.OpenDocumentCollection<'TViewModel>(documentCollectionId)
         do! documentCollection.Update(documentId, context.ViewModelUpdateAction evt)
-    // TODO: map ProjectionStore errors to EventHandlerFailure
     }

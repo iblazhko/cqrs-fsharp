@@ -3,16 +3,11 @@ namespace CQRS.Ports.EventStore
 open System.Text.Json
 
 type SystemTextJsonEventSerializer(?options: JsonSerializerOptions) =
-    let optionsOrNull =
-        match options with
-        | Some o -> o
-        | None -> null
-
     interface IEventSerializer with
         member this.Serialize(eventWithType) =
             let evt, evtType = eventWithType
-            JsonSerializer.Serialize(evt, evtType, optionsOrNull)
+            JsonSerializer.Serialize(evt, evtType, ?options = options)
 
         member this.Deserialize(eventWithType) =
             let evt, evtType = eventWithType
-            JsonSerializer.Deserialize(evt, evtType, optionsOrNull)
+            JsonSerializer.Deserialize(evt, evtType, ?options = options)

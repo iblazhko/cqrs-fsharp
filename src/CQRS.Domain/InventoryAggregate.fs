@@ -78,7 +78,7 @@ let addItems (state: InventoryState) (cmd: AddItemsToInventory) =
         })
 
 let removeItems (state: InventoryState) (cmd: RemoveItemsFromInventory) =
-    let getEvents (x: InventoryState) removedCount newQuantity outOfStock =
+    let getEvents (x: InventoryState) removedCount newQuantity =
         seq {
             yield
                 ItemsRemovedFromInventory
@@ -88,7 +88,7 @@ let removeItems (state: InventoryState) (cmd: RemoveItemsFromInventory) =
                       OldStockQuantity = x.StockQuantity
                       NewStockQuantity = newQuantity }
 
-            if outOfStock then
+            if newQuantity = Empty then
                 yield
                     ItemWentOutOfStock
                         { InventoryId = x.InventoryId
@@ -99,10 +99,7 @@ let removeItems (state: InventoryState) (cmd: RemoveItemsFromInventory) =
         let removedCount = cmd.Count
 
         match StockQuantity.subtract x.StockQuantity removedCount with
-        | Ok newQuantity ->
-            match newQuantity with
-            | Empty -> Ok(getEvents state removedCount newQuantity true)
-            | _ -> Ok(getEvents state removedCount newQuantity false)
+        | Ok newQuantity ->  Ok(getEvents state removedCount newQuantity)
         | Error _ -> Error(CannotRequestMoreThanHaveInStock state.InventoryId))
 
 // Random business rule: cannot deactivate an inventory when the moon is in full phase

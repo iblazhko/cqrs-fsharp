@@ -18,7 +18,6 @@ let handleCommand<'T when 'T :> CqrsCommandDto and 'T: not struct>
     task {
         let message = context.Message
 
-        // TODO: Use explicit dependency for logging
         Log.Logger.Information("[MESSAGE-BUS] {MessageType} {@Message}", message.GetType().FullName, message)
 
         let request = CommandProcessingRequest()

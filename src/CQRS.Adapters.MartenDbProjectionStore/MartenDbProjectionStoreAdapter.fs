@@ -33,7 +33,6 @@ type MartenDbDocumentCollection<'TViewModel when 'TViewModel: null>(documentStor
     interface IProjectionDocumentCollection<'TViewModel> with
         member this.GetById(documentId) =
             task {
-                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Retrieving {DocumentId}", documentId)
 
                 let! envelopeOption = documentId |> tryGetEnvelopeByDocumentId session
@@ -44,7 +43,6 @@ type MartenDbDocumentCollection<'TViewModel when 'TViewModel: null>(documentStor
 
         member this.Update(documentId: DocumentId, updateAction: 'TViewModel -> 'TViewModel) : Task =
             task {
-                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Storing {DocumentId}", documentId)
 
                 let! envelopeOption = documentId |> tryGetEnvelopeByDocumentId session
@@ -71,7 +69,6 @@ type MartenDbDocumentCollection<'TViewModel when 'TViewModel: null>(documentStor
 
         member this.Update(documentId: DocumentId, viewModel: 'TViewModel) : Task =
             task {
-                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Storing {DocumentId}", documentId)
 
                 let! envelopeOption = documentId |> tryGetEnvelopeByDocumentId session
@@ -106,7 +103,6 @@ type MartenDbDocumentCollection<'TViewModel when 'TViewModel: null>(documentStor
 
 [<Sealed>]
 type MartenDbProjectionStore<'TViewModel when 'TViewModel: null>(documentStore: IDocumentStore) =
-
     // in the case of MartenDb, there are no explicit documents collections (like e.g. in MongoDb)
     // so MartenDbProjectionStore simply forwards the documentStore instance
     // (which is supposed to be a singleton) to MartenDbDocumentCollection

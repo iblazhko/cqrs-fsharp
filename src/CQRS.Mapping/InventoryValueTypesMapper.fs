@@ -18,8 +18,7 @@ module StockQuantity' =
 
     let ofDTO (propName: string) (n: int) : Result<StockQuantity, ErrorsByTag> =
         match n with
-        | x when x < 0 -> Error(ErrorsByTag(seq { (propName, [ "Expected non-negative number" ]) }))
-        | x when x = 0 -> Ok Empty
+        | 0 -> Ok Empty
         | x -> x |> PositiveInteger.create propName |> Result.map InventoryCount
 
 module InventoryId' =

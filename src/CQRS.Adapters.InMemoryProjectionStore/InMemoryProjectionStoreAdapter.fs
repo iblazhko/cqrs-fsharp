@@ -7,7 +7,7 @@ open CQRS.Ports.ProjectionStore
 open Serilog
 
 (*
-Note that that this solution has two separate hosts: Application.Host and API.Host;
+Note that this solution has two separate hosts: Application.Host and API.Host;
 these hosts have their own instances of adapters, therefore when using
 InMemoryProjectionStore adapter, documents stored in Application will not be visible in API.
 
@@ -27,22 +27,16 @@ type InMemoryDocumentCollection<'TViewModel when 'TViewModel: null>() =
     interface IProjectionDocumentCollection<'TViewModel> with
         member this.GetById(documentId) =
             task {
-                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Retrieving {DocumentId}", documentId)
-
-                let result =
+                return
                     match documents.TryGetValue(documentId) with
                     | true, doc -> Some(doc)
                     | false, _ -> None
-
-                return result
             }
 
         member this.Update(documentId: DocumentId, updateAction: 'TViewModel -> 'TViewModel) : Task =
             task {
-                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Storing {DocumentId}", documentId)
-
                 documents.AddOrUpdate(
                     documentId,
                     (fun _ -> (newVm ()) |> updateAction),
@@ -53,9 +47,7 @@ type InMemoryDocumentCollection<'TViewModel when 'TViewModel: null>() =
 
         member this.Update(documentId: DocumentId, viewModel: 'TViewModel) : Task =
             task {
-                // TODO: Use explicit dependency for logging
                 Log.Logger.Information("[PROJECTION] Storing {DocumentId} {@Document}", documentId, viewModel)
-
                 documents.AddOrUpdate(documentId, (fun _ -> viewModel), (fun _ -> (fun _ -> viewModel)))
                 |> ignore
             }
@@ -71,13 +63,11 @@ type InMemoryProjectionStore<'TViewModel when 'TViewModel: null>() =
     interface IProjectionStore<'TViewModel> with
         member this.OpenDocumentCollection<'TViewModel>(documentCollectionId) =
             task {
-                let collection =
-                    documentCollections.GetOrAdd(
+                return
+                   documentCollections.GetOrAdd(
                         documentCollectionId,
                         (fun _ -> new InMemoryDocumentCollection<'TViewModel>())
                     )
-
-                return collection
             }
 
         member this.Dispose() = ()

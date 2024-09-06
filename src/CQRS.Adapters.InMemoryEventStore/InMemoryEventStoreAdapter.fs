@@ -7,12 +7,7 @@ open System.Threading.Tasks
 open CQRS.Ports.EventStore
 
 (*
-Note that that this solution has two separate hosts: Application.Host and API.Host;
-these hosts have their own instances of adapters, therefore when using
-InMemoryEventStore adapter, commands sent from API will not be visible in Application.
-
-This adapter is only suitable for unit or behavioural tests where everything
-is hosted in the same process.
+This adapter is only suitable for unit or behavioural tests.
 *)
 
 [<Sealed>]
@@ -37,7 +32,6 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
         member this.GetAllEvents() =
             task {
                 assertSessionIsNotLocked ()
-
                 return
                     { eventStream with
                         Events = allEvents ()
@@ -47,7 +41,6 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
         member this.GetNewEvents() =
             task {
                 assertSessionIsNotLocked ()
-
                 return
                     { eventStream with
                         Events = sessionNewEvents
@@ -57,7 +50,6 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
         member this.AppendEvents newEvents =
             task {
                 assertSessionIsNotLocked ()
-
                 sessionNewEvents <-
                     sessionNewEvents
                     |> List.append (
@@ -75,7 +67,6 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
         member this.AppendEventsWithMetadata newEvents =
             task {
                 assertSessionIsNotLocked ()
-
                 sessionNewEvents <-
                     (sessionNewEvents
                      |> List.append (newEvents |> Seq.filter (fun x -> not (isNull x.Event)) |> Seq.toList))
@@ -84,7 +75,6 @@ type InMemoryEventStreamSession<'TEvent, 'TState>(eventStream: EventStream, even
         member this.GetState projection =
             task {
                 let initialState = projection.GetInitialState(eventStream.StreamId)
-
                 let applyWithProjection state eventWithMetadata =
                     let domainEvent = eventWithMetadata |> eventMapper.ToDomainEvent
                     projection.Apply(state, domainEvent)
@@ -107,10 +97,7 @@ type InMemoryEventStore(serializer: IEventSerializer, eventPublisher: IEventPubl
             name,
             (fun x ->
                 let t = Type.GetType(x)
-
-                if isNull t then
-                    raise (UnknownEventTypeException x)
-
+                if isNull t then raise (UnknownEventTypeException x)
                 t)
         )
 
@@ -126,12 +113,10 @@ type InMemoryEventStore(serializer: IEventSerializer, eventPublisher: IEventPubl
 
         member this.Open<'TEvent, 'TState>(streamId, eventMapper) =
             task {
-                let hasElement, element = eventStreams.TryGetValue(streamId)
-
                 let serializedEventStream =
-                    match hasElement with
-                    | true -> element
-                    | false ->
+                    match eventStreams.TryGetValue(streamId) with
+                    | true, element -> element
+                    | false, _ ->
                         { StreamId = streamId
                           StreamVersion = EventStreamVersion.New
                           Events = Seq.empty }
