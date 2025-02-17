@@ -26,7 +26,7 @@ let private isPortOpen (host: string) (port: int) (timeout: TimeSpan) : bool =
     with _ ->
         false
 
-let private portCheckTimeout = TimeSpan.FromSeconds(3)
+let private portCheckTimeout = TimeSpan.FromSeconds(3.0)
 
 let private getServiceAvailability (service: InfrastructureService) =
     { ServiceName = service.Name
