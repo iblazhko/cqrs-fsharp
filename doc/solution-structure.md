@@ -1,6 +1,6 @@
 # Solution Structure
 
-Solution uses .NET 8 / F# and has following major parts:
+Solution uses .NET 9 / F# and has following major parts:
 
 - *Core domain* components. Only types and pure functions are allowed here.
     - `CQRS.Domain`: Implements domain model and domain services.

@@ -14,7 +14,7 @@ real-life projects.
 
 ## Solution Overview
 
-Solution uses .NET 8 / F# and has following major parts:
+Solution uses .NET 9 / F# and has following major parts:
 
 - *Core domain* components. Only types and pure functions are allowed here.
 - *Application* services that are aware of the outside world and intended
@@ -36,9 +36,10 @@ information.
 
 ### Prerequisites
 
-- .NET 8.0 SDK: <https://dotnet.microsoft.com/download>
+- .NET 9.0 SDK: <https://dotnet.microsoft.com/download>
 - PowerShell: <https://github.com/powershell/powershell>
-- Docker with Docker Compose: <https://www.docker.com/>
+- Docker with Docker Compose: <https://www.docker.com/>,
+  or Podman <https://podman.io/> with [`docker` wrapper](https://podman-desktop.io/docs/migrating-from-docker/emulating-docker-cli-with-podman)
 
 #### Development Environment
 
