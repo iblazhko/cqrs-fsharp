@@ -1,8 +1,8 @@
 module CQRS.Infrastructure.MartenDbConfigurator
 
 open CQRS.Configuration.Infrastructure
+open JasperFx.Events
 open Marten
-open Marten.Events
 open Microsoft.Extensions.DependencyInjection
 
 let configureServices (settings: MartenDbSettings) (services: IServiceCollection) =

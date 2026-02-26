@@ -7,7 +7,6 @@
   <ItemGroup>
     <PackageReference Include="Marten"/>
     <PackageReference Include="MassTransit.RabbitMQ"/>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
     <PackageReference Include="Npgsql"/>
     <PackageReference Include="Serilog"/>
     <PackageReference Include="Serilog.AspNetCore"/>

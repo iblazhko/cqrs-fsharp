@@ -8,7 +8,6 @@
     <PackageReference Include="FPrimitive"/>
     <PackageReference Include="FSharp.Core"/>
     <PackageReference Include="FsToolkit.ErrorHandling.TaskResult"/>
-    <PackageReference Include="Microsoft.Extensions.Logging"/>
     <PackageReference Include="Serilog"/>
   </ItemGroup>
 

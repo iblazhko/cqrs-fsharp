@@ -29,7 +29,7 @@ type MartenDbEventStreamSession<'TEvent, 'TState>
         eventStream.Events |> Seq.append sessionNewEvents
 
 
-    let mapMartenEvents (mtEvents: IReadOnlyList<Marten.Events.IEvent>) =
+    let mapMartenEvents (mtEvents: IReadOnlyList<JasperFx.Events.IEvent>) =
         mtEvents
         |> Seq.map (fun mtEvent ->
             { Event = mtEvent.Data
@@ -137,7 +137,7 @@ type MartenDbEventStore(documentStore: IDocumentStore, eventPublisher: IEventPub
                 | Some p -> p.Publish(eventStream.Events, None)
                 | None -> Task.CompletedTask
 
-            let mtEvents = eventStream.Events |> Seq.map (_.Event)
+            let mtEvents = eventStream.Events |> Seq.map _.Event
 
             match eventStream.StreamVersion with
             | EventStreamVersion.New -> session.MartenSession.Events.StartStream(session.EventStreamId, mtEvents)

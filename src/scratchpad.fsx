@@ -1,23 +1,23 @@
 #time
 
-#r "CQRS.Application.Host/bin/Debug/net9.0/FPrimitive.dll"
-#r "CQRS.Application.Host/bin/Debug/net9.0/FsToolkit.ErrorHandling.dll"
-#r "CQRS.Application.Tests/bin/Debug/net9.0/Microsoft.Extensions.Logging.Abstractions.dll"
+#r "CQRS.Application.Host/bin/Debug/net10.0/FPrimitive.dll"
+#r "CQRS.Application.Host/bin/Debug/net10.0/FsToolkit.ErrorHandling.dll"
+#r "CQRS.Application.Tests/bin/Debug/net10.0/Microsoft.Extensions.Logging.Abstractions.dll"
 
-#r "CQRS.EntityIds/bin/Debug/net9.0/CQRS.EntityIds.dll"
+#r "CQRS.EntityIds/bin/Debug/net10.0/CQRS.EntityIds.dll"
 
-#r "CQRS.Domain/bin/Debug/net9.0/CQRS.Domain.dll"
-#r "CQRS.DTO/bin/Debug/net9.0/CQRS.DTO.dll"
-#r "CQRS.Mapping/bin/Debug/net9.0/CQRS.Mapping.dll"
+#r "CQRS.Domain/bin/Debug/net10.0/CQRS.Domain.dll"
+#r "CQRS.DTO/bin/Debug/net10.0/CQRS.DTO.dll"
+#r "CQRS.Mapping/bin/Debug/net10.0/CQRS.Mapping.dll"
 
-#r "CQRS.Configuration/bin/Debug/net9.0/CQRS.Configuration.dll"
-#r "CQRS.Application/bin/Debug/net9.0/CQRS.Application.dll"
+#r "CQRS.Configuration/bin/Debug/net10.0/CQRS.Configuration.dll"
+#r "CQRS.Application/bin/Debug/net10.0/CQRS.Application.dll"
 
-#r "CQRS.Ports.EventStore/bin/Debug/net9.0/CQRS.Ports.EventStore.dll"
-#r "CQRS.Ports.ProjectionStore/bin/Debug/net9.0/CQRS.Ports.ProjectionStore.dll"
-#r "CQRS.Ports.MessageBus/bin/Debug/net9.0/CQRS.Ports.MessageBus.dll"
+#r "CQRS.Ports.EventStore/bin/Debug/net10.0/CQRS.Ports.EventStore.dll"
+#r "CQRS.Ports.ProjectionStore/bin/Debug/net10.0/CQRS.Ports.ProjectionStore.dll"
+#r "CQRS.Ports.MessageBus/bin/Debug/net10.0/CQRS.Ports.MessageBus.dll"
 
-#r "CQRS.Adapters.InMemoryEventStore/bin/Debug/net9.0/CQRS.Adapters.InMemoryEventStore.dll"
+#r "CQRS.Adapters.InMemoryEventStore/bin/Debug/net10.0/CQRS.Adapters.InMemoryEventStore.dll"
 
 open CQRS.EntityIds
 open CQRS.DTO.V1
