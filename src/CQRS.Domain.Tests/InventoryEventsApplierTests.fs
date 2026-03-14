@@ -42,7 +42,7 @@ let ``Apply InventoryDeactivated event`` () =
 
 [<Fact>]
 let ``Apply InventoryRenamed event`` () =
-    let newName = testInventoryName "INV-123-UPDATED"
+    let newName = createTestInventoryName "INV-123-UPDATED"
 
     let evt =
         InventoryEvent.InventoryRenamed
@@ -65,16 +65,16 @@ let ``Apply ItemsAddedToInventory event`` () =
         InventoryEvent.ItemsAddedToInventory
             { InventoryId = inventoryId
               Name = inventoryName
-              OldStockQuantity = testStockQuantity 1
-              NewStockQuantity = testStockQuantity 2
-              AddedCount = testStockQuantityNumber 1 }
+              OldStockQuantity = createTestStockQuantity 1
+              NewStockQuantity = createTestStockQuantity 2
+              AddedCount = createTestStockQuantityNumber 1 }
 
     InventoryStateProjection.apply currentState evt
     |> should
         equal
         { InventoryId = currentState.InventoryId
           Name = currentState.Name
-          StockQuantity = testStockQuantity 2
+          StockQuantity = createTestStockQuantity 2
           IsNew = currentState.IsNew
           IsActive = currentState.IsActive }
 
@@ -84,16 +84,16 @@ let ``Apply ItemsRemovedFromInventory event`` () =
         InventoryEvent.ItemsRemovedFromInventory
             { InventoryId = inventoryId
               Name = inventoryName
-              OldStockQuantity = testStockQuantity 2
-              NewStockQuantity = testStockQuantity 1
-              RemovedCount = testStockQuantityNumber 1 }
+              OldStockQuantity = createTestStockQuantity 2
+              NewStockQuantity = createTestStockQuantity 1
+              RemovedCount = createTestStockQuantityNumber 1 }
 
     InventoryStateProjection.apply currentState evt
     |> should
         equal
         { InventoryId = currentState.InventoryId
           Name = currentState.Name
-          StockQuantity = testStockQuantity 1
+          StockQuantity = createTestStockQuantity 1
           IsNew = currentState.IsNew
           IsActive = currentState.IsActive }
 
@@ -103,7 +103,7 @@ let ``Apply ItemInStock event`` () =
         InventoryEvent.ItemInStock
             { InventoryId = inventoryId
               Name = inventoryName
-              StockQuantity = testStockQuantity 3 }
+              StockQuantity = createTestStockQuantity 3 }
 
     InventoryStateProjection.apply currentState evt
     |> should

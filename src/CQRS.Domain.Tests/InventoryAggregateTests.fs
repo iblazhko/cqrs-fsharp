@@ -4,13 +4,12 @@ open Xunit
 
 open CQRS.Domain
 open CQRS.Domain.Inventory
-open CQRS.Domain.InventoryAggregate
 open CQRS.Domain.Tests.DomainTestsSetup
 open CQRS.Domain.Tests.AggregateAssertions
 
 [<Fact>]
 let ``Inventory can be created`` () =
-    create
+    InventoryAggregate.create
         newState
         { InventoryId = inventoryId
           Name = inventoryName }
@@ -25,13 +24,13 @@ let ``Inventory can be created`` () =
 
 [<Fact>]
 let ``Inventory cannot be created if it already exists`` () =
-    create
+    InventoryAggregate.create
         currentState
         { InventoryId = inventoryId
           Name = inventoryName }
     |> assertAggregateFailure (InventoryFailure.AlreadyExists inventoryId)
 
-    create
+    InventoryAggregate.create
         deactivatedState
         { InventoryId = inventoryId
           Name = inventoryName }
@@ -39,9 +38,9 @@ let ``Inventory cannot be created if it already exists`` () =
 
 [<Fact>]
 let ``Inventory can be renamed`` () =
-    let newName = testInventoryName "INV-123-UPDATED"
+    let newName = createTestInventoryName "INV-123-UPDATED"
 
-    rename
+    InventoryAggregate.rename
         currentState
         { InventoryId = inventoryId
           NewName = newName }
@@ -56,23 +55,23 @@ let ``Inventory can be renamed`` () =
 
 [<Fact>]
 let ``Inventory cannot be renamed if it does not exist`` () =
-    rename
+    InventoryAggregate.rename
         newState
         { InventoryId = inventoryId
-          NewName = testInventoryName "INV-123-UPDATED" }
+          NewName = createTestInventoryName "INV-123-UPDATED" }
     |> assertAggregateFailure (InventoryFailure.DoesNotExist inventoryId)
 
 [<Fact>]
 let ``Inventory cannot be renamed if it is deactivated`` () =
-    rename
+    InventoryAggregate.rename
         deactivatedState
         { InventoryId = inventoryId
-          NewName = testInventoryName "INV-123-UPDATED" }
+          NewName = createTestInventoryName "INV-123-UPDATED" }
     |> assertAggregateFailure (InventoryFailure.Deactivated inventoryId)
 
 [<Fact>]
 let ``Inventory renaming using same name does not produce new events`` () =
-    rename
+    InventoryAggregate.rename
         currentState
         { InventoryId = inventoryId
           NewName = inventoryName }
@@ -80,9 +79,9 @@ let ``Inventory renaming using same name does not produce new events`` () =
 
 [<Fact>]
 let ``Items can be added to Inventory`` () =
-    let countToAdd = testStockQuantityNumber 1
+    let countToAdd = createTestStockQuantityNumber 1
 
-    addItems
+    InventoryAggregate.addItems
         currentState
         { InventoryId = inventoryId
           Count = countToAdd }
@@ -99,9 +98,9 @@ let ``Items can be added to Inventory`` () =
 
 [<Fact>]
 let ``Adding items to empty Inventory produces InStock event`` () =
-    let countToAdd = testStockQuantityNumber 1
+    let countToAdd = createTestStockQuantityNumber 1
 
-    addItems
+    InventoryAggregate.addItems
         currentStateWithNoStock
         { InventoryId = inventoryId
           Count = countToAdd }
@@ -123,19 +122,19 @@ let ``Adding items to empty Inventory produces InStock event`` () =
 
 [<Fact>]
 let ``Items cannot be added to deactivated Inventory`` () =
-    addItems
+    InventoryAggregate.addItems
         deactivatedState
         { InventoryId = inventoryId
-          Count = testStockQuantityNumber 1 }
+          Count = createTestStockQuantityNumber 1 }
     |> assertAggregateFailure (InventoryFailure.Deactivated inventoryId)
 
 [<Fact>]
 let ``Items can be removed from Inventory`` () =
-    let countToRemove = testStockQuantityNumber 1
+    let countToRemove = createTestStockQuantityNumber 1
 
-    removeItems
+    InventoryAggregate.removeItems
         { currentState with
-            StockQuantity = testStockQuantity 5 }
+            StockQuantity = createTestStockQuantity 5 }
         { InventoryId = inventoryId
           Count = countToRemove }
     |> assertAggregateSuccess (
@@ -145,15 +144,15 @@ let ``Items can be removed from Inventory`` () =
                   Name = inventoryName
                   RemovedCount = countToRemove
                   OldStockQuantity = currentState.StockQuantity
-                  NewStockQuantity = testStockQuantity 4 }
+                  NewStockQuantity = createTestStockQuantity 4 }
         }
     )
 
 [<Fact>]
 let ``Removing all items from Inventory produces OutOfStock event`` () =
-    let stockQuantity = testStockQuantityNumber 5
+    let stockQuantity = createTestStockQuantityNumber 5
 
-    removeItems
+    InventoryAggregate.removeItems
         { currentState with
             StockQuantity = InventoryCount stockQuantity }
         { InventoryId = inventoryId
@@ -175,22 +174,22 @@ let ``Removing all items from Inventory produces OutOfStock event`` () =
 
 [<Fact>]
 let ``Items cannot be removed if not enough items available in stock`` () =
-    removeItems
+    InventoryAggregate.removeItems
         currentStateWithNoStock
         { InventoryId = inventoryId
-          Count = testStockQuantityNumber 1 }
+          Count = createTestStockQuantityNumber 1 }
     |> assertAggregateFailure (CannotRequestMoreThanHaveInStock inventoryId)
 
-    removeItems
+    InventoryAggregate.removeItems
         { currentState with
-            StockQuantity = testStockQuantity 5 }
+            StockQuantity = createTestStockQuantity 5 }
         { InventoryId = inventoryId
-          Count = testStockQuantityNumber 6 }
+          Count = createTestStockQuantityNumber 6 }
     |> assertAggregateFailure (CannotRequestMoreThanHaveInStock inventoryId)
 
 [<Fact>]
 let ``Inventory can be deactivated if no items available in stock`` () =
-    deactivate currentStateWithNoStock Moon.NewMoon { InventoryId = inventoryId }
+    InventoryAggregate.deactivate currentStateWithNoStock Moon.NewMoon { InventoryId = inventoryId }
     |> assertAggregateSuccess (
         seq {
             InventoryEvent.InventoryDeactivated
@@ -201,10 +200,10 @@ let ``Inventory can be deactivated if no items available in stock`` () =
 
 [<Fact>]
 let ``Inventory cannot be deactivated if there are items available in stock`` () =
-    deactivate currentState Moon.NewMoon { InventoryId = inventoryId }
+    InventoryAggregate.deactivate currentState Moon.NewMoon { InventoryId = inventoryId }
     |> assertAggregateFailure (CannotDeactivateNonEmpty inventoryId)
 
 [<Fact>]
 let ``Inventory cannot be deactivated when the moon is in full phase`` () =
-    deactivate currentStateWithNoStock Moon.FullMoon { InventoryId = inventoryId }
+    InventoryAggregate.deactivate currentStateWithNoStock Moon.FullMoon { InventoryId = inventoryId }
     |> assertAggregateFailure (CannotDeactivateWhenMoonIsFull inventoryId)

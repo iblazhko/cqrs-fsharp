@@ -1,0 +1,77 @@
+<Solution>
+  <Folder Name="/0_Core/">
+    <Project Path="CQRS.Architecture.Tests/CQRS.Architecture.Tests.fsproj" />
+    <Project Path="CQRS.Domain.Tests/CQRS.Domain.Tests.fsproj" />
+    <Project Path="CQRS.Domain/CQRS.Domain.fsproj" />
+    <Project Path="CQRS.DTO/CQRS.DTO.fsproj" />
+    <Project Path="CQRS.EntityIds/CQRS.EntityIds.fsproj" />
+    <Project Path="CQRS.Mapping/CQRS.Mapping.fsproj" />
+  </Folder>
+  <Folder Name="/1_Server/" />
+  <Folder Name="/1_Server/1_Application/">
+    <Project Path="CQRS.Application.CommandProcessingStatusRecording/CQRS.Application.CommandProcessingStatusRecording.fsproj" />
+    <Project Path="CQRS.Application.MassTransitConsumers/CQRS.Application.MassTransitConsumers.fsproj" />
+    <Project Path="CQRS.Application.Tests/CQRS.Application.Tests.fsproj" />
+    <Project Path="CQRS.Application/CQRS.Application.fsproj" />
+  </Folder>
+  <Folder Name="/1_Server/2_Projections/">
+    <Project Path="CQRS.Projections.MassTransitConsumers/CQRS.Projections.MassTransitConsumers.fsproj" />
+    <Project Path="CQRS.Projections.Repositories/CQRS.Projections.Repositories.fsproj" />
+    <Project Path="CQRS.Projections.Tests/CQRS.Projections.Tests.fsproj" />
+    <Project Path="CQRS.Projections.ViewModels/CQRS.Projections.ViewModels.fsproj" />
+    <Project Path="CQRS.Projections/CQRS.Projections.fsproj" />
+  </Folder>
+  <Folder Name="/1_Server/3_API/">
+    <Project Path="CQRS.API.Tests/CQRS.API.Tests.fsproj" />
+    <Project Path="CQRS.API/CQRS.API.fsproj" />
+  </Folder>
+  <Folder Name="/1_Server/4_Ports/">
+    <Project Path="CQRS.Ports.EventStore/CQRS.Ports.EventStore.fsproj" />
+    <Project Path="CQRS.Ports.MessageBus/CQRS.Ports.MessageBus.fsproj" />
+    <Project Path="CQRS.Ports.ProjectionStore/CQRS.Ports.ProjectionStore.fsproj" />
+  </Folder>
+  <Folder Name="/1_Server/5_Adapters/">
+    <Project Path="CQRS.Adapters.InMemoryEventStore/CQRS.Adapters.InMemoryEventStore.fsproj" />
+    <Project Path="CQRS.Adapters.InMemoryMessageBus/CQRS.Adapters.InMemoryMessageBus.fsproj" />
+    <Project Path="CQRS.Adapters.InMemoryProjectionStore/CQRS.Adapters.InMemoryProjectionStore.fsproj" />
+    <Project Path="CQRS.Adapters.MartenDbEventStore/CQRS.Adapters.MartenDbEventStore.fsproj" />
+    <Project Path="CQRS.Adapters.MartenDbProjectionStore/CQRS.Adapters.MartenDbProjectionStore.fsproj" />
+    <Project Path="CQRS.Adapters.MassTransitMessageBus/CQRS.Adapters.MassTransitMessageBus.fsproj" />
+  </Folder>
+  <Folder Name="/1_Server/Hosts/">
+    <Project Path="CQRS.API.Host/CQRS.API.Host.fsproj" />
+    <Project Path="CQRS.Application.Host/CQRS.Application.Host.fsproj" />
+  </Folder>
+  <Folder Name="/1_Server/Hosts/0_Infrastructure/">
+    <Project Path="CQRS.Configuration/CQRS.Configuration.fsproj" />
+    <Project Path="CQRS.Infrastructure/CQRS.Infrastructure.fsproj" />
+  </Folder>
+  <Folder Name="/2_Client/">
+    <Project Path="CQRS.CLI/CQRS.CLI.fsproj" />
+  </Folder>
+  <Folder Name="/_devops_/">
+    <File Path="../build.ps1" />
+    <File Path="../docker-compose.yaml" />
+    <File Path="../global.json" />
+    <File Path="../nuget.config" />
+    <File Path="../version.yaml" />
+    <File Path="CQRS.API.Host/cqrs-api.Dockerfile" />
+    <File Path="CQRS.Application.Host/cqrs-app.Dockerfile" />
+    <File Path="CQRS.CLI/cqrs-cli.Dockerfile" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/_doc_/">
+    <File Path="../doc/architecture.md" />
+    <File Path="../doc/build-and-run.md" />
+    <File Path="../doc/cli-api.md" />
+    <File Path="../doc/dependencies.md" />
+    <File Path="../doc/dto.md" />
+    <File Path="../doc/functional-core-imperative-shell.md" />
+    <File Path="../doc/solution-structure.md" />
+    <File Path="../README.md" />
+  </Folder>
+  <Folder Name="/_scratchpad_/">
+    <File Path="./scratchpad.fsx" />
+  </Folder>
+</Solution>

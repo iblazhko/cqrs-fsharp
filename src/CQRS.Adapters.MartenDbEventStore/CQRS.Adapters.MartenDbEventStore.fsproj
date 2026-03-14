@@ -3,6 +3,7 @@
   <ItemGroup>
     <PackageReference Include="FSharp.Core" />
     <PackageReference Include="Marten"/>
+    <PackageReference Include="Npgsql" />
     <PackageReference Include="Serilog"/>
   </ItemGroup>
 
