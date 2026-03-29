@@ -31,14 +31,8 @@ let private getProjectionId _ =
     InventoryCollection.InventoryProjectionId
 
 let private getDocumentId evt =
-    match evt with
-    | InventoryCreated x -> x.InventoryId
-    | InventoryRenamed x -> x.InventoryId
-    | ItemsAddedToInventory x -> x.InventoryId
-    | ItemsRemovedFromInventory x -> x.InventoryId
-    | ItemInStock x -> x.InventoryId
-    | ItemWentOutOfStock x -> x.InventoryId
-    | InventoryDeactivated x -> x.InventoryId
+    evt
+    |> InventoryEvent.inventoryId
     |> InventoryProjectionDocumentId.fromInventoryId
 
 let private updateVm evt vm = evt |> apply vm

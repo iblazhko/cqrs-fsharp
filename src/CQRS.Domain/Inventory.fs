@@ -149,6 +149,15 @@ type InventoryCommand =
     | RemoveItemsFromInventory of RemoveItemsFromInventory
     | DeactivateInventory of DeactivateInventory
 
+module InventoryCommand =
+    let inventoryId (cmd: InventoryCommand) =
+        match cmd with
+        | CreateInventory x -> x.InventoryId
+        | RenameInventory x -> x.InventoryId
+        | AddItemsToInventory x -> x.InventoryId
+        | RemoveItemsFromInventory x -> x.InventoryId
+        | DeactivateInventory x -> x.InventoryId
+
 // All domain events
 type InventoryEvent =
     | InventoryCreated of InventoryCreated
@@ -158,6 +167,17 @@ type InventoryEvent =
     | ItemInStock of ItemInStock
     | ItemWentOutOfStock of ItemWentOutOfStock
     | InventoryDeactivated of InventoryDeactivated
+
+module InventoryEvent =
+    let inventoryId (evt: InventoryEvent) =
+        match evt with
+        | InventoryCreated x -> x.InventoryId
+        | InventoryRenamed x -> x.InventoryId
+        | ItemsAddedToInventory x -> x.InventoryId
+        | ItemsRemovedFromInventory x -> x.InventoryId
+        | ItemInStock x -> x.InventoryId
+        | ItemWentOutOfStock x -> x.InventoryId
+        | InventoryDeactivated x -> x.InventoryId
 
 // All domain failures
 type InventoryFailure =

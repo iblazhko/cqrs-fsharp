@@ -16,13 +16,9 @@ module InventoryCommandDtoHandler =
     let private eventDtoMapper = InventoryEventStreamDtoMapper()
     let private stateProjection = InventoryEventStreamProjection()
 
-    let private streamIdFromCommand (cmd: InventoryCommand) =
-        match cmd with
-        | CreateInventory x -> x.InventoryId
-        | RenameInventory x -> x.InventoryId
-        | AddItemsToInventory x -> x.InventoryId
-        | RemoveItemsFromInventory x -> x.InventoryId
-        | DeactivateInventory x -> x.InventoryId
+    let private streamIdFromCommand cmd =
+        cmd
+        |> InventoryCommand.inventoryId
         |> InventoryEventStreamId.create
 
     let private handleCreate currentState cmd =
