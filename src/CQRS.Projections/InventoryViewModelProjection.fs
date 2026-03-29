@@ -44,6 +44,7 @@ let handleInventoryEvent<'TEventDto, 'TViewModel when 'TEventDto :> CqrsEventDto
     dto
     |> InventoryEventDtoHandler.handleEvent
         { ProjectionStore = projectionStore
+          EventFromDto = InventoryEvent'.ofDTO
           DocumentCollectionIdFromEvent = getProjectionId
           DocumentIdFromEvent = getDocumentId
           ViewModelUpdateAction = updateVm }

@@ -2,11 +2,8 @@ module CQRS.Projections.InventoryEventDtoHandler
 
 open System.Threading.Tasks
 open CQRS.DTO
-open CQRS.Domain.Inventory
-open CQRS.Mapping
 open CQRS.Ports.ProjectionStore
 open FPrimitive
-open FsToolkit.ErrorHandling
 
 // Unlike the Application where we have single "default" shape of state
 // and single event stream state projection, here we may have multiple
@@ -15,22 +12,23 @@ open FsToolkit.ErrorHandling
 // This context structure is not an idiomatic FP w.r.t. dependencies handling,
 // but it is good enough for the purpose of this solution, and this component is
 // not in the Domain where this approach probably would not be acceptable.
-type DomainEventDtoHandlerContext<'TEventDto, 'TViewModel when 'TEventDto :> CqrsDto and 'TViewModel: null> =
+type DomainEventDtoHandlerContext<'TEvent, 'TViewModel when 'TViewModel: null> =
     { ProjectionStore: IProjectionStore<'TViewModel>
-      DocumentCollectionIdFromEvent: InventoryEvent -> DocumentCollectionId
-      DocumentIdFromEvent: InventoryEvent -> DocumentId
-      ViewModelUpdateAction: InventoryEvent -> 'TViewModel -> 'TViewModel }
+      EventFromDto: CqrsEventDto -> Result<'TEvent, ErrorsByTag>
+      DocumentCollectionIdFromEvent: 'TEvent -> DocumentCollectionId
+      DocumentIdFromEvent: 'TEvent -> DocumentId
+      ViewModelUpdateAction: 'TEvent -> 'TViewModel -> 'TViewModel }
 
 exception EventDtoMappingException of ErrorsByTag
 
-let handleEvent<'TEventDto, 'TViewModel when 'TEventDto :> CqrsEventDto and 'TViewModel: null>
-    (context: DomainEventDtoHandlerContext<'TEventDto, 'TViewModel>)
+let handleEvent<'TEventDto, 'TEvent, 'TViewModel when 'TEventDto :> CqrsEventDto and 'TViewModel: null>
+    (context: DomainEventDtoHandlerContext<'TEvent, 'TViewModel>)
     (dto: 'TEventDto)
     : Task =
     task {
         let evt =
-            dto
-            |> InventoryEvent'.ofDTO
+            (dto :> CqrsEventDto)
+            |> context.EventFromDto
             |> Result.defaultWith (fun e -> raise (EventDtoMappingException e))
 
         let documentCollectionId = evt |> context.DocumentCollectionIdFromEvent
