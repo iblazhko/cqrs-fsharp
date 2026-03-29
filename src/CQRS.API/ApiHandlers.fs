@@ -60,6 +60,29 @@ let private validatingCommandApiHandler validationResult operation =
 let private validatingQueryApiHandler validationResult operation =
     validatingApiHandler validationResult operation mapQueryOperationResult
 
+let private renameInventoryCommand (inventoryId: EntityId) (name: string) =
+    let cmd = RenameInventoryCommand()
+    cmd.InventoryId <- inventoryId |> EntityId.value
+    cmd.NewName <- name
+    cmd
+
+let private addItemsToInventoryCommand (inventoryId: EntityId) (count: int) =
+    let cmd = AddItemsToInventoryCommand()
+    cmd.InventoryId <- inventoryId |> EntityId.value
+    cmd.Count <- count
+    cmd
+
+let private removeItemsFromInventoryCommand (inventoryId: EntityId) (count: int) =
+    let cmd = RemoveItemsFromInventoryCommand()
+    cmd.InventoryId <- inventoryId |> EntityId.value
+    cmd.Count <- count
+    cmd
+
+let private deactivateInventoryCommand (inventoryId: EntityId) =
+    let cmd = DeactivateInventoryCommand()
+    cmd.InventoryId <- inventoryId |> EntityId.value
+    cmd
+
 module CommandApiHandlers =
     let createInventory
         (messageBus: IMessageBus)
@@ -77,10 +100,8 @@ module CommandApiHandlers =
         (id: string, name: string)
         : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
-            let cmd = RenameInventoryCommand()
-            cmd.InventoryId <- inventoryId |> EntityId.value
-            cmd.NewName <- name
-            cmd |> MessageBusHandlers.renameInventory messageBus clock)
+            renameInventoryCommand inventoryId name
+            |> MessageBusHandlers.renameInventory messageBus clock)
 
     let addItemsToInventory
         (messageBus: IMessageBus)
@@ -88,11 +109,8 @@ module CommandApiHandlers =
         (id: string, count: int)
         : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
-            let cmd = AddItemsToInventoryCommand()
-            cmd.InventoryId <- inventoryId |> EntityId.value
-            cmd.Count <- count
-            cmd |> MessageBusHandlers.addItemsToInventory messageBus clock)
-
+            addItemsToInventoryCommand inventoryId count
+            |> MessageBusHandlers.addItemsToInventory messageBus clock)
 
     let removeItemsFromInventory
         (messageBus: IMessageBus)
@@ -100,11 +118,8 @@ module CommandApiHandlers =
         (id: string, count: int)
         : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
-            let cmd = RemoveItemsFromInventoryCommand()
-            cmd.InventoryId <- inventoryId |> EntityId.value
-            cmd.Count <- count
-            cmd |> MessageBusHandlers.removeItemsFromInventory messageBus clock)
-
+            removeItemsFromInventoryCommand inventoryId count
+            |> MessageBusHandlers.removeItemsFromInventory messageBus clock)
 
     let deactivateInventory
         (messageBus: IMessageBus)
@@ -112,9 +127,8 @@ module CommandApiHandlers =
         (id: string)
         : Task<ApiResult<AcceptedResponse>> =
         validatingCommandApiHandler (id |> EntityId.create "InventoryId") (fun inventoryId ->
-            let cmd = DeactivateInventoryCommand()
-            cmd.InventoryId <- inventoryId |> EntityId.value
-            cmd |> MessageBusHandlers.deactivateInventory messageBus clock)
+            deactivateInventoryCommand inventoryId
+            |> MessageBusHandlers.deactivateInventory messageBus clock)
 
 module QueryApiHandlers =
     let getInventory
