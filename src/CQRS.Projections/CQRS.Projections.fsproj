@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="FsToolkit.ErrorHandling"/>
+    <PackageReference Include="Serilog"/>
   </ItemGroup>
 
   <ItemGroup>
