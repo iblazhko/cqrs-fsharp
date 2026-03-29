@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="FPrimitive"/>
     <PackageReference Include="FSharp.Core"/>
+    <PackageReference Include="FsToolkit.ErrorHandling" />
     <PackageReference Include="FsToolkit.ErrorHandling.TaskResult"/>
     <PackageReference Include="Serilog"/>
   </ItemGroup>

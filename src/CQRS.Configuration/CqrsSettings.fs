@@ -8,6 +8,7 @@ open CQRS.Configuration.SettingStringBuilder
 
 type CqrsHostSettings() =
     member val ServiceUrl: string = String.Empty with get, set
+    member val Location: string = String.Empty with get, set
     member val MartenDb: MartenDbSettings = MartenDbSettings.Empty with get, set
     member val MassTransit: MassTransitSettings = MassTransitSettings.Empty with get, set
     member val InfrastructureStartup: InfrastructureStartupSettings = InfrastructureStartupSettings.Empty with get, set
@@ -17,6 +18,7 @@ type CqrsHostSettings() =
         StringBuilder()
         |> appendSettingsTitle hostName
         |> appendSettingValue this.ServiceUrl (nameof this.ServiceUrl)
+        |> appendSettingValue this.Location (nameof this.Location)
         |> appendSettingSection this.MartenDb (nameof this.MartenDb)
         |> appendSettingSection this.MassTransit (nameof this.MassTransit)
         |> appendSettingSection this.InfrastructureStartup (nameof this.InfrastructureStartup)

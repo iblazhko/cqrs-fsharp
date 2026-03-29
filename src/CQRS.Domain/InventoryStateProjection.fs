@@ -5,18 +5,22 @@ open CQRS.Domain.Inventory
 let apply (state: InventoryState) (e: InventoryEvent) : InventoryState =
     match e with
     | InventoryCreated x ->
-        { state with
-            Name = x.Name
-            StockQuantity = Empty
-            IsActive = x.IsActive
-            IsNew = false }
-    | InventoryDeactivated _ -> { state with IsActive = false }
-    | InventoryRenamed x -> { state with Name = x.NewName }
+        let data: InventoryData = { InventoryId = x.InventoryId; Name = x.Name; StockQuantity = Empty }
+        if x.IsActive then Active data else Inactive data
+    | InventoryDeactivated _ ->
+        match state with
+        | Active data -> Inactive data
+        | _ -> state
+    | InventoryRenamed x ->
+        match state with
+        | Active data -> Active { data with Name = x.NewName }
+        | _ -> state
     | ItemsAddedToInventory x ->
-        { state with
-            StockQuantity = x.NewStockQuantity }
+        match state with
+        | Active data -> Active { data with StockQuantity = x.NewStockQuantity }
+        | _ -> state
     | ItemsRemovedFromInventory x ->
-        { state with
-            StockQuantity = x.NewStockQuantity }
-    | ItemInStock _ -> state
-    | ItemWentOutOfStock _ -> state
+        match state with
+        | Active data -> Active { data with StockQuantity = x.NewStockQuantity }
+        | _ -> state
+    | ItemInStock _ | ItemWentOutOfStock _ -> state

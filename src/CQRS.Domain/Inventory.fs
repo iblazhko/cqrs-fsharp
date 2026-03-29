@@ -63,22 +63,15 @@ module StockQuantity =
                 | Error e -> Error(SubtractValueOutOfRange(e))
 
 // State
-(*
-Instead of having IsNew and IsActive flags we could define distinct states like this
-type InventoryState =
-  | NewInventory of NewInventory
-  | InactiveInventory of InactiveInventory
-  | Inventory of Inventory
-
-This could make aggregate cleaner, but OTOH it would make appliers more complicated
-because we will not be able to use "{ with Property = newValue }" syntax.
-*)
-type InventoryState =
+type InventoryData =
     { InventoryId: InventoryId
       Name: InventoryName
-      StockQuantity: StockQuantity
-      IsNew: bool
-      IsActive: bool }
+      StockQuantity: StockQuantity }
+
+type InventoryState =
+    | Uninitialized of InventoryId
+    | Active of InventoryData
+    | Inactive of InventoryData
 
 // Domain commands
 

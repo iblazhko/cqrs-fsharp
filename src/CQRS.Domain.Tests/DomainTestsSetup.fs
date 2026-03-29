@@ -23,30 +23,22 @@ let createTestStockQuantity (quantity: int) : StockQuantity =
 let inventoryId = InventoryId.newId ()
 let inventoryName = createTestInventoryName "INV-123"
 
-let newState: InventoryState =
-    { InventoryId = inventoryId
-      Name = createTestInventoryName "N/A"
-      StockQuantity = StockQuantity.Empty
-      IsNew = true
-      IsActive = true }
+let newState: InventoryState = Uninitialized inventoryId
 
 let currentState: InventoryState =
-    { InventoryId = inventoryId
-      Name = inventoryName
-      StockQuantity = createTestStockQuantity 5
-      IsNew = false
-      IsActive = true }
+    Active
+        { InventoryId = inventoryId
+          Name = inventoryName
+          StockQuantity = createTestStockQuantity 5 }
 
 let currentStateWithNoStock: InventoryState =
-    { InventoryId = inventoryId
-      Name = inventoryName
-      StockQuantity = StockQuantity.Empty
-      IsNew = false
-      IsActive = true }
+    Active
+        { InventoryId = inventoryId
+          Name = inventoryName
+          StockQuantity = Empty }
 
 let deactivatedState: InventoryState =
-    { InventoryId = inventoryId
-      Name = inventoryName
-      StockQuantity = StockQuantity.Empty
-      IsNew = false
-      IsActive = false }
+    Inactive
+        { InventoryId = inventoryId
+          Name = inventoryName
+          StockQuantity = Empty }

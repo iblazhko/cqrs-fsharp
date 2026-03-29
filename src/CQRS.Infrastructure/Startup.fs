@@ -17,7 +17,7 @@ let configureServices
     |> MessageBusConfigurator.configureServices endpointsRegistration settings.MassTransit
     |> EventStoreConfigurator.configureServices
     |> ProjectionStoreConfigurator.configureServices
-    |> ApplicationEnvironmentConfigurator.configureServices
+    |> ApplicationEnvironmentConfigurator.configureServices settings.Location
     |> HealthcheckConfigurator.configureServices settings
     |> ignore
 

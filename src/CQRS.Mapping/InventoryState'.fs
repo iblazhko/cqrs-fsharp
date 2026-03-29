@@ -6,11 +6,22 @@ open FsToolkit.ErrorHandling
 
 let toDTO (domain: InventoryState) =
     let dto = Inventory()
-    dto.InventoryId <- domain.InventoryId |> InventoryId'.toDTO
-    dto.Name <- domain.Name |> InventoryName'.toDTO
-    dto.StockQuantity <- domain.StockQuantity |> StockQuantity'.toDTO
-    dto.IsNew <- domain.IsNew
-    dto.IsActive <- domain.IsActive
+    match domain with
+    | Uninitialized id ->
+        dto.InventoryId <- id |> InventoryId'.toDTO
+        dto.IsNew <- true
+        dto.IsActive <- true
+    | Active data ->
+        dto.InventoryId <- data.InventoryId |> InventoryId'.toDTO
+        dto.Name <- data.Name |> InventoryName'.toDTO
+        dto.StockQuantity <- data.StockQuantity |> StockQuantity'.toDTO
+        dto.IsActive <- true
+    | Inactive data ->
+        dto.InventoryId <- data.InventoryId |> InventoryId'.toDTO
+        dto.Name <- data.Name |> InventoryName'.toDTO
+        dto.StockQuantity <- data.StockQuantity |> StockQuantity'.toDTO
+        dto.IsActive <- false
+    dto
 
 let ofDTO (dto: Inventory) =
     result {
@@ -20,9 +31,10 @@ let ofDTO (dto: Inventory) =
         let! stockQuantity = nonNullDto.StockQuantity |> StockQuantity'.ofDTO "StockQuantity"
 
         return
-            { InventoryState.InventoryId = inventoryId
-              Name = name
-              StockQuantity = stockQuantity
-              IsNew = dto.IsNew
-              IsActive = dto.IsActive }
+            if nonNullDto.IsNew then
+                Uninitialized inventoryId
+            elif nonNullDto.IsActive then
+                Active { InventoryId = inventoryId; Name = name; StockQuantity = stockQuantity }
+            else
+                Inactive { InventoryId = inventoryId; Name = name; StockQuantity = stockQuantity }
     }

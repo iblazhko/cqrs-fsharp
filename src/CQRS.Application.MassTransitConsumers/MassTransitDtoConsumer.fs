@@ -31,9 +31,16 @@ let handleCommand<'T when 'T :> CqrsCommandDto and 'T: not struct>
         do! env.CommandProcessingStatusRecorder.RecordCommandProcessingStarted request
 
         try
-            do! message |> InventoryCommandDtoHandler.handleCommand env
-            do! env.CommandProcessingStatusRecorder.RecordCommandProcessingCompleted(request.CommandId, env.Clock.GetUtcNow())
+            let! result = message |> InventoryCommandDtoHandler.handleCommand env
+
+            match result with
+            | Ok() ->
+                do! env.CommandProcessingStatusRecorder.RecordCommandProcessingCompleted(request.CommandId, env.Clock.GetUtcNow())
+            | Error(CommandDtoMappingError e) ->
+                do! env.CommandProcessingStatusRecorder.RecordCommandProcessingRejected(request.CommandId, env.Clock.GetUtcNow(), $"%A{e}")
+            | Error(CommandProcessingError f) ->
+                do! env.CommandProcessingStatusRecorder.RecordCommandProcessingRejected(request.CommandId, env.Clock.GetUtcNow(), $"%A{f}")
         with
-        | CommandProcessingException(cpe) -> env.CommandProcessingStatusRecorder.RecordCommandProcessingRejected(request.CommandId, env.Clock.GetUtcNow(), $"%A{cpe}") |> ignore
-        | x -> env.CommandProcessingStatusRecorder.RecordCommandProcessingFailed(request.CommandId, env.Clock.GetUtcNow(), $"Internal error: {x.GetType()} {x.Message}") |> ignore
+        | x ->
+            env.CommandProcessingStatusRecorder.RecordCommandProcessingFailed(request.CommandId, env.Clock.GetUtcNow(), $"Internal error: {x.GetType()} {x.Message}") |> ignore
     }

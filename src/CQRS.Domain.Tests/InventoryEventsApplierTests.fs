@@ -10,7 +10,7 @@ open CQRS.Domain.Tests.DomainTestsSetup
 [<Fact>]
 let ``Apply InventoryCreated event`` () =
     let evt =
-        InventoryEvent.InventoryCreated
+        InventoryCreated
             { InventoryId = inventoryId
               Name = inventoryName
               IsActive = true }
@@ -18,34 +18,32 @@ let ``Apply InventoryCreated event`` () =
     InventoryStateProjection.apply newState evt
     |> should
         equal
-        { InventoryId = inventoryId
-          Name = inventoryName
-          StockQuantity = StockQuantity.Empty
-          IsNew = false
-          IsActive = true }
+        (Active
+            { InventoryId = inventoryId
+              Name = inventoryName
+              StockQuantity = Empty })
 
 [<Fact>]
 let ``Apply InventoryDeactivated event`` () =
     let evt =
-        InventoryEvent.InventoryDeactivated
+        InventoryDeactivated
             { InventoryId = inventoryId
               Name = inventoryName }
 
     InventoryStateProjection.apply currentStateWithNoStock evt
     |> should
         equal
-        { InventoryId = inventoryId
-          Name = inventoryName
-          StockQuantity = StockQuantity.Empty
-          IsNew = false
-          IsActive = false }
+        (Inactive
+            { InventoryId = inventoryId
+              Name = inventoryName
+              StockQuantity = Empty })
 
 [<Fact>]
 let ``Apply InventoryRenamed event`` () =
     let newName = createTestInventoryName "INV-123-UPDATED"
 
     let evt =
-        InventoryEvent.InventoryRenamed
+        InventoryRenamed
             { InventoryId = inventoryId
               OldName = inventoryName
               NewName = newName }
@@ -53,16 +51,15 @@ let ``Apply InventoryRenamed event`` () =
     InventoryStateProjection.apply currentState evt
     |> should
         equal
-        { InventoryId = currentState.InventoryId
-          Name = newName
-          StockQuantity = currentState.StockQuantity
-          IsNew = currentState.IsNew
-          IsActive = currentState.IsActive }
+        (Active
+            { InventoryId = inventoryId
+              Name = newName
+              StockQuantity = createTestStockQuantity 5 })
 
 [<Fact>]
 let ``Apply ItemsAddedToInventory event`` () =
     let evt =
-        InventoryEvent.ItemsAddedToInventory
+        ItemsAddedToInventory
             { InventoryId = inventoryId
               Name = inventoryName
               OldStockQuantity = createTestStockQuantity 1
@@ -72,16 +69,15 @@ let ``Apply ItemsAddedToInventory event`` () =
     InventoryStateProjection.apply currentState evt
     |> should
         equal
-        { InventoryId = currentState.InventoryId
-          Name = currentState.Name
-          StockQuantity = createTestStockQuantity 2
-          IsNew = currentState.IsNew
-          IsActive = currentState.IsActive }
+        (Active
+            { InventoryId = inventoryId
+              Name = inventoryName
+              StockQuantity = createTestStockQuantity 2 })
 
 [<Fact>]
 let ``Apply ItemsRemovedFromInventory event`` () =
     let evt =
-        InventoryEvent.ItemsRemovedFromInventory
+        ItemsRemovedFromInventory
             { InventoryId = inventoryId
               Name = inventoryName
               OldStockQuantity = createTestStockQuantity 2
@@ -91,41 +87,28 @@ let ``Apply ItemsRemovedFromInventory event`` () =
     InventoryStateProjection.apply currentState evt
     |> should
         equal
-        { InventoryId = currentState.InventoryId
-          Name = currentState.Name
-          StockQuantity = createTestStockQuantity 1
-          IsNew = currentState.IsNew
-          IsActive = currentState.IsActive }
+        (Active
+            { InventoryId = inventoryId
+              Name = inventoryName
+              StockQuantity = createTestStockQuantity 1 })
 
 [<Fact>]
 let ``Apply ItemInStock event`` () =
     let evt =
-        InventoryEvent.ItemInStock
+        ItemInStock
             { InventoryId = inventoryId
               Name = inventoryName
               StockQuantity = createTestStockQuantity 3 }
 
     InventoryStateProjection.apply currentState evt
-    |> should
-        equal
-        { InventoryId = currentState.InventoryId
-          Name = currentState.Name
-          StockQuantity = currentState.StockQuantity
-          IsNew = currentState.IsNew
-          IsActive = currentState.IsActive }
+    |> should equal currentState
 
 [<Fact>]
 let ``Apply ItemWentOutOfStock event`` () =
     let evt =
-        InventoryEvent.ItemWentOutOfStock
+        ItemWentOutOfStock
             { InventoryId = inventoryId
               Name = inventoryName }
 
     InventoryStateProjection.apply currentState evt
-    |> should
-        equal
-        { InventoryId = currentState.InventoryId
-          Name = currentState.Name
-          StockQuantity = currentState.StockQuantity
-          IsNew = currentState.IsNew
-          IsActive = currentState.IsActive }
+    |> should equal currentState

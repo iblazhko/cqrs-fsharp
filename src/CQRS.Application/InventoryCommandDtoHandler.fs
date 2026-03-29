@@ -6,15 +6,10 @@ open CQRS.Domain
 open CQRS.Domain.Inventory
 open CQRS.Mapping
 open FPrimitive
-open FsToolkit.ErrorHandling
-
-exception CommandDtoMappingException of ErrorsByTag
-exception CommandProcessingException of InventoryFailure
 
 type CommandHandlerFailure =
     | CommandDtoMappingError of ErrorsByTag
     | CommandProcessingError of InventoryFailure
-    | EventStreamError of ErrorsByTag
 
 module InventoryCommandDtoHandler =
 
@@ -52,30 +47,27 @@ module InventoryCommandDtoHandler =
     let handleCommand<'TCommandDto when 'TCommandDto :> CqrsCommandDto>
         (env: ApplicationEnvironment)
         (dto: 'TCommandDto)
-        : Task =
+        : Task<Result<unit, CommandHandlerFailure>> =
         task {
-            let command =
-                dto
-                |> InventoryCommand'.ofDTO
-                |> Result.defaultWith (fun e -> raise (CommandDtoMappingException e))
+            match dto |> InventoryCommand'.ofDTO with
+            | Error e -> return Error(CommandDtoMappingError e)
+            | Ok command ->
+                let streamId = command |> streamIdFromCommand
+                use! streamSession = env.EventStore.Open(streamId, eventDtoMapper)
+                let! currentState = streamSession.GetState stateProjection
 
-            let streamId = command |> streamIdFromCommand
-            use! streamSession = env.EventStore.Open(streamId, eventDtoMapper)
+                let! newEventsResult =
+                    match command with
+                    | CreateInventory x -> x |> handleCreate currentState
+                    | RenameInventory x -> x |> handleRename currentState
+                    | AddItemsToInventory x -> x |> handleAddItems currentState
+                    | RemoveItemsFromInventory x -> x |> handleRemoveItems currentState
+                    | DeactivateInventory x -> x |> handleDeactivate currentState env
 
-            let! currentState = streamSession.GetState(stateProjection)
-
-            let! newEventsResult =
-                match command with
-                | CreateInventory x -> x |> handleCreate currentState
-                | RenameInventory x -> x |> handleRename currentState
-                | AddItemsToInventory x -> x |> handleAddItems currentState
-                | RemoveItemsFromInventory x -> x |> handleRemoveItems currentState
-                | DeactivateInventory x -> x |> handleDeactivate currentState env
-
-            let newEvents =
-                newEventsResult
-                |> Result.defaultWith (fun x -> raise (CommandProcessingException x))
-
-            do! streamSession.AppendEvents(newEvents |> Seq.map box)
-            do! env.EventStore.Save(streamSession)
+                match newEventsResult with
+                | Error f -> return Error(CommandProcessingError f)
+                | Ok newEvents ->
+                    do! streamSession.AppendEvents(newEvents |> Seq.map box)
+                    do! env.EventStore.Save streamSession
+                    return Ok()
         }
