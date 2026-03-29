@@ -30,7 +30,7 @@ jobs:
           export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
           ./powershell/pwsh ./build.ps1 Dotnet.Test
       - name: Test report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v3
         if: success() || failure()
         with:
           name: Test Report
