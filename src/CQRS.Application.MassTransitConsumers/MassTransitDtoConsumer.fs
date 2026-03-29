@@ -22,8 +22,8 @@ let handleCommand<'T when 'T :> CqrsCommandDto and 'T: not struct>
 
         let request = CommandProcessingRequest()
         request.CommandId <- if context.MessageId.HasValue then context.MessageId.Value else Guid.Empty
-        request.CorrelationId <- if context.CorrelationId.HasValue then context.CorrelationId.Value else Guid.Empty
-        request.CausationId <- if context.ConversationId.HasValue then context.RequestId.Value else Guid.Empty
+        request.CorrelationId <- if context.ConversationId.HasValue then context.ConversationId.Value else Guid.Empty
+        request.CausationId <- if context.RequestId.HasValue then context.RequestId.Value else Guid.Empty
         request.CommandType <- message.GetType().FullName
         request.CommandBody <- JsonSerializer.Serialize(message, serializeOptions)
         request.RequestedAt <- env.Clock.GetUtcNow()
@@ -42,5 +42,5 @@ let handleCommand<'T when 'T :> CqrsCommandDto and 'T: not struct>
                 do! env.CommandProcessingStatusRecorder.RecordCommandProcessingRejected(request.CommandId, env.Clock.GetUtcNow(), $"%A{f}")
         with
         | x ->
-            env.CommandProcessingStatusRecorder.RecordCommandProcessingFailed(request.CommandId, env.Clock.GetUtcNow(), $"Internal error: {x.GetType()} {x.Message}") |> ignore
+            do! env.CommandProcessingStatusRecorder.RecordCommandProcessingFailed(request.CommandId, env.Clock.GetUtcNow(), $"Internal error: {x.GetType()} {x.Message}")
     }
