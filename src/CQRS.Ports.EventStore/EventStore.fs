@@ -82,7 +82,7 @@ type IEventPublisher =
 // 'TEvent is supposed to be a discriminated union in F# or OneOf<E1,E2,...> in C#
 [<Interface>]
 type IEventStreamProjection<'TEvent, 'TState> =
-    abstract member GetInitialState: EventStreamId -> 'TState
+    abstract member GetInitialState: EventStreamId -> Result<'TState, string>
     abstract member Apply: 'TState * 'TEvent -> 'TState
 
 [<Interface>]

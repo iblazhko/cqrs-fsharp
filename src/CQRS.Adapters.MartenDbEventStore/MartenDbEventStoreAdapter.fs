@@ -102,7 +102,10 @@ type MartenDbEventStreamSession<'TEvent, 'TState>
 
         member this.GetState projection =
             task {
-                let initialState = projection.GetInitialState(eventStream.StreamId)
+                let initialState =
+                    match projection.GetInitialState(eventStream.StreamId) with
+                    | Ok s -> s
+                    | Error _ -> raise InvalidEventStreamIdException
 
                 let applyWithProjection state eventWithMetadata =
                     let domainEvent = eventWithMetadata |> eventMapper.ToDomainEvent
