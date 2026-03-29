@@ -4,6 +4,9 @@ open System.Threading.Tasks
 open CQRS.DTO
 open CQRS.Ports.ProjectionStore
 open FPrimitive
+open Serilog
+
+exception EventDtoMappingException of ErrorsByTag
 
 // Unlike the Application where we have single "default" shape of state
 // and single event stream state projection, here we may have multiple
@@ -19,21 +22,21 @@ type DomainEventDtoHandlerContext<'TEvent, 'TViewModel when 'TViewModel: null> =
       DocumentIdFromEvent: 'TEvent -> DocumentId
       ViewModelUpdateAction: 'TEvent -> 'TViewModel -> 'TViewModel }
 
-exception EventDtoMappingException of ErrorsByTag
-
 let handleEvent<'TEventDto, 'TEvent, 'TViewModel when 'TEventDto :> CqrsEventDto and 'TViewModel: null>
     (context: DomainEventDtoHandlerContext<'TEvent, 'TViewModel>)
     (dto: 'TEventDto)
     : Task =
     task {
-        let evt =
-            (dto :> CqrsEventDto)
-            |> context.EventFromDto
-            |> Result.defaultWith (fun e -> raise (EventDtoMappingException e))
-
-        let documentCollectionId = evt |> context.DocumentCollectionIdFromEvent
-        let documentId = evt |> context.DocumentIdFromEvent
-
-        use! documentCollection = context.ProjectionStore.OpenDocumentCollection<'TViewModel>(documentCollectionId)
-        do! documentCollection.Update(documentId, context.ViewModelUpdateAction evt)
+        match (dto :> CqrsEventDto) |> context.EventFromDto with
+        | Error e ->
+            Log.Logger.Warning(
+                "[PROJECTION] Unmappable event DTO {DtoType}: {Error}",
+                dto.GetType().FullName,
+                e)
+            raise (EventDtoMappingException e)
+        | Ok evt ->
+            let documentCollectionId = evt |> context.DocumentCollectionIdFromEvent
+            let documentId = evt |> context.DocumentIdFromEvent
+            use! documentCollection = context.ProjectionStore.OpenDocumentCollection<'TViewModel>(documentCollectionId)
+            do! documentCollection.Update(documentId, context.ViewModelUpdateAction evt)
     }
