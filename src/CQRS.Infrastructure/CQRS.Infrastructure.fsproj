@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Marten"/>
-    <PackageReference Include="MassTransit.RabbitMQ"/>
+    <PackageReference Include="WolverineFx.RabbitMQ"/>
     <PackageReference Include="Npgsql"/>
     <PackageReference Include="Serilog"/>
     <PackageReference Include="Serilog.AspNetCore"/>
@@ -18,7 +18,7 @@
     <ProjectReference Include="..\CQRS.Adapters.InMemoryProjectionStore\CQRS.Adapters.InMemoryProjectionStore.fsproj"/>
     <ProjectReference Include="..\CQRS.Adapters.MartenDbEventStore\CQRS.Adapters.MartenDbEventStore.fsproj"/>
     <ProjectReference Include="..\CQRS.Adapters.MartenDbProjectionStore\CQRS.Adapters.MartenDbProjectionStore.fsproj"/>
-    <ProjectReference Include="..\CQRS.Adapters.MassTransitMessageBus\CQRS.Adapters.MassTransitMessageBus.fsproj"/>
+    <ProjectReference Include="..\CQRS.Adapters.WolverineMessageBus\CQRS.Adapters.WolverineMessageBus.fsproj"/>
     <ProjectReference Include="..\CQRS.Application.CommandProcessingStatusRecording\CQRS.Application.CommandProcessingStatusRecording.fsproj" />
     <ProjectReference Include="..\CQRS.Application\CQRS.Application.fsproj"/>
     <ProjectReference Include="..\CQRS.Configuration\CQRS.Configuration.fsproj"/>
@@ -36,7 +36,7 @@
     <Compile Include="MartenDbConfigurator.fs"/>
     <Compile Include="EventStoreConfigurator.fs"/>
     <Compile Include="ProjectionStoreConfigurator.fs"/>
-    <Compile Include="MassTransitConventions.fs"/>
+    <Compile Include="WolverineConventions.fs"/>
     <Compile Include="EndpointsRegistration.fs"/>
     <Compile Include="MessageBusConfigurator.fs"/>
     <Compile Include="ApplicationEnvironmentConfigurator.fs"/>

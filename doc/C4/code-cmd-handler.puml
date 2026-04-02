@@ -11,7 +11,7 @@ participant "Client" as client
 boundary "API" as api
 control "[Ports/Adapters]\n\nMessage Bus\nAdapter" as messagebus_adapter
 queue "Message Bus" as messagebus
-control "[Application.MassTransit]\n\nMessage Consumer" as mt_consumer
+control "[Application.Wolverine]\n\nMessage Consumer" as wv_consumer
 control "[Application]\n\nGeneric\nCommand DTO\nhandler" as dto_handler
 participant "[Domain]\n\nDTO Mapper" as dto_mapper
 participant "[Domain]\n\nState\nProjection" as state_projection
@@ -22,19 +22,19 @@ database "EventStore" as eventstore
 
 client -> api: Submit\ncommand\nparameters
 activate api
-api -> messagebus_adapter: Send command\n[MassTransit\nDTO envelope]
+api -> messagebus_adapter: Send command\n[Wolverine\nDTO envelope]
 activate messagebus_adapter
-messagebus_adapter --> messagebus: Send command\n[MassTransit\nDTO envelope]
+messagebus_adapter --> messagebus: Send command\n[Wolverine\nDTO envelope]
 deactivate messagebus_adapter
 deactivate api
 
 ... \n ...
 
-mt_consumer <-- messagebus: Consume command\n[MassTransit\nDTO envelope]
+wv_consumer <-- messagebus: Consume command\n[Wolverine\nDTO envelope]
 activate messagebus
-activate mt_consumer
-mt_consumer -> mt_consumer: Unwrap MassTransit\nConsumeContext
-mt_consumer -> dto_handler: Command DTO
+activate wv_consumer
+wv_consumer -> wv_consumer: Unwrap Wolverine\nConsumeContext
+wv_consumer -> dto_handler: Command DTO
 
 activate dto_handler
 dto_handler -> dto_mapper: Command DTO
@@ -116,11 +116,11 @@ eventstore_adapter --> dto_handler
 deactivate eventstore_adapter
 deactivate eventstore
 
-dto_handler --> mt_consumer
+dto_handler --> wv_consumer
 deactivate dto_handler
 
-mt_consumer --> messagebus: ack
-deactivate mt_consumer
+wv_consumer --> messagebus: ack
+deactivate wv_consumer
 
 deactivate messagebus
 

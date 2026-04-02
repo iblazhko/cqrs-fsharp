@@ -12,14 +12,14 @@ let private domainDtoLayer = [ Assembly.Load("CQRS.DTO") ]
 
 let private applicationLayer =
     [ Assembly.Load("CQRS.Application")
-      Assembly.Load("CQRS.Application.MassTransitConsumers") ]
+      Assembly.Load("CQRS.Application.WolverineConsumers") ]
 
 let private applicationCommandProcessingStatusRecordingLayer =
     [ Assembly.Load("CQRS.Application.CommandProcessingStatusRecording") ]
 
 let private projectionsLayer =
     [ Assembly.Load("CQRS.Projections")
-      Assembly.Load("CQRS.Projections.MassTransitConsumers") ]
+      Assembly.Load("CQRS.Projections.WolverineConsumers") ]
 
 let private projectionsRepositoriesLayer =
     [ Assembly.Load("CQRS.Projections.Repositories") ]
@@ -40,7 +40,7 @@ let private adaptersLayer =
       Assembly.Load("CQRS.Adapters.InMemoryProjectionStore")
       Assembly.Load("CQRS.Adapters.MartenDbEventStore")
       Assembly.Load("CQRS.Adapters.MartenDbProjectionStore")
-      Assembly.Load("CQRS.Adapters.MassTransitMessageBus") ]
+      Assembly.Load("CQRS.Adapters.WolverineMessageBus") ]
 
 let private apiHostLayer = [ Assembly.Load("CQRS.API.Host") ]
 let private applicationHostLayer = [ Assembly.Load("CQRS.Application.Host") ]

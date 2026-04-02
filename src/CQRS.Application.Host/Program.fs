@@ -1,10 +1,10 @@
 module CQRS.Application.Host.Program
 
-open CQRS.Application.MassTransitConsumers
+open CQRS.Application.WolverineConsumers
 open CQRS.Configuration
 open CQRS.Infrastructure
 open CQRS.Infrastructure.Startup
-open CQRS.Projections.MassTransitConsumers
+open CQRS.Projections.WolverineConsumers
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Hosting

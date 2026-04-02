@@ -19,7 +19,7 @@ let createInventory
         if (cmd.InventoryId = EntityIdRawValue.Empty) then
             cmd.InventoryId <- (EntityId.newId () |> EntityId.value)
 
-        let messageContext = getNewMessageContext (clock.GetUtcNow())
+        let messageContext = newMessageContext (clock.GetUtcNow())
         Log.Logger.Information("Creating inventory {InventoryId}", cmd.InventoryId)
         do! messageBus.SendCommand(Command<CreateInventoryCommand>(Data = cmd, Context = messageContext), None)
         return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
@@ -31,7 +31,7 @@ let renameInventory
     (cmd: RenameInventoryCommand)
     : Task<Result<AcceptedResponse, ErrorsByTag>> =
     task {
-        let messageContext = getNewMessageContext (clock.GetUtcNow())
+        let messageContext = newMessageContext (clock.GetUtcNow())
         Log.Logger.Information("Renaming inventory {InventoryId} to {InventoryName}", cmd.InventoryId, cmd.NewName)
         do! messageBus.SendCommand(Command<RenameInventoryCommand>(Data = cmd, Context = messageContext), None)
         return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
@@ -43,7 +43,7 @@ let addItemsToInventory
     (cmd: AddItemsToInventoryCommand)
     : Task<Result<AcceptedResponse, ErrorsByTag>> =
     task {
-        let messageContext = getNewMessageContext (clock.GetUtcNow())
+        let messageContext = newMessageContext (clock.GetUtcNow())
         Log.Logger.Information("Adding {Count} items to inventory {InventoryId}", cmd.Count, cmd.InventoryId)
         do! messageBus.SendCommand(Command<AddItemsToInventoryCommand>(Data = cmd, Context = messageContext), None)
         return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
@@ -55,7 +55,7 @@ let removeItemsFromInventory
     (cmd: RemoveItemsFromInventoryCommand)
     : Task<Result<AcceptedResponse, ErrorsByTag>> =
     task {
-        let messageContext = getNewMessageContext (clock.GetUtcNow())
+        let messageContext = newMessageContext (clock.GetUtcNow())
         Log.Logger.Information("Removing {Count} items from inventory {InventoryId}", cmd.Count, cmd.InventoryId)
         do! messageBus.SendCommand(Command<RemoveItemsFromInventoryCommand>(Data = cmd, Context = messageContext), None)
         return Ok(cmd.InventoryId |> AcceptedResponse.create messageContext)
@@ -67,7 +67,7 @@ let deactivateInventory
     (cmd: DeactivateInventoryCommand)
     : Task<Result<AcceptedResponse, ErrorsByTag>> =
     task {
-        let messageContext = getNewMessageContext (clock.GetUtcNow())
+        let messageContext = newMessageContext (clock.GetUtcNow())
         Log.Logger.Information("Deactivating inventory {InventoryId}", cmd.InventoryId)
         do! messageBus.SendCommand(Command<DeactivateInventoryCommand>(Data = cmd, Context = messageContext), None)
         return Ok(cmd.InventoryId.ToString() |> AcceptedResponse.create messageContext)

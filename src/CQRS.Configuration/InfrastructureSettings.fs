@@ -74,9 +74,9 @@ type RabbitMqSettings() =
         |> fun b -> b.ToString()
 
 
-type MassTransitSettings() =
+type WolverineSettings() =
     member val RabbitMq: RabbitMqSettings = RabbitMqSettings.Empty with get, set
-    static member Empty = MassTransitSettings(RabbitMq = RabbitMqSettings.Empty)
+    static member Empty = WolverineSettings(RabbitMq = RabbitMqSettings.Empty)
 
     override this.ToString() =
         StringBuilder()

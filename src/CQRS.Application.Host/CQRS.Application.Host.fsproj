@@ -10,11 +10,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Application.MassTransitConsumers\CQRS.Application.MassTransitConsumers.fsproj"/>
+    <ProjectReference Include="..\CQRS.Application.WolverineConsumers\CQRS.Application.WolverineConsumers.fsproj"/>
     <ProjectReference Include="..\CQRS.Application\CQRS.Application.fsproj"/>
     <ProjectReference Include="..\CQRS.Configuration\CQRS.Configuration.fsproj"/>
     <ProjectReference Include="..\CQRS.Infrastructure\CQRS.Infrastructure.fsproj"/>
-    <ProjectReference Include="..\CQRS.Projections.MassTransitConsumers\CQRS.Projections.MassTransitConsumers.fsproj"/>
+    <ProjectReference Include="..\CQRS.Projections.WolverineConsumers\CQRS.Projections.WolverineConsumers.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>

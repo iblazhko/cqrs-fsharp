@@ -14,7 +14,7 @@ let configureServices
     =
     services
     |> MartenDbConfigurator.configureServices settings.MartenDb
-    |> MessageBusConfigurator.configureServices endpointsRegistration settings.MassTransit
+    |> MessageBusConfigurator.configureServices endpointsRegistration settings.Wolverine
     |> EventStoreConfigurator.configureServices
     |> ProjectionStoreConfigurator.configureServices
     |> ApplicationEnvironmentConfigurator.configureServices settings.Location
@@ -38,7 +38,7 @@ let waitForInfrastructure (settings: CqrsHostSettings) =
             waitForInfrastructure
                 settings.InfrastructureStartup
                 [ { Name = "RabbitMQ"
-                    Endpoint = settings.MassTransit.RabbitMq.Endpoint }
+                    Endpoint = settings.Wolverine.RabbitMq.Endpoint }
                   { Name = "PostgreSQL"
                     Endpoint = settings.MartenDb.Endpoint } ]
         )

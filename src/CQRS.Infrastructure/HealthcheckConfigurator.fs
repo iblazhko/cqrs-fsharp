@@ -27,7 +27,7 @@ let configureServices (settings: CqrsHostSettings) (services: IServiceCollection
         .Add(
             HealthCheckRegistration(
                 "RabbitMQ",
-                RabbitMqHealthCheck(settings.MassTransit.RabbitMq.getAmqpUrl ()),
+                RabbitMqHealthCheck(settings.Wolverine.RabbitMq.getAmqpUrl ()),
                 HealthStatus.Degraded,
                 [ readinessTag ]
             )

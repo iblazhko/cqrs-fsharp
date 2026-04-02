@@ -37,7 +37,7 @@
         1. MUST NOT depend on any project from `Core`
         2. MUST NOT depend on any project from `Application` or `Projections`
         3. An `Adapter` MUST ONLY implement one corresponding `Port`
-    6. Code in `*.MassTransitConsumers` projects MUST ONLY unwrap MassTransit
+    6. Code in `*.WolverineConsumers` projects MUST ONLY unwrap Wolverine
        consume context and pass DTO to `Application` or `Projections`
        DTO handler, there should be no application logic there as such
     7. `Hosts`

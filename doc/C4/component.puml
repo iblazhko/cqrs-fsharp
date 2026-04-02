@@ -1,6 +1,7 @@
 @startuml Inventory System - Component
 
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+!include <C4/C4_Component>
+
 skinparam defaultFontName "D-DIN"
 skinparam backgroundColor #EEEEEE
 scale 1600 width
@@ -51,9 +52,9 @@ Boundary(application_boundary, "Application") {
         Component(eventstore_port, "EventStore Port", "", "Abstraction for EventStore")
     }
 
-    Boundary(application_mt, "MassTransit") {
-        Component(app_mt_consumers, "MassTransit Consumers", "", "Get Command DTO from MT ConsumeContext and\ndelegate to Command DTO Handler")
-        Rel(messagebus, app_mt_consumers, "Consume command")
+    Boundary(application_vw, "Wolverine") {
+        Component(app_wv_consumers, "Wolverine Consumers", "", "Get Command DTO from MT ConsumeContext and\ndelegate to Command DTO Handler")
+        Rel(messagebus, app_wv_consumers, "Consume command")
     }
 
     Component(eventstream_event_mapper, "EventStream EventMapper", "", "Event DTO mapper required by EvenStream Port")
@@ -61,7 +62,7 @@ Boundary(application_boundary, "Application") {
     Component(eventstream_publisher, "EventStream Events publisher", "", "Events publisher required by EvenStream Port")
     Component(command_dto_handler, "Command DTO Handler", "", "Maps Command DTO to Domain command and delegates processing to Domain\n(Inventory Aggregate)")
 
-    Rel(app_mt_consumers, command_dto_handler, "Delegates DTO")
+    Rel(app_wv_consumers, command_dto_handler, "Delegates DTO")
     Rel(command_dto_handler, domain_dto, "Uses")
     Rel(command_dto_handler, eventstore_port, "Uses")
     Rel(command_dto_handler, domain_aggregate, "Uses")
@@ -75,16 +76,16 @@ Boundary(application_boundary, "Application") {
 }
 
 Boundary(projections_boundary, "Projections") {
-    Boundary(projections_mt, "MassTransit") {
-        Component(projections_mt_consumers, "MassTransit Consumers", "", "Get Event DTO from MT ConsumeContext and\ndelegate to Event DTO Handler")
-        Rel(messagebus, projections_mt_consumers, "Consume event")
+    Boundary(projections_vw, "Wolverine") {
+        Component(projections_wv_consumers, "Wolverine Consumers", "", "Get Event DTO from MT ConsumeContext and\ndelegate to Event DTO Handler")
+        Rel(messagebus, projections_wv_consumers, "Consume event")
     }
 
     Component(event_dto_handler, "Event DTO Handler", "", "Maps Event DTO to Domain event and delegates processing to Projection")
     Component(projectionstore_port, "ProjectionStore Port", "", "Abstraction for Projection Store")
     Component(vm_projection, "ViewModel Projection", "", "Inventory ViewModel Projection")
 
-    Rel(projections_mt_consumers, event_dto_handler, "Delegates DTO")
+    Rel(projections_wv_consumers, event_dto_handler, "Delegates DTO")
     Rel(event_dto_handler, domain_dto, "Uses")
     Rel(event_dto_handler, vm_projection, "Uses")
     Rel(event_dto_handler, projectionstore_port, "Uses")

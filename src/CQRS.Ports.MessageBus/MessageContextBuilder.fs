@@ -1,6 +1,6 @@
 module CQRS.Ports.Messaging.MessageContextBuilder
 
-let getNewMessageContext timestamp =
+let newMessageContext timestamp =
     Context(
         MessageId = MessagingId.newId (),
         CorrelationId = MessagingId.newId (),
@@ -8,7 +8,7 @@ let getNewMessageContext timestamp =
         Timestamp = timestamp
     )
 
-let getFromMessageContext (messageContext: Context) timestamp =
+let fromMessageContext (messageContext: Context) timestamp =
     Context(
         MessageId = MessagingId.newId (),
         CorrelationId = messageContext.CorrelationId,

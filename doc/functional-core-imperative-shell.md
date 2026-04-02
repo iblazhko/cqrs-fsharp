@@ -34,7 +34,7 @@ Non-pure imperative shell consists of two main parts:
   Dependency Injection components, and while implemented in F#, code there
   can be considered rather imperative. Here we prepare environment - read
   configuration from `appsettings.json` / environment variables, register
-  adapters in MS DI, register MassTransit consumers etc. Finally, we start
+  adapters in MS DI, register Wolverine consumers etc. Finally, we start
   the host by using methods provided in Microsoft Hosting.
 
 * Input triggers. Here we take inputs from either API calls or incoming
@@ -42,11 +42,11 @@ Non-pure imperative shell consists of two main parts:
   follows functional style, but directly uses Ports for communicating with
   external services (mainly *EventStore Port* and *Projections Store Port*).
   Code in the imperative shell itself can mix imperative and functional styles.
-    * API calls are handled by ASP.NET Core Minimal API.
+  * API calls are handled by ASP.NET Core Minimal API.
       API can send commands using *MessageBus Port*, or query view models
       using *ProjectionStore Port*.
-    * Messages are handled using MassTransit, and we define MassTransit-specific
-      message consumers that unwrap MassTransit consume context and pass on DTO
+  * Messages are handled using Wolverine, and we define Wolverine-specific
+      message consumers that unwrap Wolverine consume context and pass on DTO
       into a generic Application of Projection DTO handler.
 
 ## References

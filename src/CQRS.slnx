@@ -10,12 +10,12 @@
   <Folder Name="/1_Server/" />
   <Folder Name="/1_Server/1_Application/">
     <Project Path="CQRS.Application.CommandProcessingStatusRecording/CQRS.Application.CommandProcessingStatusRecording.fsproj" />
-    <Project Path="CQRS.Application.MassTransitConsumers/CQRS.Application.MassTransitConsumers.fsproj" />
+    <Project Path="CQRS.Application.WolverineConsumers/CQRS.Application.WolverineConsumers.fsproj" />
     <Project Path="CQRS.Application.Tests/CQRS.Application.Tests.fsproj" />
     <Project Path="CQRS.Application/CQRS.Application.fsproj" />
   </Folder>
   <Folder Name="/1_Server/2_Projections/">
-    <Project Path="CQRS.Projections.MassTransitConsumers/CQRS.Projections.MassTransitConsumers.fsproj" />
+    <Project Path="CQRS.Projections.WolverineConsumers/CQRS.Projections.WolverineConsumers.fsproj" />
     <Project Path="CQRS.Projections.Repositories/CQRS.Projections.Repositories.fsproj" />
     <Project Path="CQRS.Projections.Tests/CQRS.Projections.Tests.fsproj" />
     <Project Path="CQRS.Projections.ViewModels/CQRS.Projections.ViewModels.fsproj" />
@@ -36,7 +36,7 @@
     <Project Path="CQRS.Adapters.InMemoryProjectionStore/CQRS.Adapters.InMemoryProjectionStore.fsproj" />
     <Project Path="CQRS.Adapters.MartenDbEventStore/CQRS.Adapters.MartenDbEventStore.fsproj" />
     <Project Path="CQRS.Adapters.MartenDbProjectionStore/CQRS.Adapters.MartenDbProjectionStore.fsproj" />
-    <Project Path="CQRS.Adapters.MassTransitMessageBus/CQRS.Adapters.MassTransitMessageBus.fsproj" />
+    <Project Path="CQRS.Adapters.WolverineMessageBus/CQRS.Adapters.WolverineMessageBus.fsproj" />
   </Folder>
   <Folder Name="/1_Server/Hosts/">
     <Project Path="CQRS.API.Host/CQRS.API.Host.fsproj" />

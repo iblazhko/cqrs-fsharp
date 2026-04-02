@@ -3,46 +3,46 @@
 Solution uses .NET 9 / F# and has following major parts:
 
 - *Core domain* components. Only types and pure functions are allowed here.
-    - `CQRS.Domain`: Implements domain model and domain services.
-    - `CQRS.DTO`: Commands and Events [DTO](./dto.md)s that are shared across
+  - `CQRS.Domain`: Implements domain model and domain services.
+  - `CQRS.DTO`: Commands and Events [DTO](./dto.md)s that are shared across
       domain and application services projects, and stored in event streams.
       DTOs define shape of messages that go over the wire, they designed to be
       implementation-neutral and serialization-friendly. Essentially they are
       [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object)s that only use
       primitive CLR types.
-    - `CQRS.Mapping`: Implements mapping between DTOs and domain model.
+  - `CQRS.Mapping`: Implements mapping between DTOs and domain model.
 - *Application* services that are aware of the outside world and intended
   to have effects - consume and publish messages, read and write DB data,
   make external HTTP/GRPC calls etc.
-    - `CQRS.Application`: implements application services; handles Commands sent
+  - `CQRS.Application`: implements application services; handles Commands sent
       from the API.
-    - `CQRS.Projections`: projects domain Events to view models.
+  - `CQRS.Projections`: projects domain Events to view models.
       persisted in a document-based *ProjectionStore*.
-    - `CQRS.Projections.Repositories`: retrieve document by Id.
+  - `CQRS.Projections.Repositories`: retrieve document by Id.
 - *API* components
-    - `CQRS.API`: sends Commands to *Application* (command API),
+  - `CQRS.API`: sends Commands to *Application* (command API),
       uses *ProjectionStore* to retrieve view models (query API).
 - *Ports*
-    - `CQRS.Ports.EventStore`: *EventStore* abstraction for event sourcing /
+  - `CQRS.Ports.EventStore`: *EventStore* abstraction for event sourcing /
       event store
-    - `CQRS.Ports.MessageBus`: message bus abstraction for sending commands and
+  - `CQRS.Ports.MessageBus`: message bus abstraction for sending commands and
       publishing events. Note that registration of messages consumers is not
       a part of this abstraction - it is a part of *Application* host that rely
       on a specific *MessageBus* adapter
-    - `CQRS.Ports.ProjectionStore`: abstraction for persisting event
+  - `CQRS.Ports.ProjectionStore`: abstraction for persisting event
       projections in denormalized form (document store). Normalized form
       (relational database) projections are not a part of this abstraction
       at the moment, but could be added if needed.
 - *Adapters*
-    - `CQRS.Adapters.InMemoryEventStore`: in-memory adapter for *EventStore* port
-    - `CQRS.Adapters.InMemoryProjectionStore`: in-memory adapter for
+  - `CQRS.Adapters.InMemoryEventStore`: in-memory adapter for *EventStore* port
+  - `CQRS.Adapters.InMemoryProjectionStore`: in-memory adapter for
       *ProjectionStore* port
-    - `CQRS.Adapters.MartenDbEventStore`: [MartenDB](https://martendb.io/) adapter
+  - `CQRS.Adapters.MartenDbEventStore`: [MartenDB](https://martendb.io/) adapter
       for *EventStore* port
-    - `CQRS.Adapters.MartenDbProjectionStore`: [MartenDB](https://martendb.io/)
+  - `CQRS.Adapters.MartenDbProjectionStore`: [MartenDB](https://martendb.io/)
       adapter for *ProjectionStore* port
-    - `CQRS.Adapters.MassTransitMessageBus`:
-      [MassTransit](https://masstransit.io/) /
+  - `CQRS.Adapters.WolverineMessageBus`:
+      [Wolverine](https://wolverinefx.net/) /
       [RabbitMQ](https://www.rabbitmq.com/) adapter for *MessageBus* port
 - Client (`CQRS.Client`): example of an external client that interacts with
   the system via API

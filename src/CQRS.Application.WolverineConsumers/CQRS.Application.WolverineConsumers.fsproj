@@ -2,16 +2,16 @@
 
   <ItemGroup>
     <PackageReference Include="Serilog"/>
+    <PackageReference Include="WolverineFx"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQRS.Adapters.MassTransitMessageBus\CQRS.Adapters.MassTransitMessageBus.fsproj"/>
     <ProjectReference Include="..\CQRS.Application.CommandProcessingStatusRecording\CQRS.Application.CommandProcessingStatusRecording.fsproj" />
     <ProjectReference Include="..\CQRS.Application\CQRS.Application.fsproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="MassTransitDtoConsumer.fs"/>
+    <Compile Include="WolverineDtoConsumer.fs"/>
     <Compile Include="InventoryCommandsConsumer.fs"/>
   </ItemGroup>
 
