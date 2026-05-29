@@ -35,6 +35,7 @@
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageVersion Include="System.Data.SqlClient" Version="4.9.1" />
     <PackageVersion Include="System.Text.Json" Version="10.0.3" />
+    <PackageVersion Include="WolverineFx.RuntimeCompilation" Version="6.2.2" />
   </ItemGroup>
   <!-- Test Packages -->
   <ItemGroup>
